@@ -1,19 +1,1130 @@
 {
   "itinerary": {
-    "title": "Borneo Family Adventure",
-    "description": "",
-    "start_date": null,
-    "end_date": null,
+    "title": "Borneo Big 5 Family Adventure: The 'Ambitious' Loop",
+    "description": "A 21-day family itinerary covering Kuala Lumpur, Sarawak (Kuching & Mulu), and Sabah (Wildlife & Islands). Designed for a family of four (kids 7 & 4) to balance high adventure with heat management and child-friendly logistics.",
+    "start_date": "2024-07-15",
+    "end_date": "2024-08-04",
     "travelers": 4,
-    "days": [],
-    "general_tips": [],
-    "packing_list": [],
-    "budget_estimate": null,
-    "emergency_contacts": {},
-    "blog_urls": [
-      "https://www.gezinopreis.nl/borneo-met-kinderen/",
-      "https://www.gezinopreis.nl/kota-kinabalu-met-kinderen/"
-    ]
+    "days": [
+      {
+        "day_number": 1,
+        "date": "2024-07-15",
+        "title": "Arrival in Kuala Lumpur",
+        "location": "Kuala Lumpur",
+        "summary": "Arrival and settling in to the heat and time zone.",
+        "activities": [
+          {
+            "name": "Airport Transfer",
+            "description": "Take a GrabCar (6-seater) from KLIA to the hotel. It is cheaper and more comfortable than taxis.",
+            "location": "KLIA to Bukit Bintang",
+            "activity_type": "transport",
+            "start_time": null,
+            "end_time": null,
+            "cost_estimate": "RM 65-80",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "App Download",
+                "content": "Download the 'Grab' app before arrival.",
+                "category": "transport"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Dinner at Jalan Alor",
+            "description": "Street food market. Great introduction to Malaysian food. Try the Satay (chicken skewers).",
+            "location": "Jalan Alor, Bukit Bintang",
+            "activity_type": "dining",
+            "start_time": "18:00:00",
+            "end_time": "20:00:00",
+            "cost_estimate": "RM 50-100",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Kid Friendly Food",
+                "content": "Satay (meat on stick) and fresh fruit juices are safe bets for kids.",
+                "category": "dining"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Hydration",
+            "content": "Buy large water bottles at 7-Eleven; the humidity hits hard immediately.",
+            "category": "health"
+          }
+        ],
+        "weather_note": "Hot and Humid (32\u00b0C)",
+        "image_url": null,
+        "image_path": "images/Kuala_Lumpur_travel_081b516ae0df.jpg"
+      },
+      {
+        "day_number": 2,
+        "date": "2024-07-16",
+        "title": "KLCC & Towers",
+        "location": "Kuala Lumpur",
+        "summary": "Exploring the iconic towers and the best playground in the city.",
+        "activities": [
+          {
+            "name": "Petrosains Discovery Centre",
+            "description": "Science museum inside Petronas Towers. Interactive and great for ages 4-7.",
+            "location": "Suria KLCC Level 4",
+            "activity_type": "cultural",
+            "start_time": "09:30:00",
+            "end_time": "12:00:00",
+            "cost_estimate": "RM 100 total",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Timing",
+                "content": "Go at opening to avoid long queues.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "KLCC Park Water Playground",
+            "description": "Massive free wading pool and playground at the base of the towers.",
+            "location": "KLCC Park",
+            "activity_type": "relaxation",
+            "start_time": "14:00:00",
+            "end_time": "17:00:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Must Pack",
+                "content": "Swimwear is mandatory for the pool. They will not let kids in with regular clothes.",
+                "category": "packing"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Heat Escape",
+            "content": "Use the Suria KLCC mall for lunch to escape the midday heat.",
+            "category": "health"
+          }
+        ],
+        "weather_note": "Afternoon thunderstorms common",
+        "image_url": null,
+        "image_path": "images/Kuala_Lumpur_travel_081b516ae0df.jpg"
+      },
+      {
+        "day_number": 3,
+        "date": "2024-07-17",
+        "title": "To the City of Cats",
+        "location": "Kuching, Sarawak",
+        "summary": "Flight to Borneo and exploring the Kuching waterfront.",
+        "activities": [
+          {
+            "name": "Flight to Kuching",
+            "description": "Domestic flight from KUL to KCH.",
+            "location": "KUL -> KCH",
+            "activity_type": "transport",
+            "start_time": "10:00:00",
+            "end_time": "11:45:00",
+            "cost_estimate": "$150 total",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Tambang Boat Ride",
+            "description": "Take a traditional small boat across the river to buy Kek Lapis (Layer Cake).",
+            "location": "Kuching Waterfront",
+            "activity_type": "cultural",
+            "start_time": "16:00:00",
+            "end_time": "18:00:00",
+            "cost_estimate": "RM 1 per person",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Safety",
+                "content": "Boats are small but stable; hold the 4yo's hand when boarding.",
+                "category": "safety"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Cat Statues",
+            "content": "Kuching means 'Cat'. Find the giant cat statues for photos.",
+            "category": "cultural"
+          }
+        ],
+        "weather_note": "Humid",
+        "image_url": null,
+        "image_path": "images/Kuching__Sarawak_travel_8fc4351760c2.jpg"
+      },
+      {
+        "day_number": 4,
+        "date": "2024-07-18",
+        "title": "Bako National Park",
+        "location": "Kuching",
+        "summary": "Day trip to see wildlife. Proboscis monkeys are the target.",
+        "activities": [
+          {
+            "name": "Bako Adventure",
+            "description": "Bus/Grab to jetty, then boat to the park. Focus on the HQ area for wildlife.",
+            "location": "Bako National Park",
+            "activity_type": "wildlife",
+            "start_time": "08:30:00",
+            "end_time": "15:00:00",
+            "cost_estimate": "RM 150 total",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Easy Wildlife",
+                "content": "Bearded pigs and Proboscis monkeys often hang out right near the canteen/HQ. No deep trekking needed for the 4yo.",
+                "category": "wildlife"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Monkeys",
+            "content": "Macaques are aggressive with food. Keep snacks hidden.",
+            "category": "safety"
+          }
+        ],
+        "weather_note": "Hot, minimal shade on beach",
+        "image_url": null,
+        "image_path": "images/Kuching_travel_f518570983f7.jpg"
+      },
+      {
+        "day_number": 5,
+        "date": "2024-07-19",
+        "title": "Orangutans & Cool Down",
+        "location": "Kuching",
+        "summary": "Morning wildlife followed by an afternoon avoiding the heat.",
+        "activities": [
+          {
+            "name": "Semenggoh Wildlife Centre",
+            "description": "Viewing semi-wild orangutans at feeding time.",
+            "location": "Semenggoh",
+            "activity_type": "wildlife",
+            "start_time": "08:00:00",
+            "end_time": "11:00:00",
+            "cost_estimate": "RM 20 total",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Stroller",
+                "content": "The path is paved but steep in parts. Stroller manageable but sweat-inducing.",
+                "category": "logistics"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Aeon Mall Playground",
+            "description": "Escape the afternoon heat. Large indoor playground/arcade.",
+            "location": "Aeon Mall Kuching",
+            "activity_type": "relaxation",
+            "start_time": "13:00:00",
+            "end_time": "16:00:00",
+            "cost_estimate": "Variable",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "GezinOpReis Tip",
+                "content": "Perfect way to recharge kids in AC.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Booking",
+            "content": "Book your Mulu flight for tomorrow if not done yet.",
+            "category": "logistics"
+          }
+        ],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kuching_travel_f518570983f7.jpg"
+      },
+      {
+        "day_number": 6,
+        "date": "2024-07-20",
+        "title": "Into the Jungle: Mulu",
+        "location": "Mulu National Park",
+        "summary": "Flying into the heart of the rainforest.",
+        "activities": [
+          {
+            "name": "Flight to Mulu",
+            "description": "MASwings ATR-72 Propeller plane flight.",
+            "location": "KCH -> MYY -> MZV",
+            "activity_type": "transport",
+            "start_time": null,
+            "end_time": null,
+            "cost_estimate": "$200 total",
+            "booking_required": true,
+            "booking_link": "https://www.maswings.com.my",
+            "tips": [
+              {
+                "title": "Views",
+                "content": "Sit on the left for views.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Check-in Mulu Marriott",
+            "description": "Luxury resort in the jungle.",
+            "location": "Mulu Marriott",
+            "activity_type": "accommodation",
+            "start_time": "14:00:00",
+            "end_time": null,
+            "cost_estimate": "$150/night",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Pool",
+                "content": "Essential for the kids in this humidity.",
+                "category": "accommodation"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Supplies",
+            "content": "Bring cash and snacks from Kuching; Mulu prices are high and shops are limited.",
+            "category": "money"
+          }
+        ],
+        "weather_note": "Tropical Rainforest (Humid)",
+        "image_url": null,
+        "image_path": "images/Mulu_National_Park_travel_021070d9604b.jpg"
+      },
+      {
+        "day_number": 7,
+        "date": "2024-07-21",
+        "title": "The Bat Exodus",
+        "location": "Mulu National Park",
+        "summary": "Seeing one of nature's greatest shows.",
+        "activities": [
+          {
+            "name": "Deer & Lang Caves",
+            "description": "Walk 3km along wooden boardwalks to the caves.",
+            "location": "Park HQ",
+            "activity_type": "adventure",
+            "start_time": "14:30:00",
+            "end_time": "18:30:00",
+            "cost_estimate": "Included in park fee",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Walking",
+                "content": "Boardwalk is flat. 4yo can walk or be carried in a carrier. No strollers.",
+                "category": "logistics"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Bat Exodus",
+            "description": "Watch millions of bats fly out at dusk.",
+            "location": "Bat Observatory",
+            "activity_type": "wildlife",
+            "start_time": "17:30:00",
+            "end_time": "18:30:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Rain",
+            "content": "If it rains heavily, the bats won't fly.",
+            "category": "weather"
+          }
+        ],
+        "weather_note": "Likely evening rain",
+        "image_url": null,
+        "image_path": "images/Mulu_National_Park_travel_021070d9604b.jpg"
+      },
+      {
+        "day_number": 8,
+        "date": "2024-07-22",
+        "title": "Transit to Sandakan",
+        "location": "Sandakan, Sabah",
+        "summary": "Travel day crossing from Sarawak to Sabah.",
+        "activities": [
+          {
+            "name": "Flights Mulu -> KK -> Sandakan",
+            "description": "Multiple short flights to cross the island.",
+            "location": "MZV -> BKI -> SDK",
+            "activity_type": "transport",
+            "start_time": "09:00:00",
+            "end_time": "14:00:00",
+            "cost_estimate": "$250 total",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Relax at Sepilok Jungle Resort",
+            "description": "Check in and enjoy the pool/nature grounds.",
+            "location": "Sepilok",
+            "activity_type": "accommodation",
+            "start_time": "15:00:00",
+            "end_time": null,
+            "cost_estimate": "$60/night",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Rest",
+            "content": "Take it easy today; travel is tiring for the kids.",
+            "category": "health"
+          }
+        ],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Sandakan__Sabah_travel_35fe5efb7aef.jpg"
+      },
+      {
+        "day_number": 9,
+        "date": "2024-07-23",
+        "title": "Sepilok Wildlife",
+        "location": "Sepilok",
+        "summary": "The classic Borneo wildlife centers.",
+        "activities": [
+          {
+            "name": "Sepilok Orangutan Rehabilitation Centre",
+            "description": "Visit the nursery to see young orangutans playing.",
+            "location": "Sepilok",
+            "activity_type": "wildlife",
+            "start_time": "09:00:00",
+            "end_time": "11:00:00",
+            "cost_estimate": "RM 30/adult",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Cameras",
+                "content": "There is a fee for cameras (phones are usually free).",
+                "category": "money"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Bornean Sun Bear Conservation Centre",
+            "description": "See the world's smallest bears.",
+            "location": "Next to Orangutan center",
+            "activity_type": "wildlife",
+            "start_time": "11:00:00",
+            "end_time": "12:30:00",
+            "cost_estimate": "RM 30/adult",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Binoculars",
+                "content": "They have spotting scopes set up for kids to see close-ups.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Leeches",
+            "content": "If you walk the trails (not boardwalks), wear leech socks.",
+            "category": "packing"
+          }
+        ],
+        "weather_note": "Hot",
+        "image_url": null,
+        "image_path": "images/Sepilok_travel_c429c0b47db6.jpg"
+      },
+      {
+        "day_number": 10,
+        "date": "2024-07-24",
+        "title": "River Safari Transfer",
+        "location": "Kinabatangan River",
+        "summary": "Heading deep into the jungle via boat.",
+        "activities": [
+          {
+            "name": "Boat Transfer to Lodge",
+            "description": "Boat ride from Sandakan Yacht Club to the lodge. Much better than the van.",
+            "location": "Sandakan to Sukau/Bilit",
+            "activity_type": "transport",
+            "start_time": "10:00:00",
+            "end_time": "12:30:00",
+            "cost_estimate": "Included in package",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Sun",
+                "content": "Apply sunscreen, the boat is open on sides.",
+                "category": "health"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Afternoon River Cruise",
+            "description": "First search for Pygmy Elephants and Proboscis Monkeys.",
+            "location": "Kinabatangan River",
+            "activity_type": "wildlife",
+            "start_time": "16:00:00",
+            "end_time": "18:00:00",
+            "cost_estimate": "Included in package",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Life Vests",
+                "content": "Ensure the lodge provides child-sized life vests.",
+                "category": "safety"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Package Booking",
+            "content": "Book a 3D2N full board package.",
+            "category": "logistics"
+          }
+        ],
+        "weather_note": "Humid, potential rain",
+        "image_url": null,
+        "image_path": "images/Kinabatangan_River_travel_a90e59109d59.jpg"
+      },
+      {
+        "day_number": 11,
+        "date": "2024-07-25",
+        "title": "Life on the River",
+        "location": "Kinabatangan River",
+        "summary": "Full day of wildlife spotting.",
+        "activities": [
+          {
+            "name": "Dawn Cruise",
+            "description": "Best time for birds and mist.",
+            "location": "River",
+            "activity_type": "wildlife",
+            "start_time": "06:00:00",
+            "end_time": "08:00:00",
+            "cost_estimate": "Included",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Midday Siesta",
+            "description": "Too hot to do anything. Nap or play cards at the lodge.",
+            "location": "Lodge",
+            "activity_type": "relaxation",
+            "start_time": "11:00:00",
+            "end_time": "15:00:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Entertainment",
+                "content": "Bring Uno or coloring books; no internet usually.",
+                "category": "packing"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Dusk Cruise",
+            "description": "Looking for crocodiles.",
+            "location": "River",
+            "activity_type": "wildlife",
+            "start_time": "16:30:00",
+            "end_time": "18:30:00",
+            "cost_estimate": "Included",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Mosquitoes",
+            "content": "Dawn and dusk are peak mosquito times. Deet is mandatory.",
+            "category": "health"
+          }
+        ],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kinabatangan_River_travel_a90e59109d59.jpg"
+      },
+      {
+        "day_number": 12,
+        "date": "2024-07-26",
+        "title": "Return to Civilization",
+        "location": "Kota Kinabalu",
+        "summary": "Travel from jungle back to the city.",
+        "activities": [
+          {
+            "name": "Transfer & Flight",
+            "description": "Boat to Sandakan, then fly to Kota Kinabalu.",
+            "location": "SDK -> BKI",
+            "activity_type": "transport",
+            "start_time": "09:00:00",
+            "end_time": "14:00:00",
+            "cost_estimate": "$100 total",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Check-in City Hotel",
+            "description": "Stay somewhere central or Shangri-La Tanjung Aru for luxury.",
+            "location": "Kota Kinabalu",
+            "activity_type": "accommodation",
+            "start_time": "15:00:00",
+            "end_time": null,
+            "cost_estimate": "Variable",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kota_Kinabalu_travel_be92b36e2494.jpg"
+      },
+      {
+        "day_number": 13,
+        "date": "2024-07-27",
+        "title": "Mountain Air",
+        "location": "Kundasang",
+        "summary": "Driving up Mount Kinabalu for cooler weather.",
+        "activities": [
+          {
+            "name": "Drive to Kundasang",
+            "description": "Rent a car or hire a driver. Winding roads.",
+            "location": "Kundasang",
+            "activity_type": "transport",
+            "start_time": "09:00:00",
+            "end_time": "11:30:00",
+            "cost_estimate": "RM 200 (Driver)",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Car Sickness",
+                "content": "Prepare meds for the winding roads.",
+                "category": "health"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Desa Dairy Farm",
+            "description": "Feeding calves and eating gelato. 'New Zealand of Sabah'.",
+            "location": "Desa Farm",
+            "activity_type": "sightseeing",
+            "start_time": "14:00:00",
+            "end_time": "16:00:00",
+            "cost_estimate": "RM 20 total",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Temperature",
+            "content": "It gets cold (18\u00b0C). Bring a sweater.",
+            "category": "packing"
+          }
+        ],
+        "weather_note": "Cool and misty",
+        "image_url": null,
+        "image_path": "images/Kundasang_travel_f4df4ed113f0.jpg"
+      },
+      {
+        "day_number": 14,
+        "date": "2024-07-28",
+        "title": "Canopy Walk",
+        "location": "Poring / KK",
+        "summary": "Tree top walk and return to the coast.",
+        "activities": [
+          {
+            "name": "Poring Canopy Walkway",
+            "description": "Suspension bridges in the trees.",
+            "location": "Poring Hot Springs",
+            "activity_type": "adventure",
+            "start_time": "09:00:00",
+            "end_time": "11:00:00",
+            "cost_estimate": "RM 30",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Height Limit",
+                "content": "Check if the 4yo is comfortable/allowed. If not, swim in the hot pools below.",
+                "category": "safety"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Drive back to KK",
+            "description": "Return to Kota Kinabalu city.",
+            "location": "KK",
+            "activity_type": "transport",
+            "start_time": "13:00:00",
+            "end_time": "15:30:00",
+            "cost_estimate": "Included in rental",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Poring___KK_travel_46850bba4857.jpg"
+      },
+      {
+        "day_number": 15,
+        "date": "2024-07-29",
+        "title": "Island Escape",
+        "location": "Manukan Island",
+        "summary": "Heading to the private island resort.",
+        "activities": [
+          {
+            "name": "Boat to Manukan",
+            "description": "Boat from Jesselton Point (Sutera Harbour counter).",
+            "location": "Jesselton Point",
+            "activity_type": "transport",
+            "start_time": "12:00:00",
+            "end_time": "12:20:00",
+            "cost_estimate": "RM 30 pp",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Check-in",
+                "content": "Go to the dedicated Sutera Sanctuary Lodges counter.",
+                "category": "logistics"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Check-in Manukan Island Resort",
+            "description": "Stay in a beach or hillside villa.",
+            "location": "Manukan Island",
+            "activity_type": "accommodation",
+            "start_time": "14:00:00",
+            "end_time": null,
+            "cost_estimate": "$200/night",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Quiet Time",
+                "content": "Day trippers leave at 4pm. The island becomes yours.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [
+          {
+            "title": "Food",
+            "content": "Resort food is pricey. Bring some snacks from KK.",
+            "category": "money"
+          }
+        ],
+        "weather_note": "Sunny, tropical",
+        "image_url": null,
+        "image_path": "images/Manukan_Island_travel_5a68ad75b067.jpg"
+      },
+      {
+        "day_number": 16,
+        "date": "2024-07-30",
+        "title": "Manukan Relaxation",
+        "location": "Manukan Island",
+        "summary": "Full day of beach and snorkeling.",
+        "activities": [
+          {
+            "name": "Snorkeling",
+            "description": "Shallow water snorkeling suitable for kids.",
+            "location": "Resort Beach",
+            "activity_type": "adventure",
+            "start_time": "09:00:00",
+            "end_time": "11:00:00",
+            "cost_estimate": "Gear rental extra",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Fish",
+                "content": "Lots of fish right near the jetty.",
+                "category": "wildlife"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Monitor Lizard Spotting",
+            "description": "Giant lizards roam the grass areas.",
+            "location": "Resort Grounds",
+            "activity_type": "wildlife",
+            "start_time": "16:00:00",
+            "end_time": "17:00:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Distance",
+                "content": "They are generally calm but keep distance.",
+                "category": "safety"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": "Sun protection essential",
+        "image_url": null,
+        "image_path": "images/Manukan_Island_travel_5a68ad75b067.jpg"
+      },
+      {
+        "day_number": 17,
+        "date": "2024-07-31",
+        "title": "Back to KK",
+        "location": "Kota Kinabalu",
+        "summary": "Morning swim and return to mainland.",
+        "activities": [
+          {
+            "name": "Morning Swim",
+            "description": "Last dip in the ocean.",
+            "location": "Manukan",
+            "activity_type": "relaxation",
+            "start_time": "08:00:00",
+            "end_time": "10:00:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Boat to KK",
+            "description": "Return to Jesselton Point.",
+            "location": "KK",
+            "activity_type": "transport",
+            "start_time": "13:00:00",
+            "end_time": "13:20:00",
+            "cost_estimate": "Included",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kota_Kinabalu_travel_be92b36e2494.jpg"
+      },
+      {
+        "day_number": 18,
+        "date": "2024-08-01",
+        "title": "KK Culture",
+        "location": "Kota Kinabalu",
+        "summary": "Exploring local culture or wetlands.",
+        "activities": [
+          {
+            "name": "Mari Mari Cultural Village",
+            "description": "Interactive village showcasing Sabahan tribes. Blowpipes, trampolines, fire making.",
+            "location": "Inanam (30 mins from KK)",
+            "activity_type": "cultural",
+            "start_time": "10:00:00",
+            "end_time": "14:00:00",
+            "cost_estimate": "RM 100/adult",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Fun Factor",
+                "content": "Highly rated for kids due to interactive nature.",
+                "category": "general"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Seafood Dinner",
+            "description": "Fresh seafood at Welcome Seafood Restaurant.",
+            "location": "KK City",
+            "activity_type": "dining",
+            "start_time": "18:30:00",
+            "end_time": "20:00:00",
+            "cost_estimate": "RM 150",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kota_Kinabalu_travel_be92b36e2494.jpg"
+      },
+      {
+        "day_number": 19,
+        "date": "2024-08-02",
+        "title": "Leisure Day",
+        "location": "Kota Kinabalu",
+        "summary": "Easy day for shopping and sunsets.",
+        "activities": [
+          {
+            "name": "Filipino Market",
+            "description": "Souvenir and pearl shopping.",
+            "location": "Waterfront",
+            "activity_type": "shopping",
+            "start_time": "10:00:00",
+            "end_time": "12:00:00",
+            "cost_estimate": "Variable",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Haggling",
+                "content": "Friendly bargaining is expected.",
+                "category": "money"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Tanjung Aru Sunset",
+            "description": "Famous sunset viewing spot.",
+            "location": "Tanjung Aru Beach",
+            "activity_type": "relaxation",
+            "start_time": "17:30:00",
+            "end_time": "19:00:00",
+            "cost_estimate": "Free",
+            "booking_required": false,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Traffic",
+                "content": "Go early, traffic is bad at sunset.",
+                "category": "transport"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kota_Kinabalu_travel_be92b36e2494.jpg"
+      },
+      {
+        "day_number": 20,
+        "date": "2024-08-03",
+        "title": "Return to KL",
+        "location": "Kuala Lumpur",
+        "summary": "Flying back to the capital.",
+        "activities": [
+          {
+            "name": "Flight KK -> KL",
+            "description": "Domestic flight.",
+            "location": "BKI -> KUL",
+            "activity_type": "transport",
+            "start_time": "11:00:00",
+            "end_time": "13:30:00",
+            "cost_estimate": "$80 total",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          },
+          {
+            "name": "Airport Hotel Stay",
+            "description": "Stay at Sama-Sama Hotel (connected to airport) for ease.",
+            "location": "KLIA",
+            "activity_type": "accommodation",
+            "start_time": "15:00:00",
+            "end_time": null,
+            "cost_estimate": "$120",
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [
+              {
+                "title": "Convenience",
+                "content": "You can walk from the hotel to the terminal.",
+                "category": "logistics"
+              }
+            ],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kuala_Lumpur_travel_081b516ae0df.jpg"
+      },
+      {
+        "day_number": 21,
+        "date": "2024-08-04",
+        "title": "Departure",
+        "location": "Kuala Lumpur",
+        "summary": "Flight home.",
+        "activities": [
+          {
+            "name": "Fly Home",
+            "description": "International departure.",
+            "location": "KLIA",
+            "activity_type": "transport",
+            "start_time": null,
+            "end_time": null,
+            "cost_estimate": null,
+            "booking_required": true,
+            "booking_link": null,
+            "tips": [],
+            "image_url": null,
+            "image_path": null
+          }
+        ],
+        "tips": [],
+        "weather_note": null,
+        "image_url": null,
+        "image_path": "images/Kuala_Lumpur_travel_081b516ae0df.jpg"
+      }
+    ],
+    "general_tips": [
+      {
+        "title": "Grab App",
+        "content": "Always use 'Grab' (Like Uber). Select 'GrabCar 6-seater' for the family and luggage. It is fixed price and safe.",
+        "category": "transport"
+      },
+      {
+        "title": "The Heat Block",
+        "content": "Between 12:00 PM and 3:00 PM, temperatures hit 35-40\u00b0C. Plan indoor activities, mall visits, or naps during this time.",
+        "category": "health"
+      },
+      {
+        "title": "Food for Kids",
+        "content": "If kids are picky, ask for 'Roti Canai' (fluffy bread) or 'Nasi Goreng Tak Nak Pedas' (Fried rice, no spice).",
+        "category": "culture"
+      },
+      {
+        "title": "Leeches",
+        "content": "In Sepilok and Mulu, if it rains, leeches come out. Wear 'leech socks' or tuck pants into football socks.",
+        "category": "health"
+      }
+    ],
+    "packing_list": [
+      "Ponchos (lightweight)",
+      "Headlamps (for Mulu caves)",
+      "Swimwear (Mandatory for KLCC pool)",
+      "Leech Socks",
+      "Mosquito Repellent (DEET)",
+      "Motion sickness meds (for boats/winding roads)",
+      "Sweater (for Kundasang)"
+    ],
+    "budget_estimate": "\u20ac4,500 - \u20ac6,000 (excluding international flights)",
+    "emergency_contacts": {
+      "Police": "999",
+      "Ambulance": "999"
+    },
+    "blog_urls": []
   },
   "chat_history": [
     {
@@ -31,7 +1142,247 @@
     {
       "role": "assistant",
       "content": "Yes, absolutely. By combining the **\"Ambitious\"** elements (Mulu caves & crystal clear islands) with the **\"Classic\"** family loop (Kuching/Sepilok/River), we get the ultimate \"Borneo Big 5\" itinerary.\n\nThis is a **21-Day Itinerary** designed for mid-July to early August.\n*Warning:* This route involves 5 domestic flights. However, these flights are short (30-50 mins) and save you days of driving, which is better for a 4-year-old than 6-hour bus rides.\n\n### **The \"Ultimate Family Adventure\" Itinerary**\n\n#### **Phase 1: City & Culture (Kuala Lumpur)**\n*Ease into the time zone and heat.*\n\n*   **Day 1: Arrival in KL**\n    *   **Transport:** Grab (6-seater) to Bukit Bintang.\n    *   **Evening:** Easy dinner at **Jalan Alor**.\n*   **Day 2: The Kid-Favorites**\n    *   **Morning:** **Batu Caves**. Go early (8:30 AM) to beat the heat. The 4-year-old will love the monkeys, but hold their hand (monkeys can be grabby).\n    *   **Afternoon:** **KLCC Park**. This is non-negotiable. The massive playground and wading pool with the Twin Towers view is a highlight for kids.\n\n#### **Phase 2: Sarawak (Cats, Apes & Caves)**\n*The \"GezinOpReis\" favorites.*\n\n*   **Day 3: Fly KL $\\rightarrow$ Kuching**\n    *   **Afternoon:** Waterfront walk. Take the **Tambang boat** across the river to buy *Kek Lapis* (layer cake).\n*   **Day 4: Bako National Park**\n    *   **The Adventure:** Bus + Boat ride to the park.\n    *   **Activity:** Focus on the area around the HQ and the **Pakukehla trail**. Do not attempt long hikes with the 4-year-old in the humidity. You will see Proboscis monkeys and bearded pigs near the canteen.\n*   **Day 5: Semenggoh & The \"Cat\" City**\n    *   **Morning:** **Semenggoh Wildlife Centre** (Orangutan feeding).\n    *   **Afternoon:** **Semadang Kayaking** (Very gentle, scenic drift\u2014safe for 4-year-olds with life vests) **OR** visit the **Sarawak Cultural Village** (interactive longhouses).\n*   **Day 6: Fly Kuching $\\rightarrow$ Mulu (The Expedition)**\n    *   *Note:* Fly on MASwings (ATR-72 propeller plane).\n    *   **Stay:** **Mulu Marriott**. *GezinOpReis tip:* It is expensive, but in the jungle heat with kids, the pool is a lifesaver.\n*   **Day 7: The Bat Exodus**\n    *   **Activity:** Walk the boardwalks to **Deer Cave**. It is flat and stroller-accessible for parts, or easy walking.\n    *   **Highlight:** Watch 3 million bats fly out at sunset.\n*   **Day 8: Morning Boat & Caves**\n    *   **Morning:** Longboat ride up the river to **Wind Cave** or **Clearwater Cave**. Kids love the boat ride. Picnic swim at the clearwater pavilion.\n\n#### **Phase 3: Sabah (The Jungle Safari)**\n*Where the \"Wild\" happens.*\n\n*   **Day 9: Fly Mulu $\\rightarrow$ Sandakan**\n    *   *Logistics:* This is a travel day. You will likely fly Mulu $\\rightarrow$ KK $\\rightarrow$ Sandakan.\n    *   **Stay:** **Sepilok Jungle Resort** or **Sepilok Nature Resort** (places with gardens/pools).\n*   **Day 10: Sepilok (Orangutans & Bears)**\n    *   **Morning:** **Sepilok Orangutan Rehab Centre**.\n    *   **Noon:** **Sun Bear Conservation Centre** (Next door).\n    *   **Afternoon:** Transfer to the **Kinabatangan River** (2 hours).\n*   **Day 11: The River Safari**\n    *   **Activity:** Dawn and Dusk cruises.\n    *   **Why it works:** You sit in a boat. The 4-year-old can use binoculars. Look for Pygmy Elephants, Crocodiles, and Proboscis Monkeys.\n*   **Day 12: Morning Cruise $\\rightarrow$ Transfer**\n    *   **Morning:** One last cruise.\n    *   **Afternoon:** Transfer back to Sandakan Airport $\\rightarrow$ Fly to **Kota Kinabalu (KK)**.\n\n#### **Phase 4: Mountains & \"The Maldives of Sabah\"**\n*Cool air followed by crystal water.*\n\n*   **Day 13: Drive to Kundasang (Mount Kinabalu)**\n    *   **Transport:** Rent a car or hire a driver. Drive 2 hours up the mountain.\n    *   **Activity:** **Desa Dairy Farm** (Feeding calves, gelato) and **Poring Hot Springs** (Canopy walk\u2014check if the 4-year-old meets height requirements, otherwise just swim in the hot pools).\n    *   **Stay:** In Kundasang (Cool air, sweater weather!).\n*   **Day 14: Drive to Kota Belud $\\rightarrow$ Mantanani Island**\n    *   **Transport:** Drive down the mountain to the jetty (Rampayan/Kota Belud). Take the boat to **Mantanani Island**.\n    *   *Warning:* The boat ride (45 mins) can be choppy. Give kids motion sickness meds beforehand.\n*   **Day 15: Mantanani Island**\n    *   **The Vibe:** White sand, turquoise water. No crowds.\n    *   **Activity:** Snorkeling right off the beach. The water is shallow enough for the 7-year-old to learn.\n*   **Day 16: Mantanani Island**\n    *   Relaxation / Sandcastles / Blue Tears (bioluminescent plankton) at night.\n*   **Day 17: Return to Kota Kinabalu**\n    *   **Afternoon:** Boat back to mainland $\\rightarrow$ Transfer to KK City.\n    *   **Stay:** A city hotel near the waterfront (e.g., *Le Meridien* or *Hilton* for comfort).\n\n#### **Phase 5: Relaxation & Departure**\n\n*   **Day 18: Mari Mari Cultural Village**\n    *   **Activity:** A very fun, interactive village. Fire-starting, blowpipes, bamboo trampolines. Great for both ages 4 and 7.\n*   **Day 19: Island Hopping (TAR Park)**\n    *   **Activity:** Even though you went to Mantanani, a quick boat ride (15 mins) to **Sapi Island** for a final swim and BBQ lunch is a classic KK experience.\n    *   **Evening:** Sunset at **Tanjung Aru Beach**.\n*   **Day 20: Fly KK $\\rightarrow$ KL**\n    *   **Stay:** Near KLIA airport for ease (e.g., *Sama-Sama*) or one last night in the city for shopping.\n*   **Day 21: Fly Home**\n\n---\n\n### **Key Logistics for the \"Combined\" Plan**\n\n**1. Booking the Flights (Critical)**\nFor this itinerary to work in July/August, you must book these specific legs ASAP:\n1.  KL $\\rightarrow$ Kuching\n2.  Kuching $\\rightarrow$ Mulu (MASwings - small planes fill fast)\n3.  Mulu $\\rightarrow$ Kota Kinabalu (MASwings)\n4.  Kota Kinabalu $\\rightarrow$ Sandakan (Unless you skip the flight and endure a 6-hour bus, which I don't recommend with a 4yo).\n5.  Sandakan $\\rightarrow$ Kota Kinabalu\n\n**2. The 4-Year-Old Factor**\n*   **Mulu:** The boardwalks are slippery when wet. Bring shoes with good grip (Crocs/Teva sandals are fine).\n*   **Kinabatangan:** Bring a life vest from home if you want to be 100% sure of the fit. Lodges have them, but sizes for small 4-year-olds vary.\n*   **Car Sickness:** The road to Kundasang is winding. Prepare accordingly.\n\n**3. Budget Impact**\nCombining Mulu + Mantanani + River Safari moves this from a \"Budget\" trip to a **\"Mid-to-High\"** budget trip.\n*   **Mulu:** Flights + Marriott increases cost significantly.\n*   **Mantanani:** More expensive than staying in KK, but the water quality is vastly superior.\n\n**4. What to Pack (Specifics)**\n*   **Ponchos:** It rains in the rainforest.\n*   **Headlamps:** Essential for Mulu caves and searching for insects at night. Kids love having their own light.\n*   **Leech Socks:** Buy them in Kuching or Sandakan before hitting the jungle trails.\n\nDoes this combined pace (21 days) look good to you, or would you like to trim it down to 18-19 days by cutting a location?"
+    },
+    {
+      "role": "user",
+      "content": "[Shared blog tips with AI]"
+    },
+    {
+      "role": "assistant",
+      "content": "I acknowledge receipt of the specific tips from the *Gezin op Reis* blogs. These are excellent resources. They shift our strategy in three key ways:\n\n1.  **Island Choice:** The blog highly recommends **Manukan Island** (Sutera Sanctuary Lodges) over Mantanani. For a family with a 4-year-old, this is safer (15 min calm boat vs 45 min open ocean) and offers that exclusive \"deserted island\" feel after 4:00 PM.\n2.  **River Transport:** The blog advises taking the **boat transfer** from Sandakan to the Kinabatangan lodges rather than the van. It\u2019s more comfortable for kids and acts as an extra safari.\n3.  **Heat Management:** We must rigorously plan for the \"12:00 PM - 3:00 PM\" heat block (40\u00b0C), using malls/pools as the blogs suggest.\n\nHere is your **Ambitious 21-Day \"Borneo Big 5\" Itinerary**, optimized with *Gezin op Reis* insights.\n\n---\n\n### **Phase 1: Acclimatization & The City (Kuala Lumpur)**\n*Focus: Beating the jet lag & easy wins.*\n\n**Day 1: Arrival**\n*   **Transport:** Use **Grab (6-seater)** from KLIA. *Blog Tip: Much cheaper/safer than taxis.*\n*   **Stay:** Bukit Bintang area.\n*   **Dinner:** Jalan Alor (Satay & fruits).\n\n**Day 2: The Best of KL for Kids**\n*   **Morning (09:00):** **Petrosains Discovery Centre** (inside Petronas Towers). *Blog Tip: Go at opening to avoid 1-hour queues.*\n*   **Lunch:** Food court in Suria KLCC (cheap & AC).\n*   **Afternoon (Heat Escape):** **KLCC Park**.\n    *   *Blog Tip:* The water playground is massive. **Swimwear is mandatory**\u2014don't forget it at the hotel!\n*   **Evening:** Lake Symphony Light Show (Free).\n\n---\n\n### **Phase 2: Sarawak (Cats & Caves)**\n*Focus: Culture & The \"Ambitious\" Mulu Add-on.*\n\n**Day 3: Fly KL $\\rightarrow$ Kuching**\n*   **Afternoon:** Take the **Tambang (river taxi)** to Fort Margherita. *Blog Tip: More adventurous than the bridge.*\n*   **Evening:** Waterfront light show (20:30).\n\n**Day 4: Semenggoh & Heat Escape**\n*   **Morning:** **Semenggoh Wildlife Centre**.\n    *   *Why:* Semi-wild orangutans. Much easier walking than a full trek.\n*   **Afternoon:** **Aeon Mall**.\n    *   *Blog Tip:* It has a massive indoor playground/miniature city. Perfect for escaping the 40\u00b0C afternoon heat with a 4-year-old.\n\n**Day 5: Bako National Park**\n*   **Activity:** Bus + Boat to Bako.\n*   *Blog Tip:* You don't need to hike deep. Proboscis monkeys and bearded pigs hang out right at the **Park HQ/Canteen**. Stay on the boardwalks (Paku Trail) to keep it easy for the little one.\n\n**Day 6: Fly Kuching $\\rightarrow$ Mulu**\n*   **Flight:** MASwings (Propeller plane).\n*   **Stay:** **Mulu Marriott**.\n    *   *Blog alignment:* Cited as \"expensive but worth it\" for the pool in the jungle heat.\n*   **Evening:** Night walk on the boardwalks (bring flashlights).\n\n**Day 7: The Bat Exodus**\n*   **Activity:** Walk to **Deer Cave**.\n*   **The Show:** Watch 3 million bats spiral out at dusk.\n*   *Note:* The boardwalk is flat and easy for kids.\n\n---\n\n### **Phase 3: Sabah Wildlife (The River Safari)**\n*Focus: The \"Big 5\" (Elephants, Orangutans, Crocs).*\n\n**Day 8: Fly Mulu $\\rightarrow$ Sandakan (via KK)**\n*   **Stay:** **Sepilok Jungle Resort** or **MY Nature Resort**.\n*   *Tip:* Relax by the pool upon arrival.\n\n**Day 9: Sepilok Sanctuaries**\n*   **Morning:** **Sepilok Orangutan Centre** (Nursery area is a hit with kids).\n*   **Noon:** **Sun Bear Centre** (Right next door).\n*   **Afternoon:** Visit the Rainforest Discovery Centre for the canopy walk.\n\n**Day 10: Boat to the Jungle**\n*   **Transport:** **Boat Transfer** from Sandakan Yacht Club to Kinabatangan.\n    *   *Blog Tip:* Choose the boat over the van. It takes 2.5 hours but is breezy, comfortable, and you spot wildlife along the way.\n*   **Stay:** **Sukau Rainforest Lodge** (High-end, highly rated by blog) or **Bilit Rainforest Lodge** (Mid-range).\n*   **Afternoon Cruise:** Look for Pygmy Elephants.\n\n**Day 11: The River Life**\n*   **Morning:** Dawn cruise (Birds/Monkeys).\n*   **Mid-day:** Nap/Uno cards. *Blog warning: No shops nearby, bring all snacks/diapers you need.*\n*   **Afternoon:** Dusk cruise (Crocodiles).\n\n**Day 12: Fly Sandakan $\\rightarrow$ Kota Kinabalu (KK)**\n*   **Transfer:** Boat back to Sandakan $\\rightarrow$ Airport $\\rightarrow$ Fly to KK.\n*   **Stay:** **Shangri-La Tanjung Aru** (Luxury option with water park) or a city hotel near the waterfront.\n\n---\n\n### **Phase 4: Mountains & The Private Island**\n*Focus: Cool air and \"Bounty\" beaches.*\n\n**Day 13: Drive to Kundasang (The Mountains)**\n*   **Activity:** Drive 2 hours up Mt Kinabalu.\n*   **Stop:** **Desa Dairy Farm** (Feeding calves + Gelato).\n*   **Stay:** In Kundasang (enjoy the cool air).\n*   *Blog Tip:* Skip the mountain climb; it's too hard for kids. Stick to the park HQ or Poring.\n\n**Day 14: Poring Hot Springs $\\rightarrow$ KK**\n*   **Morning:** Canopy walk (check height limit for the 4yo) & hot sulfur baths.\n*   **Afternoon:** Drive back to KK.\n\n**Day 15: Boat to Manukan Island**\n*   **Transport:** Go to Jesselton Point. Look for the **Sutera Sanctuary Lodges** counter for the private boat.\n*   **Stay:** **Manukan Island Resort (Hillside/Beach Villas)**.\n*   *Blog Highlight:* The day-trippers leave at 16:00. After that, you have the island to yourselves.\n\n**Day 16 & 17: Manukan Island (Relax)**\n*   **Activity:** Snorkeling right off the beach (safe/shallow).\n*   **Wildlife:** Monitor lizards roam the lawns (harmless but keep distance).\n*   **Food:** Breakfast at *Perahu* is included. Dinner options are limited to the resort, so budget accordingly.\n\n---\n\n### **Phase 5: Departure**\n\n**Day 18: KK City & Wetlands**\n*   **Return:** Boat back to KK.\n*   **Afternoon:** **KK Wetlands Centre**.\n    *   *Blog Warning:* Heavy mosquitoes and heat. Wear long sleeves/pants and go late (4:30 PM).\n*   **Evening:** Sunset at the **Floating Mosque**.\n\n**Day 19: Leisure / Souvenirs**\n*   **Option:** **Mari Mari Cultural Village** (if you skipped Sarawak Cultural Village) OR **North Borneo Steam Train** (Runs on Wed/Sat - very fun for kids).\n\n**Day 20: Fly KK $\\rightarrow$ KL**\n*   **Stay:** Near KLIA (e.g., *Sama-Sama*) for stress-free departure.\n\n**Day 21:** Fly Home.\n\n---\n\n### **Summary of Costs & Logistics**\n\n*   **Flights to Book Now:**\n    1.  KL $\\rightarrow$ Kuching\n    2.  Kuching $\\rightarrow$ Mulu\n    3.  Mulu $\\rightarrow$ KK\n    4.  KK $\\rightarrow$ Sandakan (Round trip, or one way if flying back from Sandakan)\n*   **Estimated Budget (Family of 4):**\n    *   **Mid-Range:** \u20ac3,500 - \u20ac4,500 (excluding international flights).\n    *   **High-End (Marriott/Sukau/Manukan/Shangri-La):** \u20ac5,500 - \u20ac7,000.\n*   **Health:** The blog emphasizes that while cities are safe, **Kinabatangan** and **Mulu** have mosquitoes. Bring DEET. Consult a doctor about malaria prophylaxis for the river portion.\n\nDoes this aligned itinerary feel right for your family's adventure level?"
     }
   ],
-  "ai_provider": "Gemini"
+  "ai_provider": "Gemini",
+  "blog_content": {
+    "https://www.gezinopreis.nl/borneo-met-kinderen/": {
+      "url": "https://www.gezinopreis.nl/borneo-met-kinderen/",
+      "title": "Borneo met kinderen - Gezin op Reis",
+      "summary": "This blog post provides a detailed guide for families traveling to Malaysian Borneo (Sabah and Sarawak) with children. It covers specific itineraries, wildlife encounters like orangutans and proboscis monkeys, family-friendly accommodations, and logistical advice for navigating the island's two main states.",
+      "tips": [
+        "Plan for at least one month to see all of Malaysian Borneo, or limit the trip to one week per region (e.g., just Sarawak or just Sabah) to avoid rushing.",
+        "Use domestic flights to travel between major hubs (Kuching, Kota Kinabalu, Miri) and remote areas like Mulu National Park to save time.",
+        "Check with health professionals regarding malaria precautions, as risks exist in remote areas and dive sites, though tourist cities are generally safe.",
+        "Skip the Mount Kinabalu climb with young children as it is strenuous and expensive; visit Poring Hot Springs instead.",
+        "Visit Semenggoh Nature Reserve near Kuching for a high chance of seeing orangutans in a semi-wild setting.",
+        "Book a stay at Shangri-La\u2019s Rasa Ria Resort if looking for a kid-friendly beach experience with its own nature reserve.",
+        "Budget info: Mount Kinabalu climbing is noted as 'expensive'; upscale options like Mulu Marriott and Shangri-La\u2019s Rasa Ria are recommended, implying a range of costs is possible.",
+        "Best time to visit: Not explicitly mentioned in the provided text.",
+        "Warning: Malaria risk exists in remote areas and deep jungle/dive sites. Mount Kinabalu is too difficult for young children. Travel between Kuching and Miri takes 12+ hours by land, so flying is recommended."
+      ],
+      "highlights": [
+        "Semenggoh Nature Reserve (Kuching) for orangutans",
+        "Bako National Park (Sarawak) for proboscis monkeys and jungle walks",
+        "Sarawak Cultural Village (Kuching) as a 'living museum'",
+        "Kuching Wetlands National Park for Irrawaddy dolphins",
+        "Gunung Mulu National Park (caves and canopy walks)",
+        "Tunku Abdul Rahman Marine Park (Manukan, Sapi, Gaya Islands) for snorkeling",
+        "Kinabatangan River cruises for wildlife spotting (crocodiles, monkeys)",
+        "Sepilok Orangutan Rehabilitation Centre and Sun Bear Centre (Sandakan)",
+        "Turtle Island (Selingan) to see turtles laying eggs",
+        "Poring Hot Springs and Canopy Walkway"
+      ],
+      "images": [
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20768%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2020/01/Borneo-Maleisie-met-kinderen-Kota-Kinabalu-Shangri-Las-Rasa-Ria-Natuurreservaat-3-768x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-praktisch-vliegtuig-683x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-moskee-1-768x1024.jpeg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20683'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-arriva-hotel-2-1024x683.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-Semanggoh-1-768x1151.jpg"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nIndonesie\n/\nBorneo met kinderen\nNaar Borneo met kinderen? Wij deden het al meerdere keren en kunnen je dan ook veel vertellen over dit bijzondere stukje wereld. Borneo is het op twee na grootste eiland ter wereld en wordt gedeeld door Indonesi\u00eb, Brunei en Maleisi\u00eb.\nHet Maleisische deel, wat wij het vaakst bezocht hebben, bestaat uit de staten Sabah en Sarawak, die elk een unieke mix van natuur, cultuur en avontuur bieden. Sabah, in het oosten, staat bekend om zijn prachtige stranden en indrukwekkende duiklocaties zoals Sipadan, terwijl Sarawak, in het westen, meer traditionele dorpen heeft.\nDe steden Kuching en Kota Kinabalu zijn de meest logische startplekken voor een reis door Maleisisch Borneo. Vanuit het vaste land van Maleisi\u00eb zijn beide steden goed bereikbaar met directe vluchten. De meest toeristische delen van Borneo zijn malariavrij, maar in afgelegen gebieden (onder andere de bekende duikplekken) kan een verhoogd risico zijn. Controleer vooraf goed welke voorzorgsmaatregelen nodig zijn, afhankelijk van je reisroute. Controleer vooraf goed welke voorzorgsmaatregelen nodig zijn, afhankelijk van je reisroute.\nBenieuwd hoeveel tijd je nodig hebt voor Borneo met kinderen? Alleen voor Maleisisch Borneo met kinderen kan je al een maand uitrekken en voor Indonesisch Borneo een week of drie. Veel gezinnen kiezen er dan ook voor om zich te beperken tot een kleiner deel van het eiland. Met een week kan je in de regio Sarawak Kuching, Bako en Mulu combineren. Of verblijf een week in Sabah en beperkt je dan tot Kota Kinabalu, Sandakan en de Kinabatangan rivier.\nWil je je reis naar Borneo niet zelf organiseren? Neem contact op met een reisorganisatie zoals\nRiskjatravel\nof\nLocal Hero Travel\nvoor een reis op maat. Of kies voor een familiereis met andere gezinnen, zo kan je met\nSawadee naar Borneo\n.\nMaleisisch Borneo met kinderen\nSarawak met kinderen\nSarawak, een van de twee staten op Maleisisch Borneo, biedt een unieke mix van cultuur en natuur. Het is een ideale bestemming voor gezinnen die op zoek zijn naar avontuur en bijzondere ervaringen met kinderen.\nKuching met kinderen\nDe hoofdstad van Sarawak Kuching is een gezellige stad met veel mogelijkheden om te ontdekken. In mijn blog over\nKuching met kinderen\nlees je meer over wat je in de stad zelf kunt doen, zoals een wandeling langs de boulevard of een bezoek aan de kleurrijke markten.\nKuching is ook een goede basis voor het verkennen van de omgeving. Gelegen aan de voet van Mount Santubong, nabij Kuching, staat het Sarawak Cultural Village bekend als het \u2018levende museum\u2019. Hier kunnen kinderen kennismaken met de traditionele levenswijzen van de verschillende etnische groepen in Sarawak.\nRondom Kuching zijn er ook indrukwekkende natuurgebieden. Bij Semenggoh Nature Reserve kun je orang-oetans van dichtbij zien. Het moment waarop een orang-oetan met haar jong aan de hand naar beneden klom, was onvergetelijk. Dit centrum, op ongeveer 30 minuten rijden van de stad, is een plek waar deze dieren vrij rondlopen in een beschermd bosgebied. Een andere aanrader is Bako National Park, dat je bereikt via een korte boottocht. Hier kun je neusapen en andere dieren spotten tijdens wandelingen door de jungle, terwijl de rust van de stranden een fijne afsluiting biedt. Of kies voor het Kuching Wetlands National Park. Dit park biedt een unieke kans om mangrove-ecosystemen te verkennen. Tijdens een boottocht door de wetlands kan je dieren zien zoals de zeldzame Irrawaddy-dolfijn en verschillende vogelsoorten.\nGunung Mulu National Park met kinderen\nGunung Mulu National Park is een van de meest bijzondere plekken in Sarawak. Dit UNESCO-werelderfgoed is beroemd om zijn gigantische grotten, regenwoud en avontuurlijke activiteiten. In mijn blogs over\nGunung Mulu National Park\nen het\nMulu Marriott Resort & Spa\nlees je meer over de hoogtepunten en verblijfsmogelijkheden.\nDit afgelegen park is alleen per vliegtuig bereikbaar. Vanuit Kuching en Kota Kinabalu zijn er directe vluchten naar Mulu Airport. Vanaf de luchthaven is het een korte rit naar de ingang van het park.\nDe Deer Cave en Lang Cave zijn via goed begaanbare paden eenvoudig te bezoeken, wat dit een geschikte activiteit maakt voor kinderen. De Canopy Walk biedt een spectaculair uitzicht op de boomtoppen en is een spannende manier om de jungle te ervaren. Nachtwandelingen met een gids laten een andere kant van het regenwoud zien en zijn een geweldige ervaring voor jongere avonturiers. Voor een ontspannen verblijf na een dag vol activiteiten biedt het Mulu Marriott Resort & Spa een comfortabele plek met familievriendelijke voorzieningen.\nLambir Hills National Park\nDicht bij Miri ligt het Lambir Hills National Park, bekend om zijn watervallen en wandelpaden. De korte en toegankelijke routes maken het ideaal voor gezinnen. Na een wandeling kunnen kinderen afkoelen in de natuurlijke zwembaden bij de watervallen, wat zorgt voor een verfrissende ervaring in de natuur. De makkelijkste manier om hier te komen is door eerst naar Miri te vliegen. De reisafstand vanaf Kuching is minimaal 12 uur.\nSabah met kinderen\nSabah, gelegen in het noorden van Borneo, is een bestemming vol avontuur, natuur en prachtige stranden. Het is perfect voor gezinnen die samen de veelzijdigheid van Borneo willen ontdekken. Hieronder vind je informatie over onder andere Kota Kinabalu en Sandakan, de belangrijkste steden van Sabah.\nKota Kinabalu en omgeving\nKota Kinabalu is de hoofdstad van Sabah en een aardige stad aan de westkust van Borneo. De stad zelf biedt genoeg activiteiten voor een paar dagen, met een levendige avondmarkt. Maar het zijn vooral de stranden en natuur in de omgeving die een bezoek aantrekkelijk maken.\nIn de buurt van Kota Kinabalu ligt het Shangri-La\u2019s Rasa Ria Resort, een prachtige plek waar je kunt genieten van witte zandstranden en een eigen natuurreservaat. Wij vonden het een van de mooiste stranden die we bezochten op Borneo. Zeker ook met jonge kinderen is dit een hele fijne plek.  Lees meer in mijn blog over\nShangri-La\u2019s Rasa Ria Resort\n.\nEen ander hoogtepunt is Manukan Island, onderdeel van het Tunku Abdul Rahman Marine Park. Dit drukbezochte eiland is eenvoudig te bereiken met een korte boottocht vanuit Kota Kinabalu. Het kristalheldere water en de koraalriffen maken het een ideale plek om te snorkelen of te zwemmen. Meer over Manukan Island en praktische tips vind je in mijn blog over\nManukan Island\n. Naast Manukan Island, zijn er ook eilanden zoals Sapi en Gaya die mooie stranden en snorkelmogelijkheden bieden.\nWat meer in het binnenland bezoek je Mount Kinabalu en het Kinabalu Park. De hoogste berg van Zuidoost-Azi\u00eb, beklim je niet zomaar even. Het is een zware en dure tocht die zeker niet geschikt is met jonge kinderen. Er zijn in de omgeving wel andere wandelpaden die ook geschikt zijn voor gezinnen. De Poring Hot Springs in de buurt van het park zijn ook een leuk uitstapje. Lekker badderen in het warme water en loopt de Canopy Walkway, een hangbrug hoog in de bomen.\nSandakan en omgeving\nSandakan, gelegen aan de oostkust van Sabah, is een stad met een rijke geschiedenis en een goede uitvalsbasis om de natuur en wildlife in de omgeving te verkennen. In mijn blog over\nSandakan\nlees je meer over de stad zelf, zoals de indrukwekkende Agnes Keith House en de Sandakan Memorial Park.\nIn de buurt van Sandakan ligt Sepilok, bekend om het Sepilok Orangutan Rehabilitation Centre. Dit centrum is een bijzondere plek om orang-oetans te zien die worden voorbereid op een terugkeer naar de natuur. Daarnaast vind je in Sepilok het Bornean Sun Bear Conservation Centre, waar je meer te weten komt over de kleinste berensoort ter wereld.\nAndere hoogtepunten in de regio zijn de Kinabatangan-rivier en Turtle Island. De\nKinabatangan-rivier\nis beroemd om zijn rijke biodiversiteit. We hadden het geluk om neusapen, krokodillen en verschillende vogelsoorten te zien.\nTurtle Island, of Selingan Island, biedt een unieke kans om \u2019s nachts zeeschildpadden hun eieren te zi..."
+    },
+    "https://www.gezinopreis.nl/kota-kinabalu-met-kinderen/": {
+      "url": "https://www.gezinopreis.nl/kota-kinabalu-met-kinderen/",
+      "title": "Kota Kinabalu met kinderen: de perfecte uitvalsbasis op Borneo - Gezin op Reis",
+      "summary": "This blog post positions Kota Kinabalu as the ideal family-friendly gateway for exploring Borneo, allowing travelers to acclimatize before heading into the jungle. It details experiences such as the Wetlands Centre, the State Mosque, and river safaris, while offering logistical advice on flights and managing the tropical heat with children.",
+      "tips": [
+        "Fly via Singapore to Kota Kinabalu (BKI) to avoid long immigration lines in Kuala Lumpur.",
+        "Visit the Wetlands Centre early in the morning or late afternoon to avoid the intense heat (feels like 40\u00b0C).",
+        "Bring binoculars, extra water, and strong mosquito spray for the Wetlands.",
+        "Visit the State Mosque (Floating Mosque) at sunset for beautiful water reflections.",
+        "Wear appropriate clothing (provided at entrance) when visiting religious sites.",
+        "Be aware that the Bongawan river tour involves guides feeding macaques; if you dislike unnatural animal interactions, take note.",
+        "If your itinerary includes the Kinabatangan River later, the chances of seeing Proboscis monkeys are better there than on the Bongawan day trip.",
+        "Budget info: Specific costs are not mentioned, though the river safari tour typically includes a simple dinner.",
+        "Best time to visit: Early morning or late afternoon for outdoor activities to avoid peak heat.",
+        "Warning: Extreme heat/humidity, heavy mosquito presence in wetlands, aging boardwalks at the Wetlands Centre, and ethical concerns regarding feeding wild monkeys on the Bongawan tour."
+      ],
+      "highlights": [
+        "Kota Kinabalu Wetlands Centre (Mangrove boardwalk)",
+        "Kota Kinabalu State Mosque",
+        "Bongawan River Safari (Proboscis monkeys and fireflies)",
+        "Sky Mirror beach (Sunset photography)",
+        "Tunku Abdul Rahman National Park (Island hopping)",
+        "Night markets"
+      ],
+      "images": [
+        "https://www.gezinopreis.nl/wp-content/uploads/2025/01/Kota-Kinabalu-met-kinderen-Bongawan-1-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20768%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2025/01/Kota-Kinabalu-met-kinderen-stad-768x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20683'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2025/01/Kota-Kinabalu-met-kinderen-hoe-kom-je-er-1024x683.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2025/01/Kota-Kinabalu-met-kinderen-wetlands-1-683x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2025/01/Kota-Kinabalu-met-kinderen-wetlands-4-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20682'%3E%3C/svg%3E"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nMaleisie\n/\nKota Kinabalu met kinderen: de perfecte uitvalsbasis op Borneo\nKota Kinabalu was voor ons de eerste kennismaking met Borneo. We hadden vooraf niet veel verwachtingen van de stad, maar het bleek een fijne plek om even te acclimatiseren voordat we de jungle introkken. Kota Kinabalu is een compacte stad met een ontspannen sfeer, levendige avondmarkten en een prachtig kustgebied. Het is bovendien de perfecte uitvalsbasis voor uitstapjes naar tropische eilanden, mangroves vol wildlife en indrukwekkende natuurparken.\nIn dit blog deel ik onze ervaringen in Kota Kinabalu met kinderen en geef ik praktische tips voor de leukste activiteiten. Van (bounty)eilandhoppen in het Tunku Abdul Rahman National Park tot neusapen spotten in de mangroves en afkoelen in kindvriendelijke hotels \u2013 Kota Kinabalu biedt verrassend veel voor gezinnen. Ben je van plan om Borneo met kinderen te bezoeken? Dan mag Kota Kinabalu zeker niet ontbreken in je reisschema!\nPraktische informatie over de Kinabatanganrivier op Borneo met kinderen\nOver Kota Kinabalu\nKota Kinabalu, vaak afgekort als KK, is de hoofdstad van de provincie Sabah en ligt aan de westkust van Borneo. De stad wordt vaak gebruikt als uitvalsbasis om verder te reizen naar andere delen van Sabah, zoals het binnenland, de jungle en de paradijselijke eilanden voor de kust. Toch is Kota Kinabalu zelf ook de moeite waard voor een kort verblijf.\nOorspronkelijk stond de stad bekend als Jesselton en was het een belangrijke handelsplaats onder Brits koloniaal bestuur. Tijdens de Tweede Wereldoorlog werd de stad grotendeels verwoest, waarna ze na de oorlog opnieuw werd opgebouwd. In 1963 werd Sabah onderdeel van Maleisi\u00eb en kreeg de stad haar huidige naam, vernoemd naar Mount Kinabalu, de hoogste berg van Zuidoost-Azi\u00eb. Tegenwoordig is Kota Kinabalu een levendige stad met een mix van koloniale invloeden, moderne winkelcentra en traditionele markten.\nDe stad heeft een relaxte sfeer en is compact, waardoor je de meeste bezienswaardigheden eenvoudig te voet of met een korte taxirit bereikt. Hoewel het geen uitgesproken gezellige stad is, zorgen de levendige avondmarkten, rustige kustgebieden en groene parken voor een prettige afwisseling. Kota Kinabalu biedt gezinnen daarmee de perfecte balans tussen avontuur en ontspanning, en vormt bovendien een ideale uitvalsbasis voor uitstapjes in de omgeving.\nHoe kom je in Kota Kinabalu?\nVanuit Nederland zijn er geen directe vluchten naar Kota Kinabalu, maar de stad is goed bereikbaar via een overstap. De meest gangbare route is om eerst naar Kuala Lumpur of Singapore te vliegen. Beide steden hebben een groot internationaal vliegveld met veel dagelijkse verbindingen vanuit Europa. Vanaf daar kun je een rechtstreekse vlucht nemen naar Kota Kinabalu International Airport (BKI), de belangrijkste luchthaven van Sabah.\nKota Kinabalu International Airport ligt op slechts 10 km van het stadscentrum, waardoor je snel en gemakkelijk bij je hotel bent. Voor ons was dit ook de toegangspoort tot Maleisi\u00eb vanuit Singapore, wat betekende dat we de lange immigratierijen in\nKuala Lumpur\nkonden overslaan. Op het kleinschalige vliegveld van Kota Kinabalu hadden we binnen no time onze stempel binnen.\nDe leukste activiteiten in Kota Kinabalu\nOntdek het Kota Kinabalu Wetlands Centre\nVoor een eerste kennismaking met de natuur van Borneo is het Kota Kinabalu Wetlands Centre een perfecte plek. Dit mangrovegebied ligt op slechts 10 minuten rijden van het centrum en biedt een mooie wandelroute over houten vlonders door de wetlands. Kinderen kunnen hier op zoek gaan naar modderkruipers, kleurrijke krabben en verschillende vogelsoorten. Bij de entree kun je alvast op een bord zien welke dieren je allemaal kunt tegenkomen. Het is een rustige plek om dieren te spotten, zonder dat je diep de jungle in hoeft.\nDe houten wandelpaden kronkelen door een dicht netwerk van mangrovebomen en cre\u00ebren een unieke, bijna mysterieuze sfeer. Overal om je heen hoor je het gekwaak van kikkers en geplons in het water. Terwijl je over de vlonders loopt, rennen honderden kleine krabben in en uit hun holen. In de vroege ochtend en late middag kun je hier ook ijsvogels en Maleise reigers spotten. Neem een verrekijker mee voor de beste ervaring, want je kunt hier maar liefst 80 verschillende vogelsoorten tegenkomen!\nDe houten vlonders hebben hun beste tijd wel gehad, maar dat mag de pret niet drukken. Je kunt ervoor kiezen een ronde te lopen, waarbij er aan het eind van de route laarzen klaarstaan. Hier houdt het vlonderpad op en kun je wadend door het water verder. Supergaaf, maar toen wij er waren, stond het water te hoog, dus namen we dezelfde route terug. De ronde over de vlonders is 1,5 km lang.\nPlan je bezoek vroeg in de ochtend of later op de middag om de hitte te vermijden. Toen wij er waren, was de gevoelstemperatuur namelijk 40 graden. Zorg ook voor voldoende water en antimuggenspray, want de wetlands zitten vol insecten.\nBezoek de iconische staatsmoskee van Kota Kinabalu\nDe staatsmoskee van Kota Kinabalu is \u00e9\u00e9n van de belangrijkste religieuze bezienswaardigheden van Sabah en een indrukwekkend staaltje islamitische architectuur. De moskee, die ruimte biedt aan maar liefst 12.000 gelovigen, combineert moderne en traditionele elementen en is een iconisch herkenningspunt in de stad.\nNiet-moslims zijn welkom om de moskee buiten de gebedstijden te bezoeken. Bij aankomst dien je gepaste kleding, inclusief een hoofddeksel, op te halen bij het kledingpunt voordat je naar binnen mag. Eenmaal binnen ervaar je een serene sfeer. De grote gebedsruimte is indrukwekkend.\nDe moskee ligt aan een groot waterbassin, waardoor het gebouw bij zonsondergang prachtig weerspiegeld wordt in het water. Dit zorgt voor een fotogeniek tafereel en maakt een bezoek extra bijzonder.\nNeusapen spotten tijdens een riviersafari\nVanuit Kota Kinabalu hebben wij ook een excursie ondernomen naar de rivier in Bongawan, waar je neusapen en vuurvliegjes kunt spotten en de magische \u2018sky mirror\u2019 zonsondergang kunt ervaren. De tour duurt een hele dag, meestal van 13.00 uur tot 21.00 uur. Eerst reis je per minivan naar Bongawan, een rit van ongeveer anderhalf uur. Bij aankomst verzamel je bij de jetty, waar alle minibussen samenkomen, en stap je op een boot voor de Bongawan mangrove cruise. Een gids en een ervaren bootbestuurder begeleiden de tocht.\nDe boottocht voert je de jungle in, door de mangroves langs de rivieroevers. Het eerste deel van de tour brengt ons bij een groep makaken. Het is snel duidelijk dat deze apen dagelijks gevoerd worden, want ze springen zonder schroom op het dak van de boot en sommige klimmen zelfs naar binnen. De gids deelt trossen bananen uit, zodat toeristen de apen kunnen voeren. Helaas waren wij hier vooraf niet van op de hoogte en zijn we tegen dit soort interacties met wilde dieren. Dit is iets om rekening mee te houden bij het boeken van een excursie.\nGelukkig is de rest van de cruise puur natuur. Terwijl de gids de bomen langs de oevers afspeurt, varen we langzaam verder op zoek naar neusapen. Na een tijdje hebben we geluk: op verschillende plekken ontdekken we neusapen, met hun kenmerkende lange neuzen en bolle buiken, hoog in de bomen. Onze verrekijkers komen goed van pas, want de apen laten zich niet gemakkelijk zien. Mocht je ook de Kinabatangan-rivier in je reisschema opnemen, dan heb je daar een grotere en veel betere kans om neusapen van dichterbij te bewonderen.\nNa de cruise keren we terug naar de jetty, waar een eenvoudige, maar heerlijke maaltijd op ons wacht. Hierna gaan we opnieuw de boot op, dit keer richting het strand voor een spectaculaire zonsondergang op het strand. Het water staat laag en doordat de zee langzaam afloopt, ontstaat een spiegelend effect op het zand. Deze plek staat bekend als de \u2018sky mirror\u2019, en onze gids helpt bij het maken van de perfecte reflectiefoto\u2019s. Hoewel het strand gedeeld wordt met veel andere toeristen, is het uitzicht op de ondergaande zon erg mooi.\nOp de terug..."
+    },
+    "https://www.gezinopreis.nl/manukan-island-borneo/": {
+      "url": "https://www.gezinopreis.nl/manukan-island-borneo/",
+      "title": "Manukan Island; een tropische bounty bestemming op Maleisisch Borneo - Gezin op Reis",
+      "summary": "This blog post recommends Manukan Island, located 10 minutes from Kota Kinabalu, as a family-friendly tropical getaway with clear shallow waters perfect for snorkeling. It details the experience of staying at the island's only hotel, Sutera Sanctuary Lodges, highlighting the contrast between the busy daytime crowds and the peaceful, private atmosphere after 4:00 PM.",
+      "tips": [
+        "Head to Jesselton Point Ferry Terminal for transfers; walk through the hotel lobby to find the waterfront stalls.",
+        "Look specifically for the Sutera Sanctuary Lodges counter for their private boat transfer (every 2 hours), which includes life jackets for kids.",
+        "Don't rely on mobile connectivity; local SIM cards may not work and resort Wi-Fi is spotty (good for text, bad for photos).",
+        "Use the resort's designated private beach section during the day to avoid the heavy influx of day-trippers.",
+        "Villas have fridges and dining areas but no cooking facilities, though breakfast at Perahu restaurant is included and extensive.",
+        "Pack sun protection and beach gear, though snorkeling equipment can be rented on-site.",
+        "Budget info: Snorkeling gear rental is approx. \u20ac3 per person per day; conservation fee required upon arrival (children under 6 are free).",
+        "Best time to visit: Overnight stays are highly recommended to enjoy the island after 16:00; expect heavy crowds during the day, especially on weekends.",
+        "Warning: The East coast of Borneo is mentioned as not being malaria-free (Manukan is safer); internet connectivity is very poor."
+      ],
+      "highlights": [
+        "Snorkeling in shallow, crystal-clear water (shoulder height) teeming with tropical fish.",
+        "Manukan Villas (spacious, family-friendly units, some with 2 stories) and Beach Suites.",
+        "The 'Party Breakfast' at Perahu Restaurant featuring Western and Asian options.",
+        "The 'deserted island' experience after the last public ferry leaves at 16:00."
+      ],
+      "images": [
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20682%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/09/Maleisie-Borneo-Manukan-Island-strand-en-huisjes.jpeg-682x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/09/Maleisie-Borneo-Manukan-Island-Strand-9-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/09/Maleisie-Boneo-Manukan-boot-reis.jpeg-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20683'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/09/Maleisie-Borneo-Manukan-Island-Pier-1-1024x683.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/09/Maleisie-Borneo-Manukan-Island-woonkamer-3-1024x768.jpg"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nMaleisie\n/\nManukan Island; een tropische bounty bestemming op Maleisisch Borneo\nBen je op Maleisisch Borneo en zoek je een tropische bestemming ? Denk dan eens aan de eilandengroep Tunku Abdul Rahman National Park, op slechts tien minuten varen van Kota Kinabalu. Wij verbleven vijf dagen op Manukan Island bij het enige hotel dat het eiland rijk is, namelijk Sutera Sanctuary Lodges. Wij kozen voor deze eilandengroep omdat het oosten van Borneo, waar je meer stranden vindt, nog niet malariavrij is. In dit blog vertel ik je graag meer over onze avonturen op dit tropische bountyeiland met kinderen.\nPraktische informatie over Manukan Island (met kinderen\n)\nWij arriveerden vanuit Mulu met een propellervliegtuigje van MAS Wings (Malaysia Airlines) in de hoofdstad van Sabah; Kota Kinabalu. Vanaf de luchthaven is het slechts een korte rit naar de jachthaven waar de boten vertrekken.\nDe haven genaamd Jesselton Point Ferry Terminal bevindt zich achter een groot hotel; wij dachten even dat de taxi ons verkeerd had afgezet. Via de lobby loop je echter d\u00f3\u00f3r het hotel heen en al snel zie je aan de waterkant allerlei blauwe stalletjes staan; dit zijn de maatschappijen die de transfers naar de eilanden aanbieden.\nSutera Sanctuary Lodges heeft een eigen stalletje en beschikt over een eigen boot die elke twee uur afvaart. Onze kleuter wilde graag voor op de boot zitten, onze haren wapperden in de wind! Aan boord van de boot zijn ook gedegen reddingsvesten voor kinderen aanwezig.\nHet eiland maakt onderdeel uit van de eilandengroep Tunku Abdul Rahman National Park en is de \u00e9\u00e9n na grootste van de vijf (van groot naar klein: Gaya, Manukan, Sapi, Sulug en Mamutik). Manukan is slechts 20 hectare groot. Bij aankomst op het eiland dien je een bijdrage te betalen aan het natuurbeheer van de eilanden (kinderen tot 6 jaar zijn gratis).\nBenieuwd naar de andere eilanden, lees dit over\nGaya eiland\n.\nHet eiland wordt volop bezocht door lokale dagjesmensen (zowel lokale bewoners als veelal Chinese toeristen). Zij boeken een dagtrip om te gaan snorkelen, duiken of relaxen op het eiland. Vooral in het weekend kun je veel drukte verwachten (maar het is een illusie om te denken dat het doordeweeks rustig is).\nOm 16.00 uur vertrekken de laatste toeristenbootjes, verwacht dan een tropisch eiland met heel veel rust! Omdat je na vieren het eiland verder voor jezelf hebt, voelt het echt alsof je ineens op een onbewoond eiland bivakkeert. Overdag kun je echter ook terecht op het priv\u00e9stand voor de hotelgasten van Sutera Sanctuary Lodges, zodat je alsnog kunt genieten van de rust.\nOnze Maleisische\nsimkaarten werkten helaas niet op het eiland. Sutera Sanctuary Lodges heeft \u00e9\u00e9n internetrouter\nper twee huizen ge\u00efnstalleerd, maar tijdens ons bezoek werkte het WiFi nergens\noptimaal. Hierdoor lukte het ons wel om berichtjes ter versturen naar het\nthuisfront, maar het online opslaan van foto\u2019s helaas niet.\nKindvriendelijke\naccommodatie op Manukan Island bij Sutera Sanctuary Lodges\nOp het eiland Manukan bevindt zich slechts \u00e9\u00e9n hotel, genaamd Sutera Sanctuary Lodges. Ze beschikken zowel over Beach Suites (ter grootte van een hotelkamer) als Manukan Villa\u2019s (huisjes met \u00e9\u00e9n of meerdere slaapkamers). Alle onderkomens beschikken over een ruim eigen balkon, veranda of tuin. Bekijk\nhier direct de beschikbaarheid en actuele prijs\n.\nManukan Villa\nEen verblijf in de\nManukan Villa is fantastisch! De villa\u2019s bieden ruimte aan maximaal zes\npersonen en de grotere villa\u2019s beschikken zelfs over 2 verdiepingen. Via een\neigen ingang, afgesloten met een tuinhek, kom je de villa binnen. In de tuin\nstaat de picknicktafel al klaar, maar er is ook een buitendouche aanwezig om\nhet zand van je af te spoelen voordat je binnen treed.\nDe woonkamer is\ngroot! Er staat een gezellig zitje met moderne kussens en gezellige tafeltjes,\nen daarachter is zelfs nog een grote eettafel aanwezig. Alles is hier hip en\nluxe ingericht, wat gaaf!\nBij de eettafel is\nook nog ruimte voor een wasbak, een grote koelkast en wat keukenartikelen. Je\nkunt hier niet koken, maar we kunnen wel eindelijk onze eigen broodtrommeltjes\nen waterflessen afwassen. Aan de eettafel hebben wij regelmatig een afhaallunch\ngegeten en \u2019s avonds spelletjes gespeeld.\nWij verblijven in\neen vierpersoons villa. Dat betekent dat er een grote master slaapkamer is \u00e9n\neen tweede slaapkamer. Wij kiezen voor de master slaapkamer met het kingsize\nbed en slapen als een prins! Ook deze kamer is weer ruim opgezet, naast het bed\nis er nog voldoende ruimte voor de kledingkast, waarin badjassen en\nstrandhanddoeken klaarliggen, en een loungestoel. De aangrenzende badkamer\nbiedt ruimte aan een dubbele wastafel, toilet en douche. Er ligt een groot\nassortiment aan toiletartikelen klaar. De ramen aan de bovenkant van de\nbadkamer geven een mooi doorkijkje de jungle in.\nIn de tweede\nslaapkamer staan twee \u00e9\u00e9npersoonsbedden. Onze zoon kan niet kiezen en slaapt\neerst in het ene bed, de nacht erna in het andere. Op de aanwezige bank lezen\nwe voor het slapen gaan elke avond een verhaaltje. Ook deze kamer is weer ruim\nopgezet \u00e9n beschikt ook nog over een eigen badkamer. Deze is qua inrichting\nhetzelfde, alleen is deze ietsje kleiner (maar nog steeds bijzonder ruim).\nBeach Suite\nWij genoten zo van\nde stranddagen, dat we besloten om ons verblijf te verlengen. We konden niet in\nhetzelfde huisje verblijven en daarom verhuisden we naar een Beach Suite. Deze\nbestaat uit slechts \u00e9\u00e9n kamer, maar bevat dezelfde moderne inrichting. Een\ngroot tweepersoonsbed met daarvoor een woongedeelte met een bank en gezellig\nzitje. Desgewenst is er een extra \u00e9\u00e9npersoonsbed te plaatsen. Aangrenzend is de\nbadkamer, die er overigens hetzelfde uitzag als de badkamers in de Manukan\nVilla. Het huisje heeft een eigen veranda met uitzicht op het strand. De\nhoekhuisjes hebben daarnaast ook nog een hangmat in de tuin om heerlijk te\nkunnen luieren.\nSutera Sanctuary\nLodges beschikt ook nog over Mountain Villa\u2019s. Deze zijn qua inrichting exact\ngelijk aan de Beach Suites, alleen een stuk hoger gelegen en geven daarom een\nmooi uitzicht over het witte zandstrand en de zee.\nDe ochtend goed\nbeginnen met een uitgebreid ontbijt\nEen verblijf bij Sutera Sanctuary Lodges is altijd inclusief een uitgebreid ontbijt geserveerd in het restaurant Perahu. Op de tafeltjes van het kleurrijke restaurant staan al pakjes cornflakes en potjes pindakaas, jam, en boter klaar als we binnenkomen.\nVervolgens krijgen we hippe flesjes uitgereikt met daarin vers geperste jus d\u2019orange, koude melk \u00e9n een proefglaasje met limoen-gembersap. Samen met de menukaart krijgen we ook nog een plateau met seizoensfruit (papaya, watermeloen en gele meloen in ons geval). Mijn zoontje zegt spontaan \u2018het lijkt wel een feestontbijt!\u2019.\nVervolgens kunnen we kiezen uit 6 menu\u2019s, waarvan er 4 Aziatisch zijn en 2 Westers (namelijk \u2018American Breakfast\u2019 en pannenkoeken). Natuurlijk kiest onze kleuter elke dag voor pannenkoeken. Ik snap wel dat hij het een feestontbijt noemt!\nActiviteiten op\nManukan Island\nStrand en\nsnorkelen met kinderen\nDe belangrijkste\nreden waarom zoveel toeristen een bezoek aan Manukan brengen is vanwege de\nbountystranden, het azuurblauwe water en de tropische vissen. Deze kun je zelfs\nboven water al zien zwemmen, zo helder is het hier! Het water is afgezet met\neen rij boeien, achter de afzetting varen de ferryboten op- en neer. Het water\nheeft slechts een diepte hier tot schouderhoogte, dus het is ideaal om hier te\nsnorkelen om de tropische vissoorten te spotten. We zien niet alleen\nverschillende soorten prachtig gekleurde vissen, maar ook complete scholen\nvissen!\nSnorkels,\nduikbrillen en flippers zijn te huur bij het strandwinkeltje voor zo\u2019n \u20ac 3 p.p.\nper dag.\nSutera Sanctuary Lodges beschikt over een stuk priv\u00e9stand. Nooit gedacht dat ik daarvan gebruik zou maken, maar het is een fijne plek om rust te vinden tussen de grote stroom toeristen. Er staan hier bedjes en gekleurde parasols klaar. We bouwden hier zandkastelen, sprongen over de..."
+    },
+    "https://www.gezinopreis.nl/kuala-lumpur-met-kinderen/": {
+      "url": "https://www.gezinopreis.nl/kuala-lumpur-met-kinderen/",
+      "title": "Kuala Lumpur met kinderen, de leukste attracties en praktische tips - Gezin op Reis",
+      "summary": "This blog post focuses on family-friendly activities in Kuala Lumpur, specifically around the KLCC/Petronas Towers area. It highlights that while KL is a great hub for families, activities can be pricey, and offers specific reviews of the science center, aquarium, parks, and city cycling tours.",
+      "tips": [
+        "Check Klook for discounted tickets on attractions if traveling within 3 months.",
+        "Strollers are not allowed in the Petronas Towers observation deck and must be left downstairs.",
+        "Arrive at Petrosains Discovery Center immediately at opening time to avoid long queues.",
+        "Swimwear is mandatory for the KLCC water playground.",
+        "There are no changing rooms at the KLCC water playground, so come prepared.",
+        "Book 'Mikebikes' cycling tours in advance; they have child seats and bikes available.",
+        "Rondreizen in Kuala Lumpur is relatief makkelijk met een combinatie het openbaar vervoer en taxi\u2019s. Die laatste kan je het beste regelen via Grab en Uber, dit is veel goedkoper dan het aanhouden van een taxi op straat. Helaas hadden we hier ook een taxi chauffeur die iets aan zijn meter had gedaan waardoor wel verdacht snel opliep. Met Grab/Uber kan dit niet gebeuren want je weet van te voren de prijs.",
+        "In fastfood restaurants en in de betere restaurants zijn kinderstoelen aanwezig. Eet je bij een straatstalletje dan natuurlijk niet.",
+        "Budget info: Activities generally have a high price tag compared to budget travel; supermarkets in KLCC are expensive but stock baby products; Lake Symphony and KLCC park are free.",
+        "Best time to visit: Petrosains: At opening time; Lake Symphony: Daily from 19:00 to 23:00; Cycling tour: Took 4 hours including lunch.",
+        "Warning: Queues for Petrosains can be over an hour; Re-entry at the Aquarium is not allowed once you finish the loop; Petrosains might not be suitable for children under 4."
+      ],
+      "highlights": [
+        "Petronas Towers Skybridge & Observation Deck (86th floor)",
+        "Petrosains Discovery Center (Science Museum inside KLCC)",
+        "KLCC Park (Large playground and shallow water park)",
+        "Esplanade Lake Symphony (Free evening water and light show)",
+        "Aquaria KLCC (Aquarium with moving walkway tunnel)",
+        "Unicorn riding experience at KLCC mall (2nd floor)",
+        "Cycling tour through downtown KL with Mikebikes"
+      ],
+      "images": [
+        "https://www.gezinopreis.nl/wp-content/uploads/2018/02/kuala-lumpur-airbnb-07.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2018/02/kuala-lumpur-met-kinderen-torens-06.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2018/04/kuala-lumpur-05-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2018/04/kuala-lumpur-01-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2018/02/kuala-lumpur-petrosains-04.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nMaleisie\n/\nKuala Lumpur met kinderen, de leukste attracties en praktische tips\nJe kunt je prima vermaken in Kuala Lumpur met kinderen. Het is een van de steden in de regio die enorm veel te doen heeft voor gezinnen. Dat komt mooi uit want of je nu een langere reis maakt door Zuidoost Azi\u00eb of alleen\nMaleisi\u00eb met kinderen\nbezoekt vaak zal je een paar dagen stoppen in de Maleisische hoofdstad. Het is een hub voor goedkope Air Asia vluchten en er starten meerdere lange treinroutes.\nIk bezocht Kuala Lumpur in samen met mijn dochter en alweer meer dan tien jaar geleden een aantal dagen met mijn echtgenoot. Toen was ik niet zo onder de indruk van de stad, nu wel. Kuala Lumpur met kids is leuker dan Kuala Lumpur als stelletje mits je niet heel goedkoop op reis bent want aan de meeste kinderactiviteiten in Kuala Lumpur hangt een prijskaartje.\nTip! Ben je nu of binnen 3 maanden in Kuala Lumpur,\ncheck hier de acties van Klook\n. Hier zijn altijd kaartjes te koop met korting voor veel verschillende kindvriendelijk attracties.\nKuala Lumpur met kinderen\nPetronas towers en klcc\nPetronas Towers\nDe Petronas torens zijn het beroemdste gebouw van de stad. Deze twee torens zijn het icoon van Kuala Lumpur. Binnen in de torens zit een groot winkelcentrum. Hier zijn ook meerdere wat duurdere supermarkten maar die wel een grote keuze hebben aan babyproducten, mocht je die nodig hebben. Verder vind je hier een food court waar je lekker kunt eten.\nOp de 2e verdieping van het KLCC winkelcentrum vind je verschillende speelgoedwinkels en leuke activiteiten voor kinderen. De kidsclub is een perfecte plek voor wat ontspanning voor de kleintjes, waar tegen betaling leuke activiteiten aangeboden worden. Maar wat voor ons echt bijzonder was, was het moment dat de droom van de dochter van blogger Loraine uitkwam: ze mocht rijden op een echte unicorn! Ze vond het geweldig, het was een ervaring die ze niet snel zal vergeten.\nWij besloten om de torens te bezoeken en het was echt een waanzinnige ervaring. We hadden een fantastisch uitzicht over het park en zagen zelfs ons hotel in de verte. We wandelden over de skybridge en gingen helemaal naar de 86e verdieping. Het uitzicht was adembenemend en het voelde echt alsof we de stad van bovenaf in de palm van onze hand hadden.\nWe kochten van tevoren een ticket via\nGetYourGuide\n, waardoor we meteen konden doorlopen zonder te wachten. Alles verliep erg soepel en was heel kindvriendelijk. Hou er wel rekening mee dat wandelwagens niet zijn toegestaan, deze dien je beneden achter te laten.\nNaast de bezienswaardigheden binnenin de Petronas Torens en het KLCC winkelcentrum, biedt het gebied ook een hele leuke avondshow. Elke avond kun je om het uur genieten van een spectaculaire water- en lichtshow bij de Esplanade Lake Symphony, gelegen voor het winkelcentrum. De show combineert kleurrijke verlichting, muziek en dansende fonteinen en is een absolute must-see, vooral als je \u2019s avonds in de buurt bent. De show is gratis te bezoeken.\nHet uitzicht vanaf de promenade rondom het meer is ook prachtig, met de torens verlicht op de achtergrond. We vonden het een geweldige manier om de dag af te sluiten. De show begint elke avond om 19:00 uur en gaat door tot 23:00 uur, dus er is voldoende tijd om te genieten. Meer informatie over de show en het tijdschema kun je vinden op de offici\u00eble website van\nEsplanade Lake Symphony\n.\nPetrosains Discovery Center\nOp de 4e verdieping van de Petronas torens bevindt zich het Petrosains wetenschapsmuseum. Heel geschikt om een paar uur door te brengen tijdens je vakantie in Kuala Lumpur met kinderen. Het is een populair uitje en wachttijden kunnen flink oplopen. Wij vonden een uur te lang, dus kwamen een andere dag terug direct bij opening en konden toen gelijk naar binnen. Een van de reden waarom je zo lang moet wachten is dat je bezoek begint met een rit in een karretje waar je maar met 4 mensen in past. Tijdens dit ritje krijg je mooie filmbeelden te zien van Maleisi\u00eb en wordt indringend gesproken over het belang van wetenschap. Uiteraard met ook aandacht voor de boortorens van de sponsor van dit museum. Na de rit komen we in het museum zelf. Dit is echt een groot wetenschapsmuseum waarbij je door een aantal verschillende ruimtes met onderwerpen komt en halverwege een restaurantje. Sommige delen zijn leuker voor kinderen op de middelbare school, zeker als je al Engels kunt, terwijl andere delen heel leuk zijn voor mijn kleuterdochter. We brachten de meeste tijd door in Sparks, waar het vooral om doen gaat en minder om de wetenschap erachter. Lekker bouwen met blokken en met een graafmachine zand verplaatsen.\nDit wetenschapsmuseum is echt vergelijkbaar van niveau als wat wij in Europa gewend zijn met ook diverse interactieve stations. Wij hebben de afgelopen twee jaar meer dan tien Science Musea bezocht, dus sommige dingen zoals \u201cvlinders die op je gaan zitten\u201d werden direct door onze dochter herkend.\nIn \u201cSpeed\u201d moest mama ook aan het werk want overal moest natuurlijk gekeken worden wie er sneller, harder en beter was. Nou ik kan je vertellen: volgens de ski-machine ging ik met 100km per uur naar beneden maar mijn lieftallige dochter haalde de 140km. Gelukkig kan ik nog wel harder tegen een boksbal slaan en zonder ongelukken in een F1 auto rijden.\nOok leuk het \u201ccreative lab\u201d waar ze samen met de vriendelijke staf wat in elkaar kon knutselen.\nEr is een ruimte voor kinderen jonger dan vier maar persoonlijk zou ik wanneer je Kuala Lumpur met peuter bezoekt kiezen voor een andere activiteit.\nKLCC speeltuin en waterpark\nDe leukste speeltuinen in Kuala Lumpur kan je vinden in het park aan de voet van de Petronas torens. Er is hier een groot terrein waar een aantal speeltoestellen in elkaar overlopen, met zachte grond zodat je kind nooit hard kan vallen. Schijnt de zon dan ga je afkoelen bij de waterspeeltuin en het kinderzwembad onder de torens. Het is hier echt heerlijk spelen voor kinderen. Mijn dochter kon er geen genoeg van krijgen om hier lekker te spetteren. De waterhoogte en de speelopties zijn echt gericht op jonge kinderen. Met je tieners hoef je hier niet heen.\nRondom de speeltuin zijn bankjes voor de ouders waar je in de zon of schaduw lekker kunt kijken naar je gelukkig kind. Badkleding is verplicht maar er is geen ruimte om om te kleden.\nKLCC Aquarium\nHet Kuala Lumpur aquarium zit niet in de torens zelf maar in een van de bijgebouwen. Hoewel het niet zo groot is of modern als die in Singapore is het echt een leuk uitje voor het gezin. Nadat je diverse tanks hebt bekeken kom je bij de tunnel. Om echt optimaal te genieten heb je de keuze om niet zelf te lopen maar op een loopband te gaan staan. Op laag tempo beweeg je en ondertussen heb je alle tijd om de haaien, roggen en andere zoutwater vissen te bewonderen.\nToen we klaar waren vroegen we of we nog een rondje mochten doen maar dan moet je een nieuw kaartje kopen. Een bezoek duurt een klein uurtje.\nFietstour door Kuala Lumpur\nEen andere aanrader voor gezinnen is de fietstour door het centrum van Kuala Lumpur. Wij deden deze tour met onze kinderen van 3 en 5 jaar en het was een groot succes! We boekten de tour van tevoren bij\nMikebikes\n, waar we verwelkomd werden door de ontzettend vriendelijke en enthousiaste eigenaar. De tour duurde ongeveer 4 uur, wat voor ons de perfecte lengte was. Genoeg tijd om alles te zien zonder dat het te lang werd voor de kinderen.\nOnderweg stopten we regelmatig bij uitzichtpunten en bezienswaardigheden en kregen we de kans om de stad op een ontspannen manier te verkennen. De rit was goed te doen voor kinderen. Er zijn speciale kinderfietsen en kinderstoeltjes die achterop de fietsen kunnen worden bevestigd, zodat zelfs de jongste fietser mee kan doen. We lunchten samen bij een traditioneel restaurant, waar we konden genieten van lokale gerechten.\nDe tour is kindvriendelijk en de route was goed te fietsen, zelfs met jonge kinderen. We vonden het een geweldige manier om de stad te ontdekken, zonder het gevoel ..."
+    },
+    "https://www.gezinopreis.nl/kuching-maleisie/": {
+      "url": "https://www.gezinopreis.nl/kuching-maleisie/",
+      "title": "Kuching Maleisi\u00eb, wat is er te doen in de stad van de katten",
+      "summary": "This blog post outlines a family-friendly guide to visiting Kuching, Malaysia, serving as a hub for Borneo wildlife adventures. It details city attractions like the scenic Waterfront and Fort Margherita, provides tips for escaping the tropical heat in indoor playgrounds, and reviews local dining options suitable for children.",
+      "tips": [
+        "Take a local 'taxi boat' across the river to reach Fort Margherita instead of the footbridge for a more adventurous experience.",
+        "Escape the midday heat (which can reach 40\u00b0C) by visiting the large indoor playground at Aeon Mall.",
+        "Visit the Kuching Mosque outside of prayer times to view the interior and the historic cemetery.",
+        "To find the hidden rooftop Chinese Temple, go to the Everrise shopping center on Jalan Padungan and ask staff for the elevator to the 5th floor.",
+        "Watch the light and water show at the Waterfront; it starts at 20:30 and 21:30 on weekdays, with an extra 22:30 show on weekends.",
+        "Budget info: Fort Margherita is free for kids under 7. Pizza Hut is mentioned as a budget option (\u20ac2 per pizza). Lyn\u2019s Thandoori is slightly pricier than local stalls but cheap by Western standards.",
+        "Best time to visit: Evenings for the Waterfront activities; Mid-day for indoor malls to avoid the heat.",
+        "Warning: Temperatures can reach 40\u00b0C (104\u00b0F) during the day, so plan indoor activities during peak heat."
+      ],
+      "highlights": [
+        "Kuching Waterfront (promenade and evening market)",
+        "Fort Margherita & The Brooke Gallery",
+        "Darul Hana Bridge Light & Music Show",
+        "Aeon Mall Indoor Playground (includes miniature roleplay mall)",
+        "Topspot Food Court (Seafood dining on a parking garage roof)",
+        "Semenggoh Wildlife Centre (mentioned as a key excursion)",
+        "Bako National Park (mentioned as a key excursion)"
+      ],
+      "images": [
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-brug-1-683x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20768%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-kasteel-museum-768x1024.jpeg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-kasteel-5-683x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-speeltuin-mall-3-683x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20683%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2019/11/Maleisie-Borneo-Kuching-speeltuin-mall-4-683x1024.jpg"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nMaleisie\n/\nKuching Maleisi\u00eb, wat is er te doen in de stad van de katten\nOnze reis door Maleisisch Borneo startte in de hoofdstad Kuching. De stad bestaat uit een wirwar van kleine straatjes, heeft een promenade naast de rivier waar je heerlijk kunt flaneren en het is d\u00e9 hub om uitstapjes te maken naar bijvoorbeeld Bako National Park en het Semenggoh opvangcentrum voor orang-oetangs. In dit blog neem ik je graag mee naar onze avonturen Kuching Maleisi\u00eb.\nKuching bezienswaardigheden\nBezienswaardigheden Kuching\nHeerlijk rennen langs de Waterfront\nGeschiedenis opdoen bij Fort\nMargherita\nIndoorspeeltuin bij Aeon Mall\nLichtshow bij de brug\nBinnenkijken bij de moskee van Kuching\nChinese tempel bovenop een winkelcentrum\nKindvriendelijk restaurants in\nKuching\nTopspot\nLyn\u2019s Thandoori Restaurant\nJames Brooke Bistro & Cafe\nKindvriendelijk hotel in Kuching\nWat kun je doen rondom Kuching Maleisi\u00eb?\nOrang-oetans ontmoeten bij\nSemenggoh Natural Reserve\nBako National Park met kinderen\nPraktisch tips voor Kuching met kinderen\nVlucht Kuala Lumpur Kuching\nVervoer in Kuching\nKuching met baby of peuter\nHoeveel dagen Kuching\nBezienswaardigheden Kuching\nHeerlijk rennen langs de Waterfront\nKuching staat bekend om de Waterfront;\nlangs de rivier Sawarak loopt een wandelpromenade. Je hebt hier prachtig\nuitzicht op de rivier en d\u00e9 landmark van Kuching: een enorm lotusvormig\noverheidsgebouw. Omdat de rivieroever \u00e9\u00e9n lange autovrije promenade is, kunnen\nkinderen hier naar gelang spelen, rennen en uitrazen. \u2019s Avonds verandert de\nlange groenstrook in een uitgestrekte avondmarkt met tientallen eettentjes, ook\nalle locals komen hier graag samen.\nGeschiedenis opdoen bij Fort\nMargherita\nHet Fort Margherita aan de overzijde van de rivier werd in 1879 gebouwd om de stad Kuching te beschermen tegen aanvallen van piraten. Het biedt dan ook een prachtig uitzicht op de Sawarak rivier. Het fort is inmiddels een toeristische bezienswaardigheid; je kunt een kijkje nemen bij de uitzichttoren, de kantelen en de tuin (waar ten tijde van de Japanse bezetting ook executies zijn uitgevoerd).\nOok zit hier de Booke Gallery gevestigd, een museum met een vaste tentoonstelling over de geschiedenis van de provincie Sawarak tijdens de Brook Dynastie. Onze zoon van vier jaar vond een bezoek aan het fort fantastisch. Alhoewel hij nog weinig begreep van de geschiedenis van het fort, maakte hij zijn eigen piratenverhalen en avonturen. Ook de route ernaar toe was al een belevenis. Wij kozen namelijk voor de oversteek van de rivier met een taxibootje in plaats van de loopbrug te nemen. Het fort is dagelijks geopend en voor kinderen onder de 7 jaar hoef je geen entree te betalen.\nIndoorspeeltuin bij Aeon Mall\nHet kan enorm warm zijn in Kuching, denk aan zo\u2019n 40 graden. Op het heetst van de dag vluchtten we daarom een grote koele mall in met een enorme indoorspeeltuin. En met succes, wat een gave speeltuin is dit! Er zijn verschillende ruimtes waaronder een klimparadijs met ballenbak, zoals we die ook in Europa kennen.\nWat nieuw was voor ons, was de heuse miniatuurmall waarin kinderen allerlei soorten winkeltjes kunnen bemannen en de techniekruimte met verschillende soorten slim speelgoed. Bijvoorbeeld door draaiende schijven te combineren kunnen kinderen zelf allerlei gave bouwwerken maken. Onze zoon was hier niet weg te slaan, de middag vloog dan ook voorbij. Bij de uitgang van deze speeltuin staan ook nog elektronische speelapparaten waarvoor je apart moet betalen. Ook hier zijn leuke spellen te vinden voor jonge kinderen, zoals het \u2018blussen\u2019 van vuur, het gooien van ballen en vissen naar eendjes. Natuurlijk vind je in de mall ook een foodcourt.\nLichtshow bij de brug\nElke avond is er bij de Waterfront een licht-, muziek- en watershow. Het is een vrij nieuwe attractie, geopend in 2018, en bevat lasers, lichteffecten en enorme waterstralen van 25 meter hoog en 100 meter breed. Ook de brug zelf is prachtig uitgelicht in verschillende, elkaar afwisselende kleuren.\nOok in Kuching met kids? Volgens onze kleuter moeten meer kinderen deze spectaculaire show van 15 minuten zien waardoor ze vervolgens later naar bed mogen. De show start doordeweeks namelijk pas om 20.30 uur en 21.30 uur. Van vrijdag t/m zondag is er een extra show om 22.30 uur.\nBinnenkijken bij de moskee van Kuching\nDe aan de rivier gelegen moskee van Kuching valt al van ver op vanwege de bouwstijl en zijn roze met gouden kleuren. Het gebouw werd in 1968 gebouwd ter vervanging van een houten moskee uit 1852. Het is een enorm gebouw, er kunnen maar liefst 4.000 mensen gelijktijdig aanwezig zijn. Je kunt de rijkversierde moskee bezoeken buiten de gebedstijden om. Vergeet ook niet een kijkje te nemen bij het historische kerkhof op de binnenplaats.\nChinese tempel bovenop een winkelcentrum\nVanuit ons hotelraam hadden we zicht op een kleine Chinese tempel bovenop het dak van het Everrise winkelcentrum aan de drukke winkelstraat Jalan Padungan. Vanwege de ongebruikelijke ligging, gingen we op onderzoek uit. De werknemers en bezoekers van het winkelcentrum onder de tempel hielpen ons graag op weg en wezen ons de lift die naar de kleine en rustige tempel leidt. Doordat de tempel op het dak van de vijfde verdieping is gebouwd en daardoor boven de drukte van de straat uitstijgt, heerst er een serene rust. Mocht je in de buurt zijn, dan is het zeker de moeite waard om een bezoek te brengen.\nKindvriendelijk restaurants in\nKuching\nIn Kuching vind je op elke straathoek wel een restaurant, volgens Tripadvisor kent Kuching zo\u2019n 550 eetgelegenheden. Wij zijn geen slechte eettentjes tegengekomen, maar willen je wel graag de volgende kindvriendelijke restaurants in Kuching aanraden.\nTopspot\nNaast de Waterfront is dit misschien wel het bekendste gedeelte van Kuching: op het dak van een parkeergarage middenin het centrum zit een foodcourt genaamd Topspot. Het dak is versierd met tenten, lichtjes en felgekleurde statafels. Eromheen staan verschillende stalletjes waar je eten kunt halen. Alles draait hier om vis.\nMet een mandje kun je langs de vangsten van de dag lopen waarna je de nog spartelende dieren kunt aanwijzen die vervolgens voor je bereid worden. Voor ons als vegetari\u00ebrs was er gelukkig ook volop keuze, wij hebben ons tegoed gedaan aan verschillende smaakvolle curry\u2019s met bijvoorbeeld tofu en gewokte seizoensgroenten.\nLyn\u2019s Thandoori Restaurant\nVia een andere reiziger hoorden we\nover het beste Indiase restaurant van de stad. Aangezien ons vierjarig zoontje\neen typische moeilijke eter kan zijn maar w\u00e9l gek is op naanbrood, leek het ons\neen goed idee om hierheen te gaan. En we zijn niet teleurgesteld! De boternaan\nwas heerlijk romig en we aten de lekkerste Paneer en vegetarische Masala-curry\nooit. Je betaalt hier wel iets meer voor een maaltijd dan op andere plekken in\nKuching, maar naar Nederlandse maatstaven ben je nog steeds een habbekrats\nkwijt.\nZoals gezegd, onze zoon is op momenten nogal een moeilijke eter. Misschien de leeftijd, misschien een sterk karakter. Hoe dan ook, tijdens deze zevenweekse reis door Azi\u00eb verblijdden wij hem ook wel eens met een Westerse maaltijd. Ook daarvoor is keuze genoeg! De pizza bij de Pizzahut was zelfs de goedkoopste maaltijd die we in heel Kuching hebben genuttigd (\u20ac 2 per hele pizza).\nJames Brooke Bistro & Cafe\nJames Brooke Bistro & Cafe is een gezellige bistro aan de Waterfront van Kuching, een leuke plek voor gezinnen. De locatie is ideaal, vlakbij een speeltuin, wat het voor de kinderen een geweldige stop maakt. Het menu biedt een gevarieerde keuze, met zowel lokale als internationale gerechten, dus voor iedereen is er wel iets lekkers te vinden. Wij genoten van een aantal heerlijke lokale gerechten. Wat het extra bijzonder maakt, is het uitzicht over de rivier, waar je perfect de lichtshow kunt bekijken terwijl je geniet van je maaltijd. Het is een fijne, knusse plek waar je de lokale sfeer kunt proeven en tegelijkertijd het comfort van een gezinsvriendelijke omgeving hebt. Zeker een aanrader voor..."
+    },
+    "https://www.gezinopreis.nl/borneo-kinabatanganrivier/": {
+      "url": "https://www.gezinopreis.nl/borneo-kinabatanganrivier/",
+      "title": "Borneo Big 5 spotten met kinderen aan de Kinabatanganrivier - Gezin op Reis",
+      "summary": "This blog post recounts a family trip to the Kinabatangan River in Sabah, Borneo, focusing on a 3-day wildlife package tour with Sukau Rainforest Lodge. It details the experience of spotting wildlife like proboscis monkeys, orangutans, and crocodiles via river cruises, while providing logistical advice on transport and packing for families.",
+      "tips": [
+        "Book a package tour (2-3 nights) as the area is remote and difficult to organize independently.",
+        "Choose the boat transfer from Sandakan rather than the land transfer; it is faster, comfortable, and offers early wildlife spotting opportunities.",
+        "Bring your own snacks as there are no supermarkets or shops near the jungle resorts.",
+        "Pack a raincoat, insect repellent, and long-sleeved clothing/trousers for the evenings to protect against mosquitoes.",
+        "Participate in the afternoon cruises for the best chance to see monkeys and crocodiles, and morning cruises for birds.",
+        "Stick to resort boardwalks and guided tours; do not explore the jungle independently due to dangerous wildlife.",
+        "Budget info: Most visitors use package deals that include transport, accommodation, excursions, and meals; boat transfer is noted as slightly more expensive than land transfer but worth it.",
+        "Best time to visit: Not explicitly mentioned by month, but the text notes frequent rain showers and strong sun, typical of the tropical climate.",
+        "Warning: Do not enter the jungle alone (safety risk); there are no shops nearby so come prepared; be prepared for rain and mosquitoes."
+      ],
+      "highlights": [
+        "Kinabatangan River cruises (morning and afternoon)",
+        "Spotting Proboscis Monkeys (Neusapen)",
+        "Seeing Orangutans in the wild",
+        "Spotting Saltwater Crocodiles",
+        "Birdwatching for Hornbills (6 species spotted) and Storm's Stork",
+        "Kelenanap Oxbow Lake (covered in water lilies)",
+        "Night spotting on the boardwalk (tarantulas, palm civets)",
+        "Sukau Rainforest Lodge"
+      ],
+      "images": [
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20768%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2024/10/Borneo-met-kinderen-Kinabatanganrivier-cruise-6-768x1024.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20768'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2024/10/Borneo-met-kinderen-Kinabatanganrivier-Sukau-Lodge-1-1024x768.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20683'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2024/10/Borneo-met-kinderen-Kinabatanganrivier-apen-1-1024x683.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201024%20683'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2024/10/Borneo-met-kinderen-Kinabatanganrivier-regen-1-1024x683.jpg",
+        "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20768%201024'%3E%3C/svg%3E",
+        "https://www.gezinopreis.nl/wp-content/uploads/2024/10/Borneo-met-kinderen-Kinabatanganrivier-boardwalk-4-768x1024.jpg"
+      ],
+      "raw_text": "Home\n/\nReisinformatie\n/\nAzie\n/\nMaleisie\n/\nBorneo Big 5 spotten met kinderen aan de Kinabatanganrivier\nOrang-oetans, neusapen, krokodillen, neushoornvogels en Borneo-dwergolifanten, oftewel de Borneo Big 5. Dit zijn de dieren waar Borneo wereldberoemd om is. En de beste plek om ze allemaal te zien, is aan de Kinabatanganrivier. In dit blog neem ik je mee op onze reis naar deze geweldige plek en vertel ik waarom een bezoek aan\nBorneo met kinderen\nniet compleet is zonder een stop in dit unieke gebied aan de Kinabatanganrivier.\nPraktische informatie over de Kinabatanganrivier op Borneo met kinderen\nHoe kom je er?\nDe Kinabatanganrivier ligt in het oosten van Sabah, Maleisisch Borneo, en is het beste bereikbaar vanuit de stad Sandakan. De meeste toeristen bezoeken de Kinabatanganrivier via een pakketreis van 2, 3 of meer nachten, vanwege de afgelegen ligging van het gebied. Bij zo\u2019n pakketreis zijn vervoer, verblijf, excursies en maaltijden inbegrepen. Wij kozen voor Borneo Eco Tours met een tour van 3 dagen en 2 nachten.\nZo\u2019n tour begint meestal vanaf het vliegveld of je hotel in Sandakan. Wij werden opgehaald van het vliegveld van Sandakan, na een korte vlucht van ongeveer een uur vanaf Kota Kinabalu, de hoofdstad van Sabah. Lees ook ons blog over de\nregio Sandakan op Borneo\n.\nVervolgens heb je twee mogelijkheden om naar de Kinabatanganrivier te reizen: per boot over zee/rivier of over land met een minibus of jeep. De boottocht is de snelste optie, hoewel iets duurder. Wij kozen voor de boot, en daar hebben we geen moment spijt van gehad, want onderweg zagen we al een orang-oetan! Natuurlijk stopten we meteen om uitgebreid de tijd te nemen deze fascinerende aap te observeren. Het bleek het alfamannetje van de groep te zijn \u2013 een onvergetelijke ervaring!\nDe boot zelf was verrassend comfortabel: een twaalfzitter met een overkapping, wat ideaal was tegen de felle zon en de stortbui die we onderweg te verduren kregen. Ondanks mijn gevoeligheid voor zee- en wagenziekte, had ik nergens last van.\nOver de Kinabatanganrivier\nDe Kinabatanganrivier is niet alleen de langste rivier van Maleisisch Borneo, maar ook \u00e9\u00e9n van de meest biodiverse plekken ter wereld. De rivier slingert door een landschap van dichte jungle, mangroven en een overvloed aan wilde dieren. Hier kun je de jungle van dichtbij ervaren. Vanwege de wilde dieren is het echter niet veilig om de jungle zelfstandig te verkennen. Blijf daarom altijd bij je resort en ga alleen met een gids op pad.\nWist je trouwens dat de omgeving van de Kinabatanganrivier zo indrukwekkend is dat hier opnames voor\nPlanet Earth 3\nzijn gemaakt? Dit benadrukt nog eens hoe uniek en rijk aan wildlife deze regio is!\nAangezien alle excursies vanuit de resorts worden georganiseerd, zijn er geen supermarkten of winkels in de buurt. Zorg dus dat je wat snacks meeneemt voordat je in de bus of boot naar de Kinabatanganrivier stapt. In ons resort konden we gelukkig altijd gratis onze waterflessen bijvullen. Vergeet niet om insectenwerende middelen mee te nemen, evenals een regenjas (die hadden wij meerdere keren nodig!) en kleding met lange mouwen en broekspijpen voor de avond, om je te beschermen tegen muggen.\nExcursies op de Kinabatanganrivier op Borneo met kinderen\nWij maakten meerdere riviercruises vanuit onze lodge, Sukau Rainforest Lodge. Per cruise zal ik je vertellen wat we hebben gezien en hoe we dit hebben ervaren. Alle riviercruises werden georganiseerd door de lodge en vonden plaats in kleine, open bootjes met maximaal 12 personen per boot (vaak waren we zelfs met minder). Bij de lodge kun je ook extra cruises boeken, zoals een avondcruise in het donker. Wij hebben dit niet gedaan, omdat er door het onweer weinig kans was om wildlife te spotten.\nRiviercruises\nAfternooncruise\nDe afternooncruise is veruit de populairste excursie, omdat de kans op het zien van wildlife dan het grootst is! De dieren bereiden zich voor op de nacht. Wist je bijvoorbeeld dat apen aan de rivier in de bomen slapen? Door op het uiterste puntje van een tak te gaan zitten, kunnen roofdieren hen alleen van \u00e9\u00e9n kant benaderen in plaats van helemaal rondom. Daarom is het bijna gegarandeerd dat je tijdens een afternooncruise veel verschillende apensoorten tegenkomt.\nOnze eerste afternooncruise maakten we in de stromende regen (gelukkig werd het later wel droog), maar we zagen bijna net zoveel dieren als tijdens de afternooncruise de volgende dag. Het hoogtepunt voor ons was het zien van de neusapen (proboscis monkeys). Er leven er hier ontzettend veel, dus je kunt ze goed bestuderen. Wist je dat alleen de mannetjes zo\u2019n grote neus hebben? Hun neus kan wel 10 centimeter lang worden, en bij sommige mannetjes is hij zo groot dat ze hem opzij moeten leggen om te eten.\nOnze negenjarige zoon vond de (zoutwater)krokodil het hoogtepunt van de excursie. Het was flink zoeken, maar tijdens de zonsondergang spotte onze gids een krokodil die lag te ontspannen tussen het struikgewas in een zijtak van de rivier. Hoewel de krokodil wegzwom, zagen we hem op de terugweg opnieuw op dezelfde plek. Super gaaf!\nDaarnaast kwamen we veel apensoorten tegen, zoals de veelvoorkomende langstaartmakaak en de lampongaap. Ook de prachtige (en zeldzame) rode langoer (red leaf monkey) en de mutslangoer (silver leaf monkey) hebben we tijdens de cruises gespot.\nHoewel het op de rivier soms druk kan zijn met boten van verschillende lodges, verspreidt het zich snel. Bij \u00e9\u00e9n diersoort zijn er 0 tot 2 bootjes aanwezig. De gidsen houden elkaar overigens op de hoogte van waar bepaalde dieren te vinden zijn.\nHelaas hebben wij geen dwergolifanten gezien bij de Kinabatanganrivier, hoewel andere toeristen die we op Borneo spraken, ze vaak w\u00e9l hebben gespot. Het blijft natuurlijk wildlife, dus er is nooit een garantie dat je bepaalde dieren ziet.\nOchtendcruise\nTijdens deze cruise zagen we aanzienlijk minder groot wildlife, maar wel veel nieuwe vogelsoorten. De neushoornvogel was natuurlijk de meest gewilde soort, en wij hadden geluk: tijdens deze ochtendcruise spotten we maar liefst 6 van de 8 soorten die hier langs de rivier leven!\nDaarnaast zagen we verschillende apensoorten, waaronder opnieuw de neusaap, en een aantal prachtige vogels, zoals de zeldzame Soenda ooievaar (storm\u2019s stork) en adelaars. Een ander hoogtepunt was ons bezoek aan het schitterende Kelenanap Oxbow Lake, bedekt met duizenden waterlelies.\nOverige activiteiten bij Sukau Rainforest Lodge\nBoardwalk\nSukau Rainforest Lodge ligt midden in de jungle en verbindt de huisjes en gebouwen met een houten boardwalk. Een deel van deze boardwalk is een wandelpad van ongeveer 1,5 kilometer dat je zelf kunt verkennen of waar je met de in-house naturalist kunt meelopen. Wij hebben beide gedaan. Tijdens de wandeling met de gids zagen we onder andere de unieke pygmy-eekhoorn.\n\u2019s Avonds ontdekten we zelf waarom je de boardwalk voorzichtig moet verkennen. We zagen een enorme tarantula en een palm civetkat, een roofdier dat net een gekko had gevangen. Een indrukwekkende ervaring!\nIn-house Orang-Oetan Talk\nEen andere leuke activiteit is de in-house Orang-Oetan Talk, gegeven door \u00e9\u00e9n van de biologen. In een uur tijd leer je alles over het gedrag, de leefomgeving en de bedreigingen waarmee deze dieren worden geconfronteerd.\nWist je bijvoorbeeld dat baby orang-oetans wel 6 tot 10 jaar bij hun moeder blijven en haar gedrag nauwkeurig kopi\u00ebren?\nSukau Rainforest Lodge\nWij boekten ons verblijf, inclusief alle genoemde excursies, bij\nSukau Rainforest Lodge\nvia Borneo Eco Tours. Alle maaltijden waren inbegrepen.\nSukau Rainforest Lodge is een kleinschalige accommodatie met deluxe kamers en villa\u2019s. Wij verbleven in een deluxe room, een ruime kamer met genoeg plek voor een tweepersoonsbed en een extra bed voor onze zoon. Vanuit het zitje hadden we uitzicht op de jungle \u2013 en ja, we zagen zelfs apen! Villa\u2019s beschikken bovendien over een terras.\nHet restaurant van de lodge werkt als buffetrestaurant met een klein deel live cooking. Vegetari\u00ebrs worden goed verzorgd ..."
+    }
+  }
 }
