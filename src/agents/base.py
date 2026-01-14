@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+import json
 import sys
 from pathlib import Path
 from typing import Generator
@@ -6,6 +8,10 @@ from typing import Generator
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.models import ChatMessage, Itinerary
+
+# Debug output directory
+DEBUG_DIR = Path("debug")
+DEBUG_DIR.mkdir(exist_ok=True)
 
 
 SYSTEM_PROMPT = """You are an expert travel planner specializing in family trips to Borneo and Malaysia.
@@ -46,6 +52,39 @@ class TravelAgent(ABC):
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.system_prompt = SYSTEM_PROMPT
+
+    def save_debug_response(self, response: str, prefix: str = "itinerary") -> Path:
+        """
+        Save raw AI response for debugging.
+
+        Args:
+            response: The raw response string from the AI
+            prefix: Prefix for the filename
+
+        Returns:
+            Path to the saved debug file
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{prefix}_{self.name.lower()}_{timestamp}.json"
+        filepath = DEBUG_DIR / filename
+
+        # Try to pretty-print if it's valid JSON
+        try:
+            # Extract JSON from markdown code blocks if present
+            json_str = response.strip()
+            if "```json" in json_str:
+                json_str = json_str.split("```json")[1].split("```")[0]
+            elif "```" in json_str:
+                json_str = json_str.split("```")[1].split("```")[0]
+
+            parsed = json.loads(json_str.strip())
+            content = json.dumps(parsed, indent=2)
+        except (json.JSONDecodeError, IndexError):
+            # Save as-is if not valid JSON
+            content = response
+
+        filepath.write_text(content)
+        return filepath
 
     @abstractmethod
     def chat(

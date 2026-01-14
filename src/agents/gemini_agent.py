@@ -116,7 +116,13 @@ class GeminiAgent(TravelAgent):
             ),
         )
 
-        json_str = response.text.strip()
+        raw_response = response.text.strip()
+
+        # Save debug output
+        debug_path = self.save_debug_response(raw_response)
+        print(f"Debug response saved to: {debug_path}")
+
+        json_str = raw_response
         if json_str.startswith("```"):
             json_str = json_str.split("```")[1]
             if json_str.startswith("json"):

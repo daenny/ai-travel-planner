@@ -285,9 +285,22 @@ def render_sidebar():
 
         if st.session_state.blog_content:
             st.markdown("**Added blogs:**")
-            for url in st.session_state.blog_content:
+            urls_to_delete = []
+            for url in list(st.session_state.blog_content.keys()):
                 content = st.session_state.blog_content[url]
-                st.markdown(f"- {content.title[:30]}... ({len(content.tips)} tips)")
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    st.markdown(f"- {content.title[:25]}... ({len(content.tips)} tips)")
+                with col2:
+                    if st.button("🗑️", key=f"del_blog_sidebar_{hash(url)}", help="Delete blog"):
+                        urls_to_delete.append(url)
+
+            # Process deletions after iteration
+            for url in urls_to_delete:
+                del st.session_state.blog_content[url]
+                if url in st.session_state.session.itinerary.blog_urls:
+                    st.session_state.session.itinerary.blog_urls.remove(url)
+                st.rerun()
 
         st.markdown("---")
         st.subheader("Save/Load Plans")
@@ -547,9 +560,17 @@ def render_blog_tips():
     if st.session_state.blog_content:
         st.header("📝 Tips from Blogs")
 
-        for url, content in st.session_state.blog_content.items():
+        urls_to_delete = []
+        for url in list(st.session_state.blog_content.keys()):
+            content = st.session_state.blog_content[url]
             with st.expander(content.title, expanded=False):
-                st.markdown(f"**Source:** [{url}]({url})")
+                col1, col2 = st.columns([5, 1])
+                with col1:
+                    st.markdown(f"**Source:** [{url}]({url})")
+                with col2:
+                    if st.button("🗑️ Delete", key=f"del_blog_tab_{hash(url)}"):
+                        urls_to_delete.append(url)
+
                 st.markdown(f"**Summary:** {content.summary[:300]}...")
 
                 if content.tips:
@@ -561,6 +582,16 @@ def render_blog_tips():
                     st.markdown("**Highlights:**")
                     for highlight in content.highlights[:5]:
                         st.markdown(f"- {highlight}")
+
+        # Process deletions after iteration
+        for url in urls_to_delete:
+            del st.session_state.blog_content[url]
+            if url in st.session_state.session.itinerary.blog_urls:
+                st.session_state.session.itinerary.blog_urls.remove(url)
+            st.success(f"Deleted blog: {url[:50]}...")
+            st.rerun()
+    else:
+        st.info("No blogs added yet. Add blog URLs in the sidebar to extract travel tips.")
 
 
 def main():
