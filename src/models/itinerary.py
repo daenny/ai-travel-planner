@@ -1,7 +1,41 @@
-from datetime import date, time
+from datetime import date as DateType, time as TimeType, datetime
 from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
+
+
+def parse_date(v) -> DateType | None:
+    """Parse various date formats to date object."""
+    if v is None or v == "null" or v == "":
+        return None
+    if isinstance(v, DateType):
+        return v
+    if isinstance(v, str):
+        try:
+            return datetime.strptime(v, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+        try:
+            return datetime.fromisoformat(v).date()
+        except ValueError:
+            pass
+    return None
+
+
+def parse_time(v) -> TimeType | None:
+    """Parse various time formats to time object."""
+    if v is None or v == "null" or v == "":
+        return None
+    if isinstance(v, TimeType):
+        return v
+    if isinstance(v, str):
+        # Try common formats
+        for fmt in ["%H:%M", "%H:%M:%S", "%I:%M %p", "%I:%M%p"]:
+            try:
+                return datetime.strptime(v, fmt).time()
+            except ValueError:
+                continue
+    return None
 
 
 class ActivityType(str, Enum):
@@ -70,8 +104,8 @@ class Activity(BaseModel):
     description: str
     location: str
     activity_type: ActivityType = ActivityType.SIGHTSEEING
-    start_time: Optional[time] = None
-    end_time: Optional[time] = None
+    start_time: TimeType | None = None
+    end_time: TimeType | None = None
     cost_estimate: Optional[str] = None
     booking_required: bool = False
     booking_link: Optional[str] = None
@@ -98,10 +132,16 @@ class Activity(BaseModel):
                 return ActivityType.SIGHTSEEING
         return v
 
+    @field_validator("start_time", "end_time", mode="before")
+    @classmethod
+    def parse_time_fields(cls, v):
+        """Parse time strings to time objects."""
+        return parse_time(v)
+
 
 class DayPlan(BaseModel):
     day_number: int
-    date: Optional[date] = None
+    date: DateType | None = None
     title: str
     location: str
     summary: str
@@ -111,12 +151,18 @@ class DayPlan(BaseModel):
     image_url: Optional[str] = None
     image_path: Optional[str] = None
 
+    @field_validator("date", mode="before")
+    @classmethod
+    def parse_date_field(cls, v):
+        """Parse date strings to date objects."""
+        return parse_date(v)
+
 
 class Itinerary(BaseModel):
     title: str = "Borneo Family Adventure"
     description: str = ""
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    start_date: DateType | None = None
+    end_date: DateType | None = None
     travelers: int = 4
     days: list[DayPlan] = Field(default_factory=list)
     general_tips: list[TravelTip] = Field(default_factory=list)
@@ -124,6 +170,12 @@ class Itinerary(BaseModel):
     budget_estimate: Optional[str] = None
     emergency_contacts: dict[str, str] = Field(default_factory=dict)
     blog_urls: list[str] = Field(default_factory=list)
+
+    @field_validator("start_date", "end_date", mode="before")
+    @classmethod
+    def parse_date_fields(cls, v):
+        """Parse date strings to date objects."""
+        return parse_date(v)
 
     def add_day(self, day: DayPlan) -> None:
         self.days.append(day)
