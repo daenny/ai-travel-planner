@@ -9,11 +9,12 @@ import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.models import ChatMessage, Itinerary, PlannerSession
+from src.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent
 from src.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
 from src.agents.base import TravelAgent
 from src.services import UnsplashService, BlogScraper, PDFGenerator
 from src.services.pdf_generator import PDFStyle
+from src.services.blog_scraper import BlogContent
 from src.storage import JSONStore
 
 load_dotenv()
@@ -76,6 +77,49 @@ def delete_api_key(provider: str) -> bool:
         return True
     except Exception:
         return False
+
+
+def blog_content_to_saved(content: BlogContent) -> SavedBlogContent:
+    """Convert BlogContent dataclass to SavedBlogContent Pydantic model."""
+    return SavedBlogContent(
+        url=content.url,
+        title=content.title,
+        summary=content.summary,
+        tips=content.tips,
+        highlights=content.highlights,
+        images=content.images,
+        raw_text=content.raw_text,
+    )
+
+
+def saved_to_blog_content(saved: SavedBlogContent) -> BlogContent:
+    """Convert SavedBlogContent Pydantic model to BlogContent dataclass."""
+    return BlogContent(
+        url=saved.url,
+        title=saved.title,
+        summary=saved.summary,
+        tips=saved.tips,
+        highlights=saved.highlights,
+        images=saved.images,
+        raw_text=saved.raw_text,
+    )
+
+
+def sync_blog_content_to_session():
+    """Sync st.session_state.blog_content to session.blog_content for saving."""
+    st.session_state.session.blog_content = {
+        url: blog_content_to_saved(content)
+        for url, content in st.session_state.blog_content.items()
+    }
+
+
+def sync_blog_content_from_session():
+    """Sync session.blog_content to st.session_state.blog_content after loading."""
+    st.session_state.blog_content = {
+        url: saved_to_blog_content(saved)
+        for url, saved in st.session_state.session.blog_content.items()
+    }
+
 
 st.set_page_config(
     page_title="Borneo Travel Planner",
@@ -257,14 +301,18 @@ def render_sidebar():
                 loaded = store.load_session(selected_session)
                 if loaded:
                     st.session_state.session = loaded
-                    st.success(f"Loaded: {selected_session}")
+                    # Restore blog content from loaded session
+                    sync_blog_content_from_session()
+                    st.success(f"Loaded: {selected_session} ({len(st.session_state.blog_content)} blogs)")
                     st.rerun()
 
         save_name = st.text_input("Save as", placeholder="my_borneo_trip", key="save_name")
         if st.button("Save Session", key="save_btn"):
             if save_name:
+                # Sync blog content before saving
+                sync_blog_content_to_session()
                 store.save_session(st.session_state.session, save_name)
-                st.success(f"Saved: {save_name}")
+                st.success(f"Saved: {save_name} ({len(st.session_state.blog_content)} blogs)")
 
         st.markdown("---")
         st.subheader("Generate PDF")

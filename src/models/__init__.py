@@ -5,6 +5,7 @@ from .itinerary import (
     DayPlan,
     Itinerary,
     ChatMessage,
+    SavedBlogContent,
     PlannerSession,
 )
 
@@ -15,5 +16,6 @@ __all__ = [
     "DayPlan",
     "Itinerary",
     "ChatMessage",
+    "SavedBlogContent",
     "PlannerSession",
 ]

@@ -144,7 +144,19 @@ class ChatMessage(BaseModel):
     content: str
 
 
+class SavedBlogContent(BaseModel):
+    """Blog content model for persistence (mirrors BlogContent dataclass)."""
+    url: str
+    title: str
+    summary: str
+    tips: list[str] = Field(default_factory=list)
+    highlights: list[str] = Field(default_factory=list)
+    images: list[str] = Field(default_factory=list)
+    raw_text: str = ""
+
+
 class PlannerSession(BaseModel):
     itinerary: Itinerary = Field(default_factory=Itinerary)
     chat_history: list[ChatMessage] = Field(default_factory=list)
     ai_provider: str = "claude"
+    blog_content: dict[str, SavedBlogContent] = Field(default_factory=dict)
