@@ -6,6 +6,20 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
+app = "streamlit run src/app.py"
 
 [dependencies]
-python = ">=3.14.2,<3.15"
+python = ">=3.12,<3.14"
+streamlit = "*"
+anthropic = "*"
+openai = "*"
+google-genai = "*"
+pydantic = "*"
+weasyprint = "*"
+httpx = "*"
+beautifulsoup4 = "*"
+python-dotenv = "*"
+pillow = "*"
+qrcode = "*"
+jinja2 = "*"
+keyring = "*"

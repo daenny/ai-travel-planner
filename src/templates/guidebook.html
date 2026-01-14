@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ itinerary.title }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        @page :first {
+            margin-top: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial Narrow', Arial, sans-serif;
+            line-height: 1.4;
+            color: #1a1a1a;
+            font-size: 9pt;
+        }
+
+        .cover {
+            height: 273mm;
+            background: #1a5f4a;
+            color: white;
+            padding: 20mm;
+            page-break-after: always;
+        }
+
+        .cover h1 {
+            font-size: 32pt;
+            margin-bottom: 10px;
+        }
+
+        .cover .subtitle {
+            font-size: 12pt;
+            opacity: 0.8;
+        }
+
+        .cover .info-box {
+            margin-top: 40px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+
+        .cover .info-row {
+            margin-bottom: 8px;
+        }
+
+        .cover .info-label {
+            font-size: 8pt;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .cover .info-value {
+            font-size: 11pt;
+        }
+
+        .day-spread {
+            page-break-after: always;
+        }
+
+        .day-banner {
+            background: #2d8b6f;
+            color: white;
+            padding: 8px 12px;
+            margin: -12mm -12mm 10px -12mm;
+            display: flex;
+            align-items: center;
+        }
+
+        .day-num {
+            font-size: 24pt;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .day-title-block h2 {
+            font-size: 14pt;
+            margin-bottom: 2px;
+        }
+
+        .day-title-block .location {
+            font-size: 9pt;
+            opacity: 0.9;
+        }
+
+        .day-content {
+            display: flex;
+            gap: 15px;
+        }
+
+        .day-main {
+            flex: 2;
+        }
+
+        .day-sidebar {
+            flex: 1;
+            background: #f5f5f5;
+            padding: 10px;
+            font-size: 8pt;
+        }
+
+        .day-image {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .schedule-table th {
+            background: #e8f5e9;
+            padding: 5px;
+            text-align: left;
+            font-size: 8pt;
+            text-transform: uppercase;
+        }
+
+        .schedule-table td {
+            padding: 6px 5px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .schedule-time {
+            font-weight: bold;
+            white-space: nowrap;
+            width: 50px;
+        }
+
+        .schedule-activity {
+            font-weight: bold;
+            color: #1a5f4a;
+        }
+
+        .schedule-desc {
+            font-size: 8pt;
+            color: #555;
+        }
+
+        .schedule-location {
+            font-size: 7pt;
+            color: #888;
+        }
+
+        .schedule-cost {
+            font-size: 8pt;
+            color: #2d8b6f;
+            font-weight: bold;
+            text-align: right;
+            width: 60px;
+        }
+
+        .qr-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .qr-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .qr-code {
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+        }
+
+        .qr-label {
+            font-size: 7pt;
+        }
+
+        .tip-box {
+            background: #fff8e1;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ffc107;
+        }
+
+        .tip-title {
+            font-weight: bold;
+            font-size: 8pt;
+            color: #f57c00;
+            margin-bottom: 3px;
+        }
+
+        .weather-box {
+            background: #e3f2fd;
+            padding: 6px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .weather-icon {
+            font-size: 16pt;
+        }
+
+        .appendix {
+            padding: 10px;
+        }
+
+        .appendix h2 {
+            font-size: 14pt;
+            color: #1a5f4a;
+            border-bottom: 2px solid #2d8b6f;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .appendix h3 {
+            font-size: 10pt;
+            color: #1a5f4a;
+            margin: 15px 0 8px 0;
+        }
+
+        .checklist {
+            columns: 3;
+            column-gap: 15px;
+        }
+
+        .checklist-item {
+            font-size: 8pt;
+            margin-bottom: 4px;
+            break-inside: avoid;
+        }
+
+        .checklist-item::before {
+            content: '☐ ';
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .emergency-card {
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .emergency-label {
+            font-size: 7pt;
+            text-transform: uppercase;
+            color: #c62828;
+        }
+
+        .emergency-number {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #b71c1c;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .tip-card {
+            background: #f5f5f5;
+            padding: 8px;
+            font-size: 8pt;
+        }
+
+        .tip-card-title {
+            font-weight: bold;
+            color: #1a5f4a;
+            margin-bottom: 3px;
+        }
+
+        .budget-summary {
+            text-align: center;
+            padding: 20px;
+            background: #e8f5e9;
+            margin-top: 20px;
+        }
+
+        .budget-amount {
+            font-size: 24pt;
+            color: #1a5f4a;
+            font-weight: bold;
+        }
+
+        .print-note {
+            text-align: center;
+            font-size: 7pt;
+            color: #999;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover">
+        <h1>{{ itinerary.title }}</h1>
+        <div class="subtitle">{{ itinerary.description or "Travel Guidebook" }}</div>
+
+        <div class="info-box">
+            <div class="info-row">
+                <div class="info-label">Travel Dates</div>
+                <div class="info-value">
+                    {% if itinerary.start_date %}{{ itinerary.start_date }}{% if itinerary.end_date %} to {{ itinerary.end_date }}{% endif %}{% else %}To be determined{% endif %}
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Number of Travelers</div>
+                <div class="info-value">{{ itinerary.travelers }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Total Days</div>
+                <div class="info-value">{{ itinerary.days|length }}</div>
+            </div>
+            {% if itinerary.budget_estimate %}
+            <div class="info-row">
+                <div class="info-label">Estimated Budget</div>
+                <div class="info-value">{{ itinerary.budget_estimate }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Day Pages -->
+    {% for day in itinerary.days %}
+    <div class="day-spread">
+        <div class="day-banner">
+            <div class="day-num">{{ day.day_number }}</div>
+            <div class="day-title-block">
+                <h2>{{ day.title }}</h2>
+                <div class="location">{{ day.location }}{% if day.date %} · {{ day.date }}{% endif %}</div>
+            </div>
+        </div>
+
+        <div class="day-content">
+            <div class="day-main">
+                {% if day.image_path %}
+                <img class="day-image" src="{{ day.image_path|b64image }}" alt="{{ day.location }}">
+                {% endif %}
+
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Activity</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in day.activities %}
+                        <tr>
+                            <td class="schedule-time">{{ activity.start_time or "—" }}</td>
+                            <td>
+                                <div class="schedule-activity">{{ activity.name }}</div>
+                                <div class="schedule-desc">{{ activity.description }}</div>
+                                <div class="schedule-location">📍 {{ activity.location }}</div>
+                            </td>
+                            <td class="schedule-cost">{{ activity.cost_estimate or "—" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% set booking_activities = day.activities | selectattr('booking_link') | list %}
+                {% if booking_activities and qr_codes %}
+                <div class="qr-section">
+                    <strong style="font-size: 8pt;">Scan to Book:</strong>
+                    {% for activity in booking_activities %}
+                    {% if activity.booking_link in qr_codes %}
+                    <div class="qr-item">
+                        <img class="qr-code" src="{{ qr_codes[activity.booking_link] }}" alt="QR Code">
+                        <div class="qr-label">{{ activity.name }}</div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="day-sidebar">
+                <div style="font-size: 8pt; color: #555; margin-bottom: 10px;">{{ day.summary }}</div>
+
+                {% if day.tips %}
+                {% for tip in day.tips %}
+                <div class="tip-box">
+                    <div class="tip-title">{{ tip.title }}</div>
+                    {{ tip.content }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if day.weather_note %}
+                <div class="weather-box">
+                    <div class="weather-icon">🌤️</div>
+                    <div>{{ day.weather_note }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Appendix -->
+    <div class="appendix">
+        <h2>Quick Reference</h2>
+
+        {% if itinerary.general_tips %}
+        <h3>Essential Tips</h3>
+        <div class="tips-grid">
+            {% for tip in itinerary.general_tips %}
+            <div class="tip-card">
+                <div class="tip-card-title">{{ tip.title }}</div>
+                {{ tip.content }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if itinerary.packing_list %}
+        <h3>Packing Checklist</h3>
+        <div class="checklist">
+            {% for item in itinerary.packing_list %}
+            <div class="checklist-item">{{ item }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if itinerary.emergency_contacts %}
+        <h3>Emergency Contacts</h3>
+        <div class="emergency-grid">
+            {% for name, number in itinerary.emergency_contacts.items() %}
+            <div class="emergency-card">
+                <div class="emergency-label">{{ name }}</div>
+                <div class="emergency-number">{{ number }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if itinerary.budget_estimate %}
+        <div class="budget-summary">
+            <div style="font-size: 9pt; color: #666;">Total Estimated Budget</div>
+            <div class="budget-amount">{{ itinerary.budget_estimate }}</div>
+        </div>
+        {% endif %}
+
+        <div class="print-note">
+            Print this guidebook and take it with you! Best printed double-sided on A4 paper.
+        </div>
+    </div>
+</body>
+</html>

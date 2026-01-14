@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ itinerary.title }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .cover {
+            height: 297mm;
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8b6f 50%, #3ba88a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>');
+            background-size: 50px 50px;
+        }
+
+        .cover h1 {
+            font-size: 48pt;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .cover .subtitle {
+            font-size: 18pt;
+            font-weight: 300;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .cover .dates {
+            margin-top: 40px;
+            font-size: 14pt;
+            opacity: 0.8;
+            position: relative;
+        }
+
+        .cover .travelers {
+            margin-top: 10px;
+            font-size: 12pt;
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .day-page {
+            min-height: 297mm;
+            padding: 15mm;
+            page-break-after: always;
+            background: white;
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #2d8b6f;
+            padding-bottom: 15px;
+        }
+
+        .day-number {
+            background: #2d8b6f;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24pt;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .day-info h2 {
+            font-size: 24pt;
+            color: #1a5f4a;
+            margin-bottom: 5px;
+        }
+
+        .day-info .location {
+            font-size: 14pt;
+            color: #666;
+        }
+
+        .day-hero {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .day-summary {
+            font-size: 12pt;
+            color: #555;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2d8b6f;
+        }
+
+        .activities-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #3ba88a;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .activity-name {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #1a5f4a;
+        }
+
+        .activity-time {
+            font-size: 10pt;
+            color: #888;
+            background: #e8f5e9;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .activity-description {
+            font-size: 11pt;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .activity-location {
+            font-size: 10pt;
+            color: #777;
+        }
+
+        .activity-cost {
+            font-size: 10pt;
+            color: #2d8b6f;
+            font-weight: bold;
+        }
+
+        .tips-section {
+            margin-top: 25px;
+            background: #fff8e1;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .tips-title {
+            font-size: 14pt;
+            color: #f57c00;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tips-title::before {
+            content: '💡';
+            margin-right: 8px;
+        }
+
+        .tip-item {
+            font-size: 10pt;
+            color: #555;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .tip-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #f57c00;
+        }
+
+        .general-page {
+            min-height: 297mm;
+            padding: 15mm;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 24pt;
+            color: #1a5f4a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2d8b6f;
+        }
+
+        .packing-list {
+            columns: 2;
+            column-gap: 30px;
+        }
+
+        .packing-item {
+            font-size: 11pt;
+            padding: 5px 0;
+            break-inside: avoid;
+        }
+
+        .packing-item::before {
+            content: '☐ ';
+            color: #2d8b6f;
+        }
+
+        .emergency-contacts {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .emergency-title {
+            font-size: 14pt;
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+
+        .contact-item {
+            font-size: 11pt;
+            margin-bottom: 5px;
+        }
+
+        .budget-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .budget-label {
+            font-size: 12pt;
+            color: #666;
+        }
+
+        .budget-amount {
+            font-size: 28pt;
+            color: #2d8b6f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover">
+        <h1>{{ itinerary.title }}</h1>
+        <div class="subtitle">{{ itinerary.description or "A Family Adventure" }}</div>
+        {% if itinerary.start_date and itinerary.end_date %}
+        <div class="dates">{{ itinerary.start_date }} - {{ itinerary.end_date }}</div>
+        {% endif %}
+        <div class="travelers">{{ itinerary.travelers }} Travelers</div>
+    </div>
+
+    <!-- Day Pages -->
+    {% for day in itinerary.days %}
+    <div class="day-page">
+        <div class="day-header">
+            <div class="day-number">{{ day.day_number }}</div>
+            <div class="day-info">
+                <h2>{{ day.title }}</h2>
+                <div class="location">📍 {{ day.location }}</div>
+            </div>
+        </div>
+
+        {% if day.image_path %}
+        <img class="day-hero" src="{{ day.image_path|b64image }}" alt="{{ day.location }}">
+        {% endif %}
+
+        <div class="day-summary">{{ day.summary }}</div>
+
+        <div class="activities-grid">
+            {% for activity in day.activities %}
+            <div class="activity-card">
+                <div class="activity-header">
+                    <div class="activity-name">{{ activity.name }}</div>
+                    {% if activity.start_time %}
+                    <div class="activity-time">{{ activity.start_time }}{% if activity.end_time %} - {{ activity.end_time }}{% endif %}</div>
+                    {% endif %}
+                </div>
+                <div class="activity-description">{{ activity.description }}</div>
+                <div class="activity-location">📍 {{ activity.location }}</div>
+                {% if activity.cost_estimate %}
+                <div class="activity-cost">💰 {{ activity.cost_estimate }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if day.tips %}
+        <div class="tips-section">
+            <div class="tips-title">Tips for {{ day.location }}</div>
+            {% for tip in day.tips %}
+            <div class="tip-item"><strong>{{ tip.title }}:</strong> {{ tip.content }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if day.weather_note %}
+        <div style="margin-top: 15px; font-size: 10pt; color: #666;">
+            🌤️ <strong>Weather:</strong> {{ day.weather_note }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <!-- General Info Page -->
+    <div class="general-page">
+        <h2 class="section-title">Travel Tips & Essentials</h2>
+
+        {% if itinerary.general_tips %}
+        <div style="margin-bottom: 30px;">
+            {% for tip in itinerary.general_tips %}
+            <div class="tip-item" style="margin-bottom: 12px;">
+                <strong>{{ tip.title }}:</strong> {{ tip.content }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if itinerary.packing_list %}
+        <h3 style="font-size: 16pt; color: #1a5f4a; margin-bottom: 15px;">Packing List</h3>
+        <div class="packing-list">
+            {% for item in itinerary.packing_list %}
+            <div class="packing-item">{{ item }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if itinerary.budget_estimate %}
+        <div class="budget-box">
+            <div class="budget-label">Estimated Total Budget</div>
+            <div class="budget-amount">{{ itinerary.budget_estimate }}</div>
+        </div>
+        {% endif %}
+
+        {% if itinerary.emergency_contacts %}
+        <div class="emergency-contacts">
+            <div class="emergency-title">🚨 Emergency Contacts</div>
+            {% for name, number in itinerary.emergency_contacts.items() %}
+            <div class="contact-item"><strong>{{ name }}:</strong> {{ number }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
