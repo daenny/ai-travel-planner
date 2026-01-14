@@ -1,7 +1,7 @@
 from datetime import date, time
 from enum import Enum
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class ActivityType(str, Enum):
@@ -14,6 +14,49 @@ class ActivityType(str, Enum):
     WILDLIFE = "wildlife"
     CULTURAL = "cultural"
     SHOPPING = "shopping"
+    NATURE = "nature"
+    BEACH = "beach"
+    FOOD = "food"
+    OTHER = "other"
+
+
+# Map common AI-generated variations to valid enum values
+ACTIVITY_TYPE_ALIASES = {
+    "culture": "cultural",
+    "food": "dining",
+    "restaurant": "dining",
+    "eating": "dining",
+    "travel": "transport",
+    "flight": "transport",
+    "bus": "transport",
+    "train": "transport",
+    "taxi": "transport",
+    "hotel": "accommodation",
+    "stay": "accommodation",
+    "lodge": "accommodation",
+    "hostel": "accommodation",
+    "rest": "relaxation",
+    "spa": "relaxation",
+    "beach": "relaxation",
+    "hike": "adventure",
+    "hiking": "adventure",
+    "trek": "adventure",
+    "trekking": "adventure",
+    "tour": "sightseeing",
+    "visit": "sightseeing",
+    "explore": "sightseeing",
+    "museum": "cultural",
+    "temple": "cultural",
+    "market": "shopping",
+    "animals": "wildlife",
+    "safari": "wildlife",
+    "jungle": "wildlife",
+    "rainforest": "wildlife",
+    "nature": "wildlife",
+    "snorkeling": "adventure",
+    "diving": "adventure",
+    "water": "adventure",
+}
 
 
 class TravelTip(BaseModel):
@@ -35,6 +78,25 @@ class Activity(BaseModel):
     tips: list[TravelTip] = Field(default_factory=list)
     image_url: Optional[str] = None
     image_path: Optional[str] = None
+
+    @field_validator("activity_type", mode="before")
+    @classmethod
+    def normalize_activity_type(cls, v):
+        """Normalize activity type to handle AI variations."""
+        if isinstance(v, ActivityType):
+            return v
+        if isinstance(v, str):
+            v_lower = v.lower().strip()
+            # Check aliases first
+            if v_lower in ACTIVITY_TYPE_ALIASES:
+                v_lower = ACTIVITY_TYPE_ALIASES[v_lower]
+            # Try to match enum
+            try:
+                return ActivityType(v_lower)
+            except ValueError:
+                # Default to sightseeing for unknown types
+                return ActivityType.SIGHTSEEING
+        return v
 
 
 class DayPlan(BaseModel):
