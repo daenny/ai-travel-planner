@@ -1,3 +1,11 @@
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# cache
+__pycache__
+
+# data
+debug/
+exports/
+images/
