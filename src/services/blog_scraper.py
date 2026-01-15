@@ -44,19 +44,25 @@ class BlogContent:
         return "\n".join(parts)
 
 
-BLOG_EXTRACTION_PROMPT = """Analyze this travel blog content and extract useful information for planning a trip to Borneo/Malaysia.
+def build_blog_extraction_prompt(destination: str | None = None) -> str:
+    """Build blog extraction prompt, optionally destination-specific."""
+    dest_context = ""
+    if destination:
+        dest_context = f" to {destination}"
+
+    return f"""Analyze this travel blog content and extract useful information for planning a trip{dest_context}.
 
 Return a JSON object with this exact structure:
-{
+{{
     "summary": "A 2-3 sentence summary of what this blog post is about",
     "tips": ["tip 1", "tip 2", ...],
     "highlights": ["place or activity 1", "place or activity 2", ...],
-    "practical_info": {
+    "practical_info": {{
         "budget_mentions": "any budget/cost information mentioned",
         "best_time": "best time to visit if mentioned",
         "warnings": "any warnings or things to avoid"
-    }
-}
+    }}
+}}
 
 Focus on extracting:
 - Practical travel tips (what to bring, what to book ahead, etc.)
@@ -69,6 +75,10 @@ Focus on extracting:
 
 Blog content:
 """
+
+
+# Default prompt for backward compatibility
+BLOG_EXTRACTION_PROMPT = build_blog_extraction_prompt()
 
 
 class BlogScraper:
@@ -148,7 +158,7 @@ class BlogScraper:
         return text
 
     def scrape_with_ai(
-        self, url: str, agent: "TravelAgent"
+        self, url: str, agent: "TravelAgent", destination: str | None = None
     ) -> BlogContent | None:
         """
         Scrape blog and use AI agent to extract tips and summarize.
@@ -156,6 +166,7 @@ class BlogScraper:
         Args:
             url: Blog post URL
             agent: AI agent to use for extraction
+            destination: Optional destination for context-aware extraction
 
         Returns:
             BlogContent with AI-extracted information
@@ -167,7 +178,8 @@ class BlogScraper:
 
         try:
             # Use agent to extract better content
-            prompt = BLOG_EXTRACTION_PROMPT + basic_content.raw_text
+            extraction_prompt = build_blog_extraction_prompt(destination)
+            prompt = extraction_prompt + basic_content.raw_text
 
             # Collect full response (non-streaming)
             full_response = ""

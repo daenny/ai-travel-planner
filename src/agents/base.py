@@ -3,29 +3,25 @@ from datetime import datetime
 import json
 import sys
 from pathlib import Path
-from typing import Generator
+from typing import Generator, TYPE_CHECKING
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.models import ChatMessage, Itinerary
+
+if TYPE_CHECKING:
+    from src.models.destination import TripDestinations
 
 # Debug output directory
 DEBUG_DIR = Path("debug")
 DEBUG_DIR.mkdir(exist_ok=True)
 
 
-SYSTEM_PROMPT = """You are an expert travel planner specializing in family trips to Borneo and Malaysia.
+# Template-based system prompt - destination-agnostic
+SYSTEM_PROMPT_TEMPLATE = """You are an expert travel planner specializing in family trips.
 You help families plan memorable, safe, and enriching travel experiences.
 
-Your expertise includes:
-- Kuala Lumpur city attractions, food, and culture
-- Borneo wildlife (orangutans, proboscis monkeys, pygmy elephants)
-- Sabah and Sarawak regions
-- Family-friendly activities and accommodations
-- Local cuisine and dining recommendations
-- Weather patterns and best times to visit
-- Budget planning and cost estimates
-- Safety tips and health precautions
+{destination_expertise}
 
 When helping plan a trip:
 1. Ask about travel dates, number of travelers (adults/children ages)
@@ -45,13 +41,66 @@ When asked to create or update the itinerary, structure your response to include
 - Tips specific to each activity or location
 """
 
+# Default expertise when no destination is set
+DEFAULT_EXPERTISE = """Your expertise includes:
+- Global destination knowledge
+- Family-friendly activities and accommodations
+- Local cuisine and dining recommendations
+- Weather patterns and best times to visit
+- Budget planning and cost estimates
+- Safety tips and health precautions"""
+
+
+def build_destination_expertise(destinations: "TripDestinations") -> str:
+    """Build expertise section based on detected destinations."""
+    if not destinations or not destinations.primary:
+        return DEFAULT_EXPERTISE
+
+    dest = destinations.primary
+    lines = [f"Your expertise includes planning trips to {dest.name}:"]
+
+    if dest.key_attractions:
+        lines.append(f"- Key attractions: {', '.join(dest.key_attractions[:5])}")
+    if dest.local_cuisine:
+        lines.append(f"- Local cuisine: {dest.local_cuisine}")
+    if dest.best_time_to_visit:
+        lines.append(f"- Best time to visit: {dest.best_time_to_visit}")
+
+    lines.extend(
+        [
+            "- Family-friendly activities and accommodations",
+            "- Local customs and cultural considerations",
+            "- Budget planning and cost estimates",
+            "- Safety tips and health precautions",
+        ]
+    )
+
+    if destinations.secondary:
+        secondary_names = [d.name for d in destinations.secondary[:3]]
+        lines.append(f"- Also familiar with: {', '.join(secondary_names)}")
+
+    return "\n".join(lines)
+
 
 class TravelAgent(ABC):
     """Abstract base class for travel planning agents."""
 
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.system_prompt = SYSTEM_PROMPT
+        self._destinations: "TripDestinations | None" = None
+        self._update_system_prompt()
+
+    def set_destinations(self, destinations: "TripDestinations") -> None:
+        """Update the agent's destination context."""
+        self._destinations = destinations
+        self._update_system_prompt()
+
+    def _update_system_prompt(self) -> None:
+        """Rebuild system prompt based on current destinations."""
+        expertise = build_destination_expertise(self._destinations)
+        self.system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
+            destination_expertise=expertise
+        )
 
     def save_debug_response(self, response: str, prefix: str = "itinerary") -> Path:
         """

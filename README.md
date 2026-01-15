@@ -1,6 +1,6 @@
-# Borneo Travel Planner
+# Travel Planner
 
-A Streamlit-based travel planning assistant that helps you plan family trips to Borneo via Kuala Lumpur. Chat with an AI agent to build your itinerary, extract tips from travel blogs, and generate beautiful PDF travel guides.
+A Streamlit-based travel planning assistant that helps you plan family trips to any destination. Chat with an AI agent to build your itinerary, extract tips from travel blogs, and generate beautiful PDF travel guides. The app automatically detects your destination and adapts its expertise accordingly.
 
 ![Python](https://img.shields.io/badge/python-3.12+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -57,11 +57,13 @@ pixi run app
 ### Quick Start
 
 1. **Configure AI Provider** - Select Claude/OpenAI/Gemini in the sidebar and enter your API key
-2. **Chat** - Ask the AI to help plan your Borneo trip
+2. **Chat** - Tell the AI where you want to travel (e.g., "I want to plan a trip to Japan")
 3. **Add Blogs** - Paste travel blog URLs to extract tips (AI will analyze them)
 4. **Share Tips** - Click "Share tips with AI" to give the agent your blog research
 5. **Generate Itinerary** - Click "Create Itinerary from Conversation" in the Itinerary tab
 6. **Export PDF** - Choose a style and download your travel guide
+
+The app will automatically detect your destination and update the title and AI expertise accordingly.
 
 ### API Keys
 

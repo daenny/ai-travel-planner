@@ -9,7 +9,7 @@ from google import genai
 from google.genai import types
 
 from src.models import ChatMessage, Itinerary
-from .base import TravelAgent, SYSTEM_PROMPT
+from .base import TravelAgent
 
 
 ITINERARY_JSON_PROMPT = """Based on the conversation and requirements, generate a complete travel itinerary in JSON format.
@@ -112,7 +112,7 @@ class GeminiAgent(TravelAgent):
             model=self._model_id,
             contents=prompt,
             config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT,
+                system_instruction=self.system_prompt,
             ),
         )
 

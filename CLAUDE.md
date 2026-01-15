@@ -1,8 +1,8 @@
-# Borneo Travel Planner - Development Guide
+# Travel Planner - Development Guide
 
 ## Project Overview
 
-A Streamlit-based travel planning assistant for family trips to Borneo via Kuala Lumpur. Features conversational AI planning, blog content extraction, and PDF generation with multiple styles.
+A Streamlit-based travel planning assistant for family trips to any destination. Features conversational AI planning with automatic destination detection, blog content extraction, and PDF generation with multiple styles.
 
 ## Quick Start
 
@@ -20,16 +20,18 @@ pixi run app
 src/
 ├── app.py                 # Streamlit entry point - main UI logic
 ├── agents/                # AI provider implementations
-│   ├── base.py            # Abstract TravelAgent class + system prompt
+│   ├── base.py            # Abstract TravelAgent class + dynamic system prompt
 │   ├── claude_agent.py    # Anthropic Claude
 │   ├── openai_agent.py    # OpenAI GPT
 │   └── gemini_agent.py    # Google Gemini
 ├── services/              # External integrations
 │   ├── unsplash.py        # Image fetching + caching
 │   ├── blog_scraper.py    # HTML scraping for travel tips
-│   └── pdf_generator.py   # WeasyPrint PDF generation
+│   ├── pdf_generator.py   # WeasyPrint PDF generation
+│   └── destination_detector.py  # Automatic destination detection
 ├── models/                # Pydantic data models
-│   └── itinerary.py       # Itinerary, DayPlan, Activity, etc.
+│   ├── itinerary.py       # Itinerary, DayPlan, Activity, etc.
+│   └── destination.py     # Destination and TripDestinations
 ├── storage/               # Persistence
 │   └── json_store.py      # JSON file save/load
 └── templates/             # Jinja2 HTML templates for PDFs
@@ -84,7 +86,7 @@ API keys can be stored in two ways:
 Keys are securely stored in the OS keyring (GNOME Keyring, KWallet, macOS Keychain, Windows Credential Manager).
 - Use the "💾 Save Key" button in the sidebar to store keys
 - Keys persist across sessions securely
-- Service name: `borneo-travel-planner`
+- Service name: `travel-planner`
 
 ### 2. Environment Variables (Fallback)
 Create `.env` file with:
@@ -111,7 +113,10 @@ Managed via pixi (conda-forge). Key packages:
 
 ### Modify the AI System Prompt
 
-Edit `SYSTEM_PROMPT` in `src/agents/base.py`. This prompt is shared across all providers.
+The system prompt is dynamically generated based on detected destinations. Edit these in `src/agents/base.py`:
+- `SYSTEM_PROMPT_TEMPLATE` - Main prompt template with `{destination_expertise}` placeholder
+- `DEFAULT_EXPERTISE` - Expertise shown when no destination is detected
+- `build_destination_expertise()` - Function that builds destination-specific expertise
 
 ### Change Itinerary JSON Schema
 

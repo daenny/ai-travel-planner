@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from openai import OpenAI
 
 from src.models import ChatMessage, Itinerary
-from .base import TravelAgent, SYSTEM_PROMPT
+from .base import TravelAgent
 
 
 ITINERARY_JSON_PROMPT = """Based on the conversation and requirements, generate a complete travel itinerary in JSON format.
@@ -107,7 +107,7 @@ class OpenAIAgent(TravelAgent):
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": prompt},
             ],
             max_tokens=8192,

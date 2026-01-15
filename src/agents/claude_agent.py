@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import anthropic
 
 from src.models import ChatMessage, Itinerary
-from .base import TravelAgent, SYSTEM_PROMPT
+from .base import TravelAgent
 
 
 ITINERARY_JSON_PROMPT = """Based on the conversation and requirements, generate a complete travel itinerary in JSON format.
@@ -105,7 +105,7 @@ class ClaudeAgent(TravelAgent):
         response = self.client.messages.create(
             model=self.model,
             max_tokens=8192,
-            system=SYSTEM_PROMPT,
+            system=self.system_prompt,
             messages=[{"role": "user", "content": prompt}],
         )
 

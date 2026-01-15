@@ -1,7 +1,10 @@
 from datetime import date as DateType, time as TimeType, datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from pydantic import BaseModel, Field, field_validator
+
+if TYPE_CHECKING:
+    from src.models.destination import TripDestinations
 
 
 def parse_date(v) -> DateType | None:
@@ -159,7 +162,7 @@ class DayPlan(BaseModel):
 
 
 class Itinerary(BaseModel):
-    title: str = "Borneo Family Adventure"
+    title: str = "My Travel Adventure"
     description: str = ""
     start_date: DateType | None = None
     end_date: DateType | None = None
@@ -212,3 +215,10 @@ class PlannerSession(BaseModel):
     chat_history: list[ChatMessage] = Field(default_factory=list)
     ai_provider: str = "claude"
     blog_content: dict[str, SavedBlogContent] = Field(default_factory=dict)
+    destinations: "TripDestinations" = Field(default_factory=lambda: _get_trip_destinations_default())
+
+
+def _get_trip_destinations_default():
+    """Lazy import to avoid circular dependency."""
+    from src.models.destination import TripDestinations
+    return TripDestinations()

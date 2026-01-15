@@ -7,6 +7,7 @@ version = "0.1.0"
 
 [tasks]
 app = "streamlit run src/app.py"
+test = "pytest tests/ -v"
 
 [dependencies]
 python = ">=3.12,<3.14"
@@ -23,3 +24,4 @@ pillow = "*"
 qrcode = "*"
 jinja2 = "*"
 keyring = "*"
+pytest = "*"

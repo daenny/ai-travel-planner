@@ -8,6 +8,10 @@ from .itinerary import (
     SavedBlogContent,
     PlannerSession,
 )
+from .destination import Destination, TripDestinations
+
+# Rebuild PlannerSession to resolve the TripDestinations forward reference
+PlannerSession.model_rebuild()
 
 __all__ = [
     "Activity",
@@ -18,4 +22,6 @@ __all__ = [
     "ChatMessage",
     "SavedBlogContent",
     "PlannerSession",
+    "Destination",
+    "TripDestinations",
 ]

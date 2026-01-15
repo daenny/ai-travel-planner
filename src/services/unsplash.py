@@ -1,7 +1,14 @@
+from __future__ import annotations
+
 import hashlib
+import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import httpx
+
+if TYPE_CHECKING:
+    from src.models.destination import TripDestinations
 
 
 class UnsplashService:
@@ -109,13 +116,61 @@ class UnsplashService:
 
         return self.download_photo(query)
 
+    def get_destination_images(
+        self, destinations: "TripDestinations"
+    ) -> dict[str, Path | None]:
+        """
+        Fetch images for the detected destinations.
+
+        Args:
+            destinations: TripDestinations object with detected destinations
+
+        Returns:
+            Dict mapping query to image paths
+        """
+        queries = []
+
+        for dest in destinations.all_destinations():
+            queries.extend(dest.to_image_queries())
+
+        # Add generic travel queries as fallback
+        if not queries:
+            queries = [
+                "travel adventure",
+                "vacation landscape",
+                "family travel",
+            ]
+
+        # Deduplicate while preserving order and limit
+        seen = set()
+        unique_queries = []
+        for q in queries:
+            if q.lower() not in seen:
+                seen.add(q.lower())
+                unique_queries.append(q)
+        queries = unique_queries[:10]
+
+        results = {}
+        for query in queries:
+            results[query] = self.download_photo(query)
+
+        return results
+
     def get_borneo_images(self) -> dict[str, Path | None]:
         """
         Pre-fetch common Borneo-related images.
 
+        .. deprecated::
+            Use :meth:`get_destination_images` instead.
+
         Returns:
             Dict mapping location/activity to image paths
         """
+        warnings.warn(
+            "get_borneo_images is deprecated, use get_destination_images instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         queries = [
             "Borneo rainforest",
             "Orangutan Sepilok",

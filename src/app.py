@@ -9,18 +9,19 @@ import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent
+from src.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent, TripDestinations
 from src.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
 from src.agents.base import TravelAgent
 from src.services import UnsplashService, BlogScraper, PDFGenerator
 from src.services.pdf_generator import PDFStyle
 from src.services.blog_scraper import BlogContent
+from src.services.destination_detector import DestinationDetector
 from src.storage import JSONStore
 
 load_dotenv()
 
 # Keyring service name for storing API keys
-KEYRING_SERVICE = "borneo-travel-planner"
+KEYRING_SERVICE = "travel-planner"
 
 # Mapping of providers to keyring key names
 KEYRING_KEYS = {
@@ -122,8 +123,8 @@ def sync_blog_content_from_session():
 
 
 st.set_page_config(
-    page_title="Borneo Travel Planner",
-    page_icon="🌴",
+    page_title="Travel Planner",
+    page_icon="✈️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -184,10 +185,48 @@ def get_agent(provider: str, api_key: str, model: str) -> TravelAgent | None:
     return None
 
 
+def get_app_title(session: PlannerSession) -> str:
+    """Get dynamic title based on detected destination."""
+    dest_name = session.destinations.display_name()
+    if dest_name and dest_name != "Your Trip":
+        return f"✈️ {dest_name} Planner"
+    return "✈️ Travel Planner"
+
+
+def get_chat_placeholder(session: PlannerSession) -> str:
+    """Get dynamic chat input placeholder based on destination."""
+    dest_name = session.destinations.display_name()
+    if dest_name and dest_name != "Your Trip":
+        return f"Ask about your {dest_name} trip..."
+    return "Where would you like to travel?"
+
+
+def maybe_update_destination(session: PlannerSession, agent: TravelAgent) -> bool:
+    """Check if we should update detected destination."""
+    # Only detect if no destination set yet
+    if session.destinations.primary is None:
+        detector = DestinationDetector()
+        # Check last few messages for destination patterns
+        last_messages = session.chat_history[-3:]
+        for msg in last_messages:
+            if msg.role == "user":
+                simple_dest = detector.extract_from_text(msg.content)
+                if simple_dest:
+                    # Quick detection found something - do full AI extraction
+                    new_destinations = detector.extract_from_conversation(
+                        session.chat_history, agent
+                    )
+                    if new_destinations.primary:
+                        session.destinations = new_destinations
+                        agent.set_destinations(new_destinations)
+                        return True
+    return False
+
+
 def render_sidebar():
     """Render the sidebar with configuration options."""
     with st.sidebar:
-        st.title("🌴 Borneo Planner")
+        st.title(get_app_title(st.session_state.session))
         st.markdown("---")
 
         st.subheader("AI Provider")
@@ -319,7 +358,7 @@ def render_sidebar():
                     st.success(f"Loaded: {selected_session} ({len(st.session_state.blog_content)} blogs)")
                     st.rerun()
 
-        save_name = st.text_input("Save as", placeholder="my_borneo_trip", key="save_name")
+        save_name = st.text_input("Save as", placeholder="my_trip", key="save_name")
         if st.button("Save Session", key="save_btn"):
             if save_name:
                 # Sync blog content before saving
@@ -439,7 +478,8 @@ def render_chat():
         with st.chat_message(msg.role):
             st.markdown(msg.content)
 
-    if prompt := st.chat_input("Ask about your Borneo trip..."):
+    chat_placeholder = get_chat_placeholder(st.session_state.session)
+    if prompt := st.chat_input(chat_placeholder):
         st.session_state.session.chat_history.append(
             ChatMessage(role="user", content=prompt)
         )
@@ -462,6 +502,11 @@ def render_chat():
                     st.session_state.session.chat_history.append(
                         ChatMessage(role="assistant", content=full_response)
                     )
+
+                    # Try to detect destination after user message
+                    if maybe_update_destination(st.session_state.session, st.session_state.agent):
+                        st.rerun()  # Refresh to show updated title
+
                 except Exception as e:
                     st.error(f"Error: {e}")
         else:
