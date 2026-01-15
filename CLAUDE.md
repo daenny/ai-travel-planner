@@ -17,7 +17,7 @@ pixi run app
 ## Project Structure
 
 ```
-src/
+ai_travel_planner/
 ├── app.py                 # Streamlit entry point - main UI logic
 ├── agents/                # AI provider implementations
 │   ├── base.py            # Abstract TravelAgent class + dynamic system prompt
@@ -44,19 +44,19 @@ src/
 
 ### Adding a New AI Provider
 
-1. Create `src/agents/new_agent.py`
+1. Create `ai_travel_planner/agents/new_agent.py`
 2. Inherit from `TravelAgent` base class
 3. Implement required methods:
    - `chat(message, history)` - streaming generator
    - `generate_itinerary_json(requirements, current_itinerary)` - returns `Itinerary`
    - `name` and `model_id` properties
-4. Add to `src/agents/__init__.py`
-5. Add provider option in `src/app.py` `get_agent()` function
+4. Add to `ai_travel_planner/agents/__init__.py`
+5. Add provider option in `ai_travel_planner/app.py` `get_agent()` function
 
 ### Adding a New PDF Style
 
-1. Create `src/templates/newstyle.html` (Jinja2 template)
-2. Add enum value to `PDFStyle` in `src/services/pdf_generator.py`
+1. Create `ai_travel_planner/templates/newstyle.html` (Jinja2 template)
+2. Add enum value to `PDFStyle` in `ai_travel_planner/services/pdf_generator.py`
 3. Template receives: `itinerary`, `qr_codes`, `b64image` filter
 
 ### Blog Integration
@@ -113,24 +113,24 @@ Managed via pixi (conda-forge). Key packages:
 
 ### Modify the AI System Prompt
 
-The system prompt is dynamically generated based on detected destinations. Edit these in `src/agents/base.py`:
+The system prompt is dynamically generated based on detected destinations. Edit these in `ai_travel_planner/agents/base.py`:
 - `SYSTEM_PROMPT_TEMPLATE` - Main prompt template with `{destination_expertise}` placeholder
 - `DEFAULT_EXPERTISE` - Expertise shown when no destination is detected
 - `build_destination_expertise()` - Function that builds destination-specific expertise
 
 ### Change Itinerary JSON Schema
 
-1. Update Pydantic models in `src/models/itinerary.py`
+1. Update Pydantic models in `ai_travel_planner/models/itinerary.py`
 2. Update `ITINERARY_JSON_PROMPT` in each agent file (claude, openai, gemini)
 3. Update PDF templates if new fields need rendering
 
 ### Add New Activity Types
 
-Add to `ActivityType` enum in `src/models/itinerary.py`
+Add to `ActivityType` enum in `ai_travel_planner/models/itinerary.py`
 
 ### Customize PDF Styling
 
-Edit the `<style>` section in the relevant template file in `src/templates/`
+Edit the `<style>` section in the relevant template file in `ai_travel_planner/templates/`
 
 ## Testing
 
@@ -141,7 +141,7 @@ pixi run app
 
 Test imports:
 ```bash
-pixi run python -c "from src.models import Itinerary; print('OK')"
+pixi run python -c "from ai_travel_planner.models import Itinerary; print('OK')"
 ```
 
 ## Known Issues

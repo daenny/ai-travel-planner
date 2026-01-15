@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 import httpx
 
 if TYPE_CHECKING:
-    from src.models.destination import TripDestinations
+    from ai_travel_planner.models.destination import TripDestinations
 
 
 class UnsplashService:

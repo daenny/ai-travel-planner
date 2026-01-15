@@ -1,14 +1,9 @@
 import json
-import sys
-from pathlib import Path
 from typing import Generator
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from openai import OpenAI
 
-from google import genai
-from google.genai import types
-
-from src.models import ChatMessage, Itinerary
+from ai_travel_planner.models import ChatMessage, Itinerary
 from .base import TravelAgent
 
 
@@ -55,49 +50,46 @@ The JSON should follow this exact structure:
 Return ONLY the JSON, no other text. Make it comprehensive based on all discussed plans."""
 
 
-class GeminiAgent(TravelAgent):
-    """Google Gemini-powered travel planning agent."""
+class OpenAIAgent(TravelAgent):
+    """OpenAI-powered travel planning agent."""
 
-    def __init__(self, api_key: str, model: str = "gemini-2.0-flash"):
+    def __init__(self, api_key: str, model: str = "gpt-4o"):
         super().__init__(api_key)
-        self.client = genai.Client(api_key=api_key)
-        self._model_id = model
+        self.client = OpenAI(api_key=api_key)
+        self.model = model
 
     @property
     def name(self) -> str:
-        return "Gemini"
+        return "OpenAI"
 
     @property
     def model_id(self) -> str:
-        return self._model_id
+        return self.model
 
-    def _build_contents(
+    def _build_messages(
         self, message: str, history: list[ChatMessage]
-    ) -> list[types.Content]:
-        """Build contents list for Gemini API."""
-        contents = []
+    ) -> list[dict]:
+        messages = [{"role": "system", "content": self.system_prompt}]
         for msg in history:
-            role = "user" if msg.role == "user" else "model"
-            contents.append(types.Content(role=role, parts=[types.Part(text=msg.content)]))
-        contents.append(types.Content(role="user", parts=[types.Part(text=message)]))
-        return contents
+            messages.append({"role": msg.role, "content": msg.content})
+        messages.append({"role": "user", "content": message})
+        return messages
 
     def chat(
         self, message: str, history: list[ChatMessage]
     ) -> Generator[str, None, None]:
-        contents = self._build_contents(message, history)
+        messages = self._build_messages(message, history)
 
-        response = self.client.models.generate_content_stream(
-            model=self._model_id,
-            contents=contents,
-            config=types.GenerateContentConfig(
-                system_instruction=self.system_prompt,
-            ),
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=4096,
+            stream=True,
         )
 
-        for chunk in response:
-            if chunk.text:
-                yield chunk.text
+        for chunk in stream:
+            if chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
 
     def generate_itinerary_json(
         self, requirements: str, current_itinerary: Itinerary | None = None
@@ -108,15 +100,16 @@ class GeminiAgent(TravelAgent):
 
         prompt = f"{requirements}{context}\n\n{ITINERARY_JSON_PROMPT}"
 
-        response = self.client.models.generate_content(
-            model=self._model_id,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=self.system_prompt,
-            ),
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": prompt},
+            ],
+            max_tokens=8192,
         )
 
-        raw_response = response.text.strip()
+        raw_response = response.choices[0].message.content.strip()
 
         # Save debug output
         debug_path = self.save_debug_response(raw_response)

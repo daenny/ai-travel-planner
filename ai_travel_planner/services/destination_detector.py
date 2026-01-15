@@ -7,10 +7,10 @@ import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.agents.base import TravelAgent
-    from src.models import ChatMessage
+    from ai_travel_planner.agents.base import TravelAgent
+    from ai_travel_planner.models import ChatMessage
 
-from src.models.destination import Destination, TripDestinations
+from ai_travel_planner.models.destination import Destination, TripDestinations
 
 
 DESTINATION_EXTRACTION_PROMPT = """Analyze this conversation and extract the travel destination(s) being discussed.

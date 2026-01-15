@@ -1,12 +1,6 @@
 """Tests for the Destination model."""
 
-import sys
-from pathlib import Path
-
-# Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from src.models.destination import Destination, TripDestinations
+from ai_travel_planner.models.destination import Destination, TripDestinations
 
 
 class TestDestination:

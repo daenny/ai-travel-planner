@@ -1,13 +1,9 @@
 import json
-import sys
-from pathlib import Path
 from typing import Generator
-
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import anthropic
 
-from src.models import ChatMessage, Itinerary
+from ai_travel_planner.models import ChatMessage, Itinerary
 from .base import TravelAgent
 
 

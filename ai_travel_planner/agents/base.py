@@ -1,16 +1,13 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 import json
-import sys
 from pathlib import Path
 from typing import Generator, TYPE_CHECKING
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-from src.models import ChatMessage, Itinerary
+from ai_travel_planner.models import ChatMessage, Itinerary
 
 if TYPE_CHECKING:
-    from src.models.destination import TripDestinations
+    from ai_travel_planner.models.destination import TripDestinations
 
 # Debug output directory
 DEBUG_DIR = Path("debug")

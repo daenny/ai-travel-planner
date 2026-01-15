@@ -7,7 +7,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 if TYPE_CHECKING:
-    from src.agents.base import TravelAgent
+    from ai_travel_planner.agents.base import TravelAgent
 
 
 @dataclass

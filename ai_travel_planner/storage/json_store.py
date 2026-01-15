@@ -1,11 +1,8 @@
 import json
-import sys
 from datetime import date, time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-from src.models import Itinerary, PlannerSession
+from ai_travel_planner.models import Itinerary, PlannerSession
 
 
 class JSONStore:

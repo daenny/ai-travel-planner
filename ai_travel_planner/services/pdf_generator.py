@@ -1,14 +1,11 @@
 import base64
-import sys
 from enum import Enum
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
 
-from src.models import Itinerary
+from ai_travel_planner.models import Itinerary
 
 
 class PDFStyle(str, Enum):
@@ -22,7 +19,7 @@ class PDFGenerator:
 
     def __init__(
         self,
-        templates_dir: Path | str = "src/templates",
+        templates_dir: Path | str = "ai_travel_planner/templates",
         exports_dir: Path | str = "exports",
     ):
         self.templates_dir = Path(templates_dir)

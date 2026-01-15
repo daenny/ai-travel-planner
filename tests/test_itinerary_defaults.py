@@ -1,12 +1,6 @@
 """Tests for Itinerary default values."""
 
-import sys
-from pathlib import Path
-
-# Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from src.models import Itinerary, PlannerSession
+from ai_travel_planner.models import Itinerary, PlannerSession
 
 
 class TestItineraryDefaults:

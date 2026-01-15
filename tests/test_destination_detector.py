@@ -1,12 +1,6 @@
 """Tests for the DestinationDetector service."""
 
-import sys
-from pathlib import Path
-
-# Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from src.services.destination_detector import DestinationDetector
+from ai_travel_planner.services.destination_detector import DestinationDetector
 
 
 class TestDestinationDetector:

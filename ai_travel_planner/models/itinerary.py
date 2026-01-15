@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 from pydantic import BaseModel, Field, field_validator
 
 if TYPE_CHECKING:
-    from src.models.destination import TripDestinations
+    from ai_travel_planner.models.destination import TripDestinations
 
 
 def parse_date(v) -> DateType | None:
@@ -220,5 +220,5 @@ class PlannerSession(BaseModel):
 
 def _get_trip_destinations_default():
     """Lazy import to avoid circular dependency."""
-    from src.models.destination import TripDestinations
+    from ai_travel_planner.models.destination import TripDestinations
     return TripDestinations()

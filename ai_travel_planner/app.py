@@ -1,22 +1,18 @@
 import os
-import sys
 from pathlib import Path
-
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from src.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent, TripDestinations
-from src.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
-from src.agents.base import TravelAgent
-from src.services import UnsplashService, BlogScraper, PDFGenerator
-from src.services.pdf_generator import PDFStyle
-from src.services.blog_scraper import BlogContent
-from src.services.destination_detector import DestinationDetector
-from src.storage import JSONStore
+from ai_travel_planner.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent, TripDestinations
+from ai_travel_planner.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
+from ai_travel_planner.agents.base import TravelAgent
+from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerator
+from ai_travel_planner.services.pdf_generator import PDFStyle
+from ai_travel_planner.services.blog_scraper import BlogContent
+from ai_travel_planner.services.destination_detector import DestinationDetector
+from ai_travel_planner.storage import JSONStore
 
 load_dotenv()
 
