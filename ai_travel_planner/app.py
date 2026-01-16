@@ -83,14 +83,38 @@ def save_api_key_to_session(provider: str, api_key: str) -> None:
         api_keys.unsplash = api_key
 
 
+# Mapping of providers to environment variable names
+ENV_VAR_KEYS = {
+    "Claude": "ANTHROPIC_API_KEY",
+    "OpenAI": "OPENAI_API_KEY",
+    "Gemini": "GOOGLE_API_KEY",
+    "Unsplash": "UNSPLASH_ACCESS_KEY",
+}
+
+
 def get_api_key(provider: str) -> str:
     """Get API key based on deployment mode.
 
     Local mode: Load from keyring, fall back to environment variables.
-    Remote mode: Load from session only (user must enter or load from saved session).
+    Remote mode: Load from Streamlit secrets, fall back to environment variables,
+                 then session (user-entered keys).
     """
+    env_var = ENV_VAR_KEYS.get(provider, "")
+
     if not LOCAL_MODE:
-        # Remote mode: only use session-stored keys
+        # Remote mode: check Streamlit secrets first
+        try:
+            if hasattr(st, "secrets") and env_var in st.secrets:
+                return st.secrets[env_var]
+        except Exception:
+            pass
+
+        # Then check environment variables (for container deployments)
+        env_key = os.getenv(env_var, "")
+        if env_key:
+            return env_key
+
+        # Finally fall back to session-stored keys
         return get_api_key_from_session(provider)
 
     # Local mode: keyring first, then environment variables
@@ -105,13 +129,7 @@ def get_api_key(provider: str) -> str:
         pass
 
     # Fall back to environment variables
-    env_vars = {
-        "Claude": "ANTHROPIC_API_KEY",
-        "OpenAI": "OPENAI_API_KEY",
-        "Gemini": "GOOGLE_API_KEY",
-        "Unsplash": "UNSPLASH_ACCESS_KEY",
-    }
-    return os.getenv(env_vars.get(provider, ""), "")
+    return os.getenv(env_var, "")
 
 
 def save_api_key(provider: str, api_key: str) -> bool:

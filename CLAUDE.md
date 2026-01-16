@@ -145,24 +145,46 @@ resume_itinerary_generation(agent, requirements, metadata, existing_itinerary)
 
 ## API Key Storage
 
-API keys can be stored in two ways:
+API key resolution depends on the deployment mode:
 
-### 1. System Keyring (Recommended for Local Mode)
-Keys are securely stored in the OS keyring (GNOME Keyring, KWallet, macOS Keychain, Windows Credential Manager).
+### Local Mode (`--local` flag)
+Priority order:
+1. **System Keyring** - OS keyring (GNOME Keyring, KWallet, macOS Keychain, Windows Credential Manager)
+2. **Environment Variables** - `.env` file or shell environment
+
+Keyring configuration:
 - Configure in the **Settings tab** (not sidebar)
 - Use the "Save Key" button to store keys in keyring
 - Click "Connect" to apply provider/model changes
 - Keys persist across sessions securely
 - Service name: `travel-planner`
 
-### 2. Environment Variables (Fallback)
-Create `.env` file with:
-- `ANTHROPIC_API_KEY` - For Claude
-- `OPENAI_API_KEY` - For OpenAI
-- `GOOGLE_API_KEY` - For Gemini
-- `UNSPLASH_ACCESS_KEY` - For images (optional but recommended)
+### Remote Mode (default, no flag)
+Priority order:
+1. **Streamlit Secrets** - `.streamlit/secrets.toml` or Streamlit Cloud secrets
+2. **Environment Variables** - Container env vars or shell environment
+3. **Session Storage** - User-entered keys in Settings tab
 
-The app checks keyring first, then falls back to environment variables.
+This enables two deployment scenarios:
+- **Public deployment** (no keys): Users enter their own API keys in Settings
+- **Limited testing** (with keys): Pre-configure keys via Streamlit secrets or env vars
+
+### Environment Variable Names
+```
+ANTHROPIC_API_KEY    # Claude
+OPENAI_API_KEY       # OpenAI
+GOOGLE_API_KEY       # Gemini
+UNSPLASH_ACCESS_KEY  # Unsplash images (optional)
+```
+
+### Streamlit Secrets Configuration
+For Streamlit Cloud or local `.streamlit/secrets.toml`:
+```toml
+ANTHROPIC_API_KEY = "sk-ant-..."
+OPENAI_API_KEY = "sk-..."
+GOOGLE_API_KEY = "..."
+UNSPLASH_ACCESS_KEY = "..."
+```
 
 ### Auto-Detection
 On startup, the app automatically detects and connects to the first available provider that has an API key configured (checks Claude, then OpenAI, then Gemini).
