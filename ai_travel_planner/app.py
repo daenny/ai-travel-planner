@@ -556,7 +556,7 @@ def render_sidebar():
             # Default filename based on destination or generic
             dest = st.session_state.session.destinations
             if dest and dest.primary:
-                default_name = dest.primary.lower().replace(" ", "_")
+                default_name = dest.primary.name.lower().replace(" ", "_")
             else:
                 default_name = "trip"
             filename = f"session_{default_name}.json"
@@ -656,9 +656,15 @@ def render_chat():
     """Render the chat interface."""
     st.header("💬 Plan Your Trip")
 
-    # Chat input at the top
+    # Check if AI provider is configured
+    has_agent = st.session_state.agent is not None
+
+    if not has_agent:
+        st.warning("⚠️ No AI provider configured. Go to the **Settings** tab to set up an API key.")
+
+    # Chat input at the top (disabled if no agent)
     chat_placeholder = get_chat_placeholder(st.session_state.session)
-    prompt = st.chat_input(chat_placeholder)
+    prompt = st.chat_input(chat_placeholder, disabled=not has_agent)
 
     # Show blog context indicator and share button
     if st.session_state.blog_content:

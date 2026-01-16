@@ -37,9 +37,10 @@ ai_travel_planner/
 │   ├── unsplash.py        # Image fetching + caching
 │   ├── blog_scraper.py    # HTML scraping for travel tips
 │   ├── pdf_generator.py   # WeasyPrint PDF generation
-│   └── destination_detector.py  # Automatic destination detection
+│   ├── destination_detector.py  # Automatic destination detection
+│   └── itinerary_generator.py   # Iterative itinerary generation with resume
 ├── models/                # Pydantic data models
-│   ├── itinerary.py       # Itinerary, DayPlan, Activity, etc.
+│   ├── itinerary.py       # Itinerary, DayPlan, Activity, ItineraryMetadata, GenerationProgress, GenerationState
 │   └── destination.py     # Destination and TripDestinations
 ├── storage/               # Persistence
 │   └── json_store.py      # JSON file save/load
@@ -55,7 +56,7 @@ The app uses a 4-tab layout with a sidebar:
 
 ### Tabs
 1. **Chat** - Conversational AI planning interface
-2. **Itinerary** - View/edit generated itinerary, create from conversation
+2. **Itinerary** - View/edit generated itinerary, iterative generation with progress, resume capability
 3. **Blog Tips** - Add blog URLs, extract tips, view extracted content
 4. **Settings** - AI provider selection, API keys, language, Unsplash configuration
 
@@ -80,6 +81,8 @@ The app uses a 4-tab layout with a sidebar:
 3. Implement required methods:
    - `chat(message, history)` - streaming generator
    - `generate_itinerary_json(requirements, current_itinerary)` - returns `Itinerary`
+   - `generate_itinerary_metadata(requirements, language)` - returns `ItineraryMetadata`
+   - `generate_day_block(requirements, metadata, start_day, end_day, total_days, previous_days, language)` - returns `list[DayPlan]`
    - `name` and `model_id` properties
 4. Add to `ai_travel_planner/agents/__init__.py`
 5. In `ai_travel_planner/app.py`:
@@ -105,11 +108,39 @@ The blog scraper can use AI for intelligent extraction:
 ```
 User Chat → Agent.chat() → ChatMessage stored in PlannerSession
          ↓
-"Generate Itinerary" → Agent.generate_itinerary_json() → Itinerary model
+"Create Itinerary" → generate_itinerary_iteratively() → Progress updates + partial Itinerary
+         ↓
+         ├─ Step 1: Agent.generate_itinerary_metadata() → ItineraryMetadata (AI determines total_days)
+         ├─ Step 2: Agent.generate_day_block(days 1-3) → DayPlan[]
+         ├─ Step 3: Agent.generate_day_block(days 4-6) → DayPlan[]
+         └─ ... until complete or error
+         ↓
+"Resume" (if partial) → resume_itinerary_generation() → Continue from last day
          ↓
 "Generate PDF" → PDFGenerator.generate_pdf() → WeasyPrint → PDF file
 
 Blog URL (Blog Tips tab) → BlogScraper.scrape_with_ai() → BlogContent → "Share tips" → Agent context
+```
+
+### Iterative Generation Flow
+
+For long trips, itineraries are generated in blocks to provide progress feedback:
+
+1. **Metadata First**: AI analyzes conversation and determines `total_days`
+2. **Block Generation**: Days generated in configurable blocks (default: 3 days)
+3. **Context Continuity**: Each block receives summary of previous days
+4. **Resume Support**: On failure, state is saved and can be resumed
+
+```
+generate_itinerary_iteratively(agent, requirements, block_size=3)
+    │
+    ├─→ yields (progress, itinerary, metadata) after metadata
+    ├─→ yields (progress, itinerary, metadata) after each block
+    └─→ yields (progress, itinerary, metadata) on complete/error
+
+resume_itinerary_generation(agent, requirements, metadata, existing_itinerary)
+    │
+    └─→ continues from existing days, yields same tuple format
 ```
 
 ## API Key Storage
@@ -160,8 +191,24 @@ The system prompt is dynamically generated based on detected destinations. Edit 
 ### Change Itinerary JSON Schema
 
 1. Update Pydantic models in `ai_travel_planner/models/itinerary.py`
-2. Update `ITINERARY_JSON_PROMPT` in each agent file (claude, openai, gemini)
+2. Update prompts in `ai_travel_planner/agents/base.py`:
+   - `ITINERARY_JSON_PROMPT` - Single-call generation (legacy)
+   - `METADATA_JSON_PROMPT` - Trip metadata with `total_days`
+   - `DAY_BLOCK_PROMPT` - Block generation with context placeholders
 3. Update PDF templates if new fields need rendering
+
+### Itinerary Generation Prompts
+
+Located in `ai_travel_planner/agents/base.py`:
+
+- **`METADATA_JSON_PROMPT`**: Generates trip overview (title, description, total_days, tips, packing list)
+  - AI determines `total_days` from conversation context
+  - No day-by-day details
+
+- **`DAY_BLOCK_PROMPT`**: Generates specific day ranges
+  - Placeholders: `{start_day}`, `{end_day}`, `{total_days}`, `{title}`, `{description}`, `{previous_days_context}`
+  - Receives summary of previous days for continuity
+  - Returns only the requested day range
 
 ### Add New Activity Types
 
@@ -183,10 +230,29 @@ Test imports:
 pixi run python -c "from ai_travel_planner.models import Itinerary; print('OK')"
 ```
 
+## Key Models
+
+### Generation Models (`models/itinerary.py`)
+
+- **`ItineraryMetadata`**: Trip overview without days
+  - `total_days` - AI-determined trip length
+  - `title`, `description`, `general_tips`, `packing_list`, etc.
+
+- **`GenerationProgress`**: Tracks iterative generation state
+  - `status`: `"generating_metadata"` | `"generating_days"` | `"complete"` | `"partial"` | `"error"`
+  - `completed_days`, `total_days`, `current_block_start`, `current_block_end`
+  - `can_resume` property for checking resumability
+
+- **`GenerationState`**: Stored in session for resume capability
+  - `requirements`, `language`, `block_size`
+  - `metadata` - saved `ItineraryMetadata`
+  - `progress` - saved `GenerationProgress`
+
 ## Known Issues
 
 - WeasyPrint requires system libraries (cairo, pango) - usually pre-installed on Linux
 - Large blog pages may timeout during scraping
+- Very long trips (20+ days) may hit API rate limits during generation
 
 ## Code Style
 

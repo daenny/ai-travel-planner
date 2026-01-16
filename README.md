@@ -10,6 +10,10 @@ A Streamlit-based travel planning assistant that helps you plan family trips to 
 - **AI-Powered Planning** - Chat with Claude, OpenAI, or Google Gemini to plan your trip
 - **Auto-Detection** - Automatically connects to the first available AI provider on startup
 - **Multiple Model Support** - Choose from various models (GPT-4o, Claude Sonnet, Gemini Pro, etc.)
+- **Iterative Generation** - Generate long itineraries (10+ days) with real-time progress feedback
+  - AI determines optimal trip duration from your conversation
+  - Days generated in configurable blocks (2-4 days at a time)
+  - Resume from partial completion if generation fails
 - **Blog Tip Extraction** - Paste travel blog URLs in the Blog Tips tab and let AI extract useful tips
 - **PDF Generation** - Export your itinerary in 3 beautiful styles:
   - **Magazine** - Colorful travel magazine aesthetic with large images
@@ -60,10 +64,12 @@ pixi run app
 
 1. **Auto-Connect** - The app automatically detects and connects to an available AI provider on startup
 2. **Configure (Optional)** - Go to the **Settings tab** to change provider, model, or add API keys
-3. **Chat** - Tell the AI where you want to travel (e.g., "I want to plan a trip to Japan")
+3. **Chat** - Tell the AI where you want to travel (e.g., "I want to plan a 10-day trip to Japan")
 4. **Add Blogs** - Go to the **Blog Tips tab**, paste travel blog URLs and click "Extract Tips"
 5. **Share Tips** - In the Chat tab, click "Share tips with AI" to give the agent your blog research
-6. **Generate Itinerary** - Click "Create Itinerary from Conversation" in the Itinerary tab
+6. **Generate Itinerary** - Click "Create Itinerary" in the Itinerary tab
+   - Watch progress as days are generated in blocks
+   - If generation fails, click "Resume" to continue from where it stopped
 7. **Export PDF** - In the sidebar, choose a style and download your travel guide
 
 The app will automatically detect your destination and update the title and AI expertise accordingly.
