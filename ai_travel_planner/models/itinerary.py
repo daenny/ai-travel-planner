@@ -163,6 +163,81 @@ class DayPlan(BaseModel):
         return parse_date(v)
 
 
+class ItineraryMetadata(BaseModel):
+    """Trip metadata generated separately from days."""
+    title: str = "My Travel Adventure"
+    description: str = ""
+    total_days: int = 5
+    start_date: DateType | None = None
+    end_date: DateType | None = None
+    travelers: int = 4
+    general_tips: list[TravelTip] = Field(default_factory=list)
+    packing_list: list[str] = Field(default_factory=list)
+    budget_estimate: Optional[str] = None
+    emergency_contacts: dict[str, str] = Field(default_factory=dict)
+
+    @field_validator("start_date", "end_date", mode="before")
+    @classmethod
+    def parse_date_fields(cls, v):
+        """Parse date strings to date objects."""
+        return parse_date(v)
+
+
+class GenerationProgress(BaseModel):
+    """Tracks iterative generation progress."""
+    total_days: int
+    completed_days: int = 0
+    current_block_start: int = 0
+    current_block_end: int = 0
+    status: str = "pending"  # "pending" | "generating_metadata" | "generating_days" | "complete" | "error" | "partial"
+    error_message: Optional[str] = None
+
+    @property
+    def progress_percent(self) -> float:
+        """Calculate progress percentage."""
+        if self.total_days == 0:
+            return 0.0
+        return (self.completed_days / self.total_days) * 100
+
+    @property
+    def is_complete(self) -> bool:
+        """Check if generation is complete."""
+        return self.status == "complete"
+
+    @property
+    def is_error(self) -> bool:
+        """Check if generation encountered an error."""
+        return self.status == "error"
+
+    @property
+    def is_partial(self) -> bool:
+        """Check if generation was partially completed."""
+        return self.status == "partial"
+
+    @property
+    def can_resume(self) -> bool:
+        """Check if generation can be resumed."""
+        return self.status in ("error", "partial") and self.completed_days > 0 and self.completed_days < self.total_days
+
+
+class GenerationState(BaseModel):
+    """Stores state for resumable itinerary generation."""
+    requirements: str = ""
+    language: str = "English"
+    block_size: int = 3
+    metadata: Optional[ItineraryMetadata] = None
+    progress: Optional[GenerationProgress] = None
+
+    @property
+    def can_resume(self) -> bool:
+        """Check if there's a resumable generation."""
+        return (
+            self.metadata is not None
+            and self.progress is not None
+            and self.progress.can_resume
+        )
+
+
 class Itinerary(BaseModel):
     title: str = "My Travel Adventure"
     description: str = ""
@@ -175,6 +250,21 @@ class Itinerary(BaseModel):
     budget_estimate: Optional[str] = None
     emergency_contacts: dict[str, str] = Field(default_factory=dict)
     blog_urls: list[str] = Field(default_factory=list)
+
+    @classmethod
+    def from_metadata(cls, metadata: ItineraryMetadata) -> "Itinerary":
+        """Create an Itinerary from metadata (without days)."""
+        return cls(
+            title=metadata.title,
+            description=metadata.description,
+            start_date=metadata.start_date,
+            end_date=metadata.end_date,
+            travelers=metadata.travelers,
+            general_tips=metadata.general_tips,
+            packing_list=metadata.packing_list,
+            budget_estimate=metadata.budget_estimate,
+            emergency_contacts=metadata.emergency_contacts,
+        )
 
     @field_validator("start_date", "end_date", mode="before")
     @classmethod

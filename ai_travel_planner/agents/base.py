@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from typing import Generator, TYPE_CHECKING
 
-from ai_travel_planner.models import ChatMessage, Itinerary
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, DayPlan
 
 if TYPE_CHECKING:
     from ai_travel_planner.models.destination import TripDestinations
@@ -208,6 +208,95 @@ IMPORTANT GUIDELINES:
 
 Return ONLY the JSON, no other text. Make it comprehensive based on all discussed plans."""
 
+# Prompt for generating trip metadata (title, tips, packing list) without days
+METADATA_JSON_PROMPT = """Based on the conversation and requirements, generate trip metadata (WITHOUT day plans) in JSON format.
+
+The JSON should follow this exact structure:
+{
+    "title": "Trip title",
+    "description": "Brief description of the trip",
+    "total_days": 7,
+    "start_date": "YYYY-MM-DD or null",
+    "end_date": "YYYY-MM-DD or null",
+    "travelers": 4,
+    "general_tips": [{"title": "General tip", "content": "Content", "category": "packing|health|safety|money|culture"}],
+    "packing_list": ["Item 1", "Item 2", "Item 3"],
+    "budget_estimate": "Total estimate or null",
+    "emergency_contacts": {"Police": "emergency number", "Ambulance": "emergency number", "Embassy": "number if applicable"}
+}
+
+IMPORTANT:
+- **total_days**: Determine the appropriate number of days based on the conversation. Consider:
+  - Explicit mentions of trip duration (e.g., "7-day trip", "a week")
+  - The number of destinations and activities discussed
+  - Realistic time needed for the planned experiences
+  - If unclear, choose a reasonable duration (5-7 days for a single destination, more for multi-destination)
+- Generate ONLY the metadata, NOT the day-by-day itinerary
+- The packing list should be comprehensive for the trip destination and activities
+- General tips should cover health, safety, money, and cultural considerations
+- Emergency contacts should include local emergency numbers for the destination
+
+Return ONLY the JSON, no other text."""
+
+# Prompt template for generating a block of days
+DAY_BLOCK_PROMPT = """You are generating days {start_day} to {end_day} of a {total_days}-day trip.
+
+Trip Overview:
+- Title: {title}
+- Description: {description}
+- Total days: {total_days}
+
+{previous_days_context}
+
+Generate ONLY days {start_day} to {end_day} in JSON format. Follow this structure:
+{{
+    "days": [
+        {{
+            "day_number": {start_day},
+            "date": "YYYY-MM-DD or null",
+            "title": "Day title",
+            "location": "City/Area name",
+            "summary": "Brief summary of the day",
+            "image_queries": ["specific evocative search query 1", "specific search query 2"],
+            "activities": [
+                {{
+                    "name": "Activity name",
+                    "description": "A detailed paragraph (3-5 sentences) describing the activity, what visitors will experience, why it's special, and practical tips. Include sensory details and insider knowledge to bring the experience to life.",
+                    "location": "Specific location",
+                    "activity_type": "sightseeing|adventure|dining|transport|accommodation|relaxation|wildlife|cultural|shopping",
+                    "start_time": "HH:MM or null",
+                    "end_time": "HH:MM or null",
+                    "cost_estimate": "$XX or null",
+                    "booking_required": true/false,
+                    "booking_link": "URL or null",
+                    "tips": [{{"title": "Tip title", "content": "Tip content", "category": "general"}}]
+                }}
+            ],
+            "tips": [{{"title": "Day tip", "content": "Content", "category": "general"}}],
+            "weather_note": "Expected weather or null"
+        }}
+    ]
+}}
+
+IMPORTANT GUIDELINES:
+
+1. Activity descriptions MUST be detailed paragraphs (3-5 sentences each):
+   - Describe what visitors will experience and see
+   - Explain why the activity is special or memorable
+   - Include practical tips (best time to visit, what to bring)
+   - Add sensory details and local insights
+
+2. image_queries should contain 2-3 specific, evocative search queries for finding relevant photos:
+   - Use location-specific terms (e.g., "golden sunset Tanah Lot Bali" not just "sunset")
+   - Include distinctive visual elements
+
+3. Ensure continuity with previous days:
+   - Don't repeat activities or locations unless the user requested it
+   - Build a logical flow (e.g., if they visited the north yesterday, explore nearby areas today)
+   - Reference previous experiences where appropriate
+
+Return ONLY the JSON with the days array, no other text."""
+
 
 class TravelAgent(ABC):
     """Abstract base class for travel planning agents."""
@@ -302,6 +391,84 @@ class TravelAgent(ABC):
             Updated Itinerary object
         """
         pass
+
+    @abstractmethod
+    def generate_itinerary_metadata(
+        self, requirements: str, language: str = "English"
+    ) -> ItineraryMetadata:
+        """
+        Generate trip metadata without day plans.
+
+        The AI determines the appropriate total_days based on the requirements.
+
+        Args:
+            requirements: Description of what the user wants
+            language: Language for generated content
+
+        Returns:
+            ItineraryMetadata object with title, total_days, tips, packing list, etc.
+        """
+        pass
+
+    @abstractmethod
+    def generate_day_block(
+        self,
+        requirements: str,
+        metadata: ItineraryMetadata,
+        start_day: int,
+        end_day: int,
+        total_days: int,
+        previous_days: list[DayPlan],
+        language: str = "English",
+    ) -> list[DayPlan]:
+        """
+        Generate a block of days (e.g., days 1-3).
+
+        Args:
+            requirements: Original trip requirements
+            metadata: Trip metadata (title, description, etc.)
+            start_day: First day number to generate (1-indexed)
+            end_day: Last day number to generate (inclusive)
+            total_days: Total days in the trip
+            previous_days: Already-generated days for context
+            language: Language for generated content
+
+        Returns:
+            List of DayPlan objects for the requested range
+        """
+        pass
+
+    def calculate_day_blocks(self, total_days: int, block_size: int = 3) -> list[tuple[int, int]]:
+        """
+        Calculate day ranges for iterative generation.
+
+        Args:
+            total_days: Total number of days in the trip
+            block_size: Number of days per block
+
+        Returns:
+            List of (start_day, end_day) tuples, e.g., [(1, 3), (4, 6), (7, 7)] for 7 days
+        """
+        blocks = []
+        for start in range(1, total_days + 1, block_size):
+            end = min(start + block_size - 1, total_days)
+            blocks.append((start, end))
+        return blocks
+
+    def _build_previous_days_context(self, previous_days: list[DayPlan]) -> str:
+        """Build a context string summarizing previous days for continuity."""
+        if not previous_days:
+            return "This is the first block of days - no previous days to reference."
+
+        lines = ["Previously generated days (for context and continuity):"]
+        for day in previous_days:
+            activities_summary = ", ".join(a.name for a in day.activities[:3])
+            if len(day.activities) > 3:
+                activities_summary += f" (+{len(day.activities) - 3} more)"
+            lines.append(f"- Day {day.day_number} ({day.location}): {day.title} - {activities_summary}")
+        lines.append("")
+        lines.append("Ensure the new days build naturally on these experiences without repeating activities.")
+        return "\n".join(lines)
 
     @property
     @abstractmethod

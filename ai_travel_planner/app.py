@@ -8,10 +8,10 @@ import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from ai_travel_planner.models import ChatMessage, Itinerary, PlannerSession, SavedBlogContent, TripDestinations
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, PlannerSession, SavedBlogContent, TripDestinations, GenerationProgress, GenerationState
 from ai_travel_planner.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
 from ai_travel_planner.agents.base import TravelAgent
-from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerator
+from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerator, generate_itinerary_iteratively, resume_itinerary_generation
 from ai_travel_planner.services.pdf_generator import PDFStyle
 from ai_travel_planner.services.blog_scraper import BlogContent
 from ai_travel_planner.services.destination_detector import DestinationDetector
@@ -240,6 +240,8 @@ def init_session_state():
         st.session_state.agent = None
     if "blog_content" not in st.session_state:
         st.session_state.blog_content = {}
+    if "generation_state" not in st.session_state:
+        st.session_state.generation_state = GenerationState()
 
     # Auto-detect and initialize provider on first load
     if "auto_detected" not in st.session_state:
@@ -751,37 +753,207 @@ def render_itinerary_builder():
 
     if st.session_state.agent:
         st.subheader("Generate Itinerary from Chat")
-        if st.button("Create Itinerary from Conversation", key="gen_itinerary"):
-            with st.spinner("Generating itinerary..."):
+
+        # Check if there's a resumable generation
+        gen_state = st.session_state.generation_state
+        can_resume = gen_state.can_resume and st.session_state.session.itinerary.days
+
+        # Show resume banner if available
+        if can_resume:
+            st.warning(
+                f"⚠️ Previous generation incomplete: {len(st.session_state.session.itinerary.days)}/{gen_state.progress.total_days} days generated. "
+                f"Last error: {gen_state.progress.error_message or 'Unknown'}"
+            )
+
+        # Generation options
+        col_opt1, col_opt2, col_opt3 = st.columns([1, 1, 2])
+        with col_opt1:
+            block_size = st.selectbox(
+                "Days per block",
+                options=[2, 3, 4],
+                index=1,  # Default to 3
+                key="gen_block_size",
+                help="Number of days to generate at once. Smaller blocks show progress faster."
+            )
+        with col_opt2:
+            use_iterative = st.checkbox(
+                "Iterative mode",
+                value=True,
+                key="use_iterative",
+                help="Generate days in blocks with progress feedback"
+            )
+
+        # Generate and Resume buttons
+        col_btn1, col_btn2 = st.columns([1, 1])
+        with col_btn1:
+            generate_clicked = st.button("Create Itinerary", key="gen_itinerary", type="primary", use_container_width=True)
+        with col_btn2:
+            resume_clicked = st.button(
+                f"Resume ({len(st.session_state.session.itinerary.days)}/{gen_state.progress.total_days if gen_state.progress else '?'} days)",
+                key="resume_itinerary",
+                disabled=not can_resume,
+                use_container_width=True
+            )
+
+        # Handle generation
+        if generate_clicked or resume_clicked:
+            chat_context = "\n".join(
+                f"{msg.role}: {msg.content}"
+                for msg in st.session_state.session.chat_history
+            )
+
+            if use_iterative:
+                # Iterative generation with progress
+                progress_container = st.container()
+                status_placeholder = progress_container.empty()
+                progress_bar = progress_container.progress(0)
+                days_display = progress_container.empty()
+                error_placeholder = progress_container.empty()
+
                 try:
-                    chat_context = "\n".join(
-                        f"{msg.role}: {msg.content}"
-                        for msg in st.session_state.session.chat_history
-                    )
-                    new_itinerary = st.session_state.agent.generate_itinerary_json(
-                        chat_context, st.session_state.session.itinerary, st.session_state.session.language
-                    )
-                    st.session_state.session.itinerary = new_itinerary
+                    is_resume = resume_clicked and can_resume
 
-                    # Save debug output if debug mode is enabled
-                    if DEBUG_MODE:
-                        from datetime import datetime
-                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                        debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
-                        debug_data = {
-                            "timestamp": timestamp,
-                            "chat_context": chat_context,
-                            "language": st.session_state.session.language,
-                            "itinerary": new_itinerary.model_dump(mode="json"),
-                        }
-                        with open(debug_file, "w") as f:
-                            json.dump(debug_data, f, indent=2, default=str)
-                        st.info(f"Debug output saved to {debug_file}")
+                    if is_resume:
+                        status_placeholder.info(f"▶️ Resuming from day {len(st.session_state.session.itinerary.days) + 1}...")
+                        generator = resume_itinerary_generation(
+                            agent=st.session_state.agent,
+                            requirements=gen_state.requirements,
+                            metadata=gen_state.metadata,
+                            existing_itinerary=st.session_state.session.itinerary,
+                            language=gen_state.language,
+                            block_size=block_size,
+                        )
+                    else:
+                        status_placeholder.info("🚀 Starting generation...")
+                        generator = generate_itinerary_iteratively(
+                            agent=st.session_state.agent,
+                            requirements=chat_context,
+                            language=st.session_state.session.language,
+                            block_size=block_size,
+                        )
 
-                    st.success("Itinerary generated!")
-                    st.rerun()
+                    final_itinerary = None
+                    final_metadata = None
+                    final_progress = None
+
+                    for progress, partial_itinerary, metadata in generator:
+                        final_progress = progress
+                        final_metadata = metadata
+
+                        # Update progress display
+                        if progress.status == "generating_metadata":
+                            status_placeholder.info("⏳ Generating trip overview...")
+                            progress_bar.progress(0)
+
+                        elif progress.status == "generating_days":
+                            pct = progress.completed_days / progress.total_days if progress.total_days > 0 else 0
+                            progress_bar.progress(pct)
+
+                            # Cleaner status: "Generating days 4-6 of 21"
+                            if progress.current_block_start > 0:
+                                status_placeholder.info(
+                                    f"⏳ Generating days {progress.current_block_start}-{progress.current_block_end} of {progress.total_days}"
+                                )
+
+                            # Show completed days separately below progress bar
+                            if partial_itinerary.days:
+                                with days_display.container():
+                                    st.caption(f"✓ {progress.completed_days} days complete")
+                                    # Show last 3 generated days
+                                    for day in partial_itinerary.days[-3:]:
+                                        st.markdown(f"  Day {day.day_number}: {day.title}")
+
+                        elif progress.status == "complete":
+                            progress_bar.progress(1.0)
+                            status_placeholder.success(f"✅ Complete! {progress.total_days} days generated.")
+                            days_display.empty()
+                            final_itinerary = partial_itinerary
+                            # Clear generation state on success
+                            st.session_state.generation_state = GenerationState()
+
+                        elif progress.status in ("error", "partial"):
+                            pct = progress.completed_days / progress.total_days if progress.total_days > 0 else 0
+                            progress_bar.progress(pct)
+
+                            if progress.completed_days > 0:
+                                # Partial completion - can resume
+                                status_placeholder.warning(
+                                    f"⚠️ Stopped at {progress.completed_days}/{progress.total_days} days"
+                                )
+                                error_placeholder.error(f"Error: {progress.error_message}")
+                                final_itinerary = partial_itinerary
+
+                                # Store state for resume
+                                st.session_state.generation_state = GenerationState(
+                                    requirements=chat_context if not is_resume else gen_state.requirements,
+                                    language=st.session_state.session.language if not is_resume else gen_state.language,
+                                    block_size=block_size,
+                                    metadata=metadata,
+                                    progress=progress,
+                                )
+                            else:
+                                # Complete failure
+                                status_placeholder.error("❌ Generation failed")
+                                error_placeholder.error(f"Error: {progress.error_message}")
+                            break
+
+                    if final_itinerary:
+                        st.session_state.session.itinerary = final_itinerary
+
+                        # Save debug output if debug mode is enabled
+                        if DEBUG_MODE:
+                            from datetime import datetime
+                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                            debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
+                            debug_data = {
+                                "timestamp": timestamp,
+                                "chat_context": chat_context,
+                                "language": st.session_state.session.language,
+                                "generation_mode": "iterative" + ("_resume" if is_resume else ""),
+                                "block_size": block_size,
+                                "final_status": final_progress.status if final_progress else "unknown",
+                                "itinerary": final_itinerary.model_dump(mode="json"),
+                            }
+                            with open(debug_file, "w") as f:
+                                json.dump(debug_data, f, indent=2, default=str)
+                            st.info(f"Debug output saved to {debug_file}")
+
+                        st.rerun()
+
                 except Exception as e:
                     st.error(f"Failed to generate itinerary: {e}")
+
+            else:
+                # Original single-call generation
+                with st.spinner("Generating itinerary..."):
+                    try:
+                        new_itinerary = st.session_state.agent.generate_itinerary_json(
+                            chat_context, st.session_state.session.itinerary, st.session_state.session.language
+                        )
+                        st.session_state.session.itinerary = new_itinerary
+                        # Clear generation state
+                        st.session_state.generation_state = GenerationState()
+
+                        # Save debug output if debug mode is enabled
+                        if DEBUG_MODE:
+                            from datetime import datetime
+                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                            debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
+                            debug_data = {
+                                "timestamp": timestamp,
+                                "chat_context": chat_context,
+                                "language": st.session_state.session.language,
+                                "generation_mode": "single",
+                                "itinerary": new_itinerary.model_dump(mode="json"),
+                            }
+                            with open(debug_file, "w") as f:
+                                json.dump(debug_data, f, indent=2, default=str)
+                            st.info(f"Debug output saved to {debug_file}")
+
+                        st.success("Itinerary generated!")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Failed to generate itinerary: {e}")
 
     st.markdown("---")
     st.subheader("Day-by-Day Plan")
