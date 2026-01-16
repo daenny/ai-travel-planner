@@ -755,6 +755,35 @@ def render_chat():
             st.markdown(msg.content)
 
 
+def load_photos_for_itinerary(itinerary: Itinerary) -> bool:
+    """Load photos for days with image_queries but no image_paths."""
+    unsplash_key = get_api_key("Unsplash")
+    if not unsplash_key:
+        st.warning("Unsplash API key not configured. Add it in Settings.")
+        return False
+
+    unsplash = UnsplashService(unsplash_key, IMAGES_DIR)
+    days_needing_photos = [d for d in itinerary.days if d.image_queries and not d.image_paths]
+
+    if not days_needing_photos:
+        return False
+
+    progress = st.progress(0)
+    status = st.empty()
+
+    for i, day in enumerate(days_needing_photos):
+        status.text(f"Loading photos for Day {day.day_number}...")
+        paths = unsplash.download_photos_for_queries(day.image_queries, max_images=3)
+        if paths:
+            day.image_paths = [str(p) for p in paths]
+            day.image_path = str(paths[0]) if not day.image_path else day.image_path
+        progress.progress((i + 1) / len(days_needing_photos))
+
+    progress.empty()
+    status.empty()
+    return True
+
+
 def render_itinerary_builder():
     """Render the itinerary builder/viewer."""
     st.header("📋 Current Itinerary")
@@ -980,11 +1009,33 @@ def render_itinerary_builder():
                         st.error(f"Failed to generate itinerary: {e}")
 
     st.markdown("---")
+
+    # Photo loading section
+    if itinerary.days:
+        days_with_queries = [d for d in itinerary.days if d.image_queries]
+        days_with_photos = [d for d in itinerary.days if d.image_paths]
+
+        if days_with_queries and len(days_with_photos) < len(days_with_queries):
+            if st.button("📷 Load Photos", key="load_itinerary_photos"):
+                if load_photos_for_itinerary(itinerary):
+                    st.success("Photos loaded!")
+                    st.rerun()
+        elif days_with_photos:
+            st.caption(f"✓ {len(days_with_photos)} days have photos ({sum(len(d.image_paths) for d in days_with_photos)} total)")
+
     st.subheader("Day-by-Day Plan")
 
     if itinerary.days:
         for day in itinerary.days:
             with st.expander(f"Day {day.day_number}: {day.title} - {day.location}", expanded=False):
+                # Photo gallery
+                if day.image_paths:
+                    cols = st.columns(min(len(day.image_paths), 3))
+                    for idx, img_path in enumerate(day.image_paths[:3]):
+                        with cols[idx]:
+                            if Path(img_path).exists():
+                                st.image(img_path, use_container_width=True)
+
                 st.markdown(f"**Summary:** {day.summary}")
 
                 if day.activities:

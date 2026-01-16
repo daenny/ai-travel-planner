@@ -202,6 +202,7 @@ IMPORTANT GUIDELINES:
    - Use location-specific terms (e.g., "golden sunset Tanah Lot Bali" not just "sunset")
    - Include distinctive visual elements (e.g., "orangutan mother baby Sepilok" not just "orangutan")
    - Reference specific landmarks, activities, or atmospheric conditions
+   - ALWAYS write image_queries in English regardless of content language (for optimal image search results)
 
    BAD: ["beach", "temple", "food"]
    GOOD: ["Tanah Lot temple sunset silhouette", "Balinese cliff temple ocean waves", "traditional offerings Tanah Lot"]
@@ -289,6 +290,7 @@ IMPORTANT GUIDELINES:
 2. image_queries should contain 2-3 specific, evocative search queries for finding relevant photos:
    - Use location-specific terms (e.g., "golden sunset Tanah Lot Bali" not just "sunset")
    - Include distinctive visual elements
+   - ALWAYS write image_queries in English regardless of content language (for optimal image search results)
 
 3. Ensure continuity with previous days:
    - Don't repeat activities or locations unless the user requested it
