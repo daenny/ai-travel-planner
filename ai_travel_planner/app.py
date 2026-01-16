@@ -439,6 +439,10 @@ def render_chat():
     """Render the chat interface."""
     st.header("💬 Plan Your Trip")
 
+    # Chat input at the top
+    chat_placeholder = get_chat_placeholder(st.session_state.session)
+    prompt = st.chat_input(chat_placeholder)
+
     # Show blog context indicator and share button
     if st.session_state.blog_content:
         blog_count = len(st.session_state.blog_content)
@@ -470,43 +474,44 @@ def render_chat():
                         )
                     st.rerun()
 
-    for msg in st.session_state.session.chat_history:
-        with st.chat_message(msg.role):
-            st.markdown(msg.content)
-
-    chat_placeholder = get_chat_placeholder(st.session_state.session)
-    if prompt := st.chat_input(chat_placeholder):
+    # Handle new message input
+    if prompt:
         st.session_state.session.chat_history.append(
             ChatMessage(role="user", content=prompt)
         )
-        with st.chat_message("user"):
-            st.markdown(prompt)
 
         if st.session_state.agent:
-            with st.chat_message("assistant"):
-                response_placeholder = st.empty()
-                full_response = ""
+            response_placeholder = st.empty()
+            full_response = ""
 
-                try:
-                    history = st.session_state.session.chat_history[:-1]
+            try:
+                history = st.session_state.session.chat_history[:-1]
 
-                    for chunk in st.session_state.agent.chat(prompt, history):
-                        full_response += chunk
-                        response_placeholder.markdown(full_response + "▌")
+                for chunk in st.session_state.agent.chat(prompt, history):
+                    full_response += chunk
+                    response_placeholder.markdown(full_response + "▌")
 
-                    response_placeholder.markdown(full_response)
-                    st.session_state.session.chat_history.append(
-                        ChatMessage(role="assistant", content=full_response)
-                    )
+                response_placeholder.empty()
+                st.session_state.session.chat_history.append(
+                    ChatMessage(role="assistant", content=full_response)
+                )
 
-                    # Try to detect destination after user message
-                    if maybe_update_destination(st.session_state.session, st.session_state.agent):
-                        st.rerun()  # Refresh to show updated title
+                # Try to detect destination after user message
+                if maybe_update_destination(st.session_state.session, st.session_state.agent):
+                    st.rerun()  # Refresh to show updated title
+                else:
+                    st.rerun()  # Rerun to display the new messages in correct order
 
-                except Exception as e:
-                    st.error(f"Error: {e}")
+            except Exception as e:
+                st.error(f"Error: {e}")
         else:
             st.warning("Please configure an AI provider in the sidebar.")
+            st.rerun()
+
+    # Display messages in reverse order (newest first)
+    for msg in reversed(st.session_state.session.chat_history):
+        with st.chat_message(msg.role):
+            st.markdown(msg.content)
 
 
 def render_itinerary_builder():
