@@ -53,7 +53,7 @@ Return ONLY the JSON, no other text. Make it comprehensive based on all discusse
 class ClaudeAgent(TravelAgent):
     """Claude-powered travel planning agent."""
 
-    def __init__(self, api_key: str, model: str = "claude-sonnet-4-20250514"):
+    def __init__(self, api_key: str, model: str = "claude-sonnet-4-5"):
         super().__init__(api_key)
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model

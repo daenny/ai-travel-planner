@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 
@@ -12,7 +13,6 @@ from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerato
 from ai_travel_planner.services.pdf_generator import PDFStyle
 from ai_travel_planner.services.blog_scraper import BlogContent
 from ai_travel_planner.services.destination_detector import DestinationDetector
-from ai_travel_planner.storage import JSONStore
 
 load_dotenv()
 
@@ -145,24 +145,29 @@ def init_session_state():
 
 PROVIDER_MODELS = {
     "Claude": [
-        "claude-sonnet-4-20250514",
-        "claude-opus-4-20250514",
-        "claude-3-5-sonnet-20241022",
-        "claude-3-5-haiku-20241022",
+        "claude-sonnet-4-5",
+        "claude-opus-4-5",
+        "claude-haiku-4-5",
+        "claude-opus-4-1",
+        "claude-sonnet-4",
     ],
     "OpenAI": [
+        "gpt-5.2",
+        "gpt-5.2-pro",
+        "gpt-5-mini",
+        "gpt-5-nano",
+        "o3",
+        "o4-mini",
+        "gpt-5-search-api",
+        "gpt-4.1",
         "gpt-4o",
         "gpt-4o-mini",
-        "gpt-4-turbo",
-        "o1",
-        "o1-mini",
     ],
     "Gemini": [
         "gemini-3-pro-preview",
-        "gemini-2.0-flash",
-        "gemini-2.0-flash-lite",
-        "gemini-1.5-pro",
-        "gemini-1.5-flash",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-pro",
     ],
 }
 
@@ -370,27 +375,44 @@ def render_sidebar():
         st.markdown("---")
         st.subheader("Save/Load Plans")
 
-        store = JSONStore(PLANS_DIR)
-        sessions = store.list_sessions()
-
-        if sessions:
-            selected_session = st.selectbox("Load session", [""] + sessions, key="load_session")
-            if selected_session and st.button("Load", key="load_btn"):
-                loaded = store.load_session(selected_session)
-                if loaded:
+        # Load session via file upload (supports drag-and-drop)
+        uploaded_file = st.file_uploader(
+            "Load session",
+            type=["json"],
+            help="Upload a previously saved session JSON file (or drag & drop)",
+            key="session_upload",
+        )
+        if uploaded_file is not None:
+            # Track which file was last loaded to prevent re-loading on rerun
+            file_id = f"{uploaded_file.name}_{uploaded_file.size}"
+            if st.session_state.get("last_loaded_file") != file_id:
+                try:
+                    data = json.load(uploaded_file)
+                    loaded = PlannerSession.model_validate(data)
                     st.session_state.session = loaded
+                    st.session_state.last_loaded_file = file_id
                     # Restore blog content from loaded session
                     sync_blog_content_from_session()
-                    st.success(f"Loaded: {selected_session} ({len(st.session_state.blog_content)} blogs)")
+                    st.success(f"Loaded: {uploaded_file.name} ({len(st.session_state.blog_content)} blogs)")
                     st.rerun()
+                except Exception as e:
+                    st.error(f"Failed to load session: {e}")
 
-        save_name = st.text_input("Save as", placeholder="my_trip", key="save_name")
-        if st.button("Save Session", key="save_btn"):
-            if save_name:
-                # Sync blog content before saving
-                sync_blog_content_to_session()
-                store.save_session(st.session_state.session, save_name)
-                st.success(f"Saved: {save_name} ({len(st.session_state.blog_content)} blogs)")
+        # Save session via download button
+        st.markdown("**Save current session:**")
+        save_name = st.text_input("Filename", placeholder="my_trip", key="save_name")
+        if save_name:
+            # Sync blog content before saving
+            sync_blog_content_to_session()
+            session_json = st.session_state.session.model_dump_json(indent=2)
+            filename = f"session_{save_name}.json" if not save_name.endswith(".json") else save_name
+            st.download_button(
+                "💾 Download Session",
+                data=session_json,
+                file_name=filename,
+                mime="application/json",
+                key="save_session_download",
+            )
 
         st.markdown("---")
         st.subheader("Generate PDF")

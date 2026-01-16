@@ -53,7 +53,7 @@ Return ONLY the JSON, no other text. Make it comprehensive based on all discusse
 class OpenAIAgent(TravelAgent):
     """OpenAI-powered travel planning agent."""
 
-    def __init__(self, api_key: str, model: str = "gpt-4o"):
+    def __init__(self, api_key: str, model: str = "gpt-5.2"):
         super().__init__(api_key)
         self.client = OpenAI(api_key=api_key)
         self.model = model
