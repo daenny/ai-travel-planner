@@ -166,6 +166,19 @@ PROVIDER_MODELS = {
     ],
 }
 
+SUPPORTED_LANGUAGES = [
+    "English",
+    "Spanish",
+    "French",
+    "German",
+    "Italian",
+    "Portuguese",
+    "Dutch",
+    "Japanese",
+    "Chinese (Simplified)",
+    "Korean",
+]
+
 
 def get_agent(provider: str, api_key: str, model: str) -> TravelAgent | None:
     """Create an agent for the selected provider."""
@@ -273,7 +286,24 @@ def render_sidebar():
             st.session_state.agent = get_agent(provider, api_key, model)
             st.session_state.session.ai_provider = provider
             if st.session_state.agent:
+                st.session_state.agent.set_language(st.session_state.session.language)
                 st.success(f"Connected to {provider} ({model})")
+
+        st.markdown("---")
+        st.subheader("Language")
+        current_language = st.session_state.session.language
+        language_index = SUPPORTED_LANGUAGES.index(current_language) if current_language in SUPPORTED_LANGUAGES else 0
+        language = st.selectbox(
+            "Content Language",
+            SUPPORTED_LANGUAGES,
+            index=language_index,
+            key="language_select",
+            help="Language for AI-generated content (descriptions, tips, activities)"
+        )
+        if language != st.session_state.session.language:
+            st.session_state.session.language = language
+            if st.session_state.agent:
+                st.session_state.agent.set_language(language)
 
         st.markdown("---")
         st.subheader("Unsplash Images")
@@ -544,7 +574,7 @@ def render_itinerary_builder():
                         for msg in st.session_state.session.chat_history
                     )
                     new_itinerary = st.session_state.agent.generate_itinerary_json(
-                        chat_context, st.session_state.session.itinerary
+                        chat_context, st.session_state.session.itinerary, st.session_state.session.language
                     )
                     st.session_state.session.itinerary = new_itinerary
                     st.success("Itinerary generated!")

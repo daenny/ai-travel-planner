@@ -90,13 +90,17 @@ class ClaudeAgent(TravelAgent):
                 yield text
 
     def generate_itinerary_json(
-        self, requirements: str, current_itinerary: Itinerary | None = None
+        self, requirements: str, current_itinerary: Itinerary | None = None, language: str = "English"
     ) -> Itinerary:
         context = ""
         if current_itinerary:
             context = f"\n\nCurrent itinerary to update/expand:\n{current_itinerary.model_dump_json(indent=2)}"
 
-        prompt = f"{requirements}{context}\n\n{ITINERARY_JSON_PROMPT}"
+        language_note = ""
+        if language.lower() != "english":
+            language_note = f"\n\nIMPORTANT: Generate all text content in {language}.\n"
+
+        prompt = f"{requirements}{context}{language_note}\n\n{ITINERARY_JSON_PROMPT}"
 
         response = self.client.messages.create(
             model=self.model,

@@ -214,6 +214,7 @@ class PlannerSession(BaseModel):
     itinerary: Itinerary = Field(default_factory=Itinerary)
     chat_history: list[ChatMessage] = Field(default_factory=list)
     ai_provider: str = "claude"
+    language: str = "English"
     blog_content: dict[str, SavedBlogContent] = Field(default_factory=dict)
     destinations: "TripDestinations" = Field(default_factory=lambda: _get_trip_destinations_default())
 

@@ -36,7 +36,7 @@ When asked to create or update the itinerary, structure your response to include
 - Morning, afternoon, and evening activities
 - Estimated costs where relevant
 - Tips specific to each activity or location
-"""
+{language_instruction}"""
 
 # Default expertise when no destination is set
 DEFAULT_EXPERTISE = """Your expertise includes:
@@ -79,12 +79,21 @@ def build_destination_expertise(destinations: "TripDestinations") -> str:
     return "\n".join(lines)
 
 
+def build_language_instruction(language: str) -> str:
+    """Build language instruction for the system prompt."""
+    if language.lower() == "english":
+        return ""
+    return f"""
+IMPORTANT: Generate ALL content in {language}. This includes activity names, descriptions, tips, day summaries, and packing list items. Keep proper names (places, restaurants) in their original form."""
+
+
 class TravelAgent(ABC):
     """Abstract base class for travel planning agents."""
 
     def __init__(self, api_key: str):
         self.api_key = api_key
         self._destinations: "TripDestinations | None" = None
+        self._language: str = "English"
         self._update_system_prompt()
 
     def set_destinations(self, destinations: "TripDestinations") -> None:
@@ -92,11 +101,18 @@ class TravelAgent(ABC):
         self._destinations = destinations
         self._update_system_prompt()
 
+    def set_language(self, language: str) -> None:
+        """Update the agent's language setting."""
+        self._language = language
+        self._update_system_prompt()
+
     def _update_system_prompt(self) -> None:
-        """Rebuild system prompt based on current destinations."""
+        """Rebuild system prompt based on current destinations and language."""
         expertise = build_destination_expertise(self._destinations)
+        language_instruction = build_language_instruction(self._language)
         self.system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
-            destination_expertise=expertise
+            destination_expertise=expertise,
+            language_instruction=language_instruction
         )
 
     def save_debug_response(self, response: str, prefix: str = "itinerary") -> Path:
@@ -150,7 +166,7 @@ class TravelAgent(ABC):
 
     @abstractmethod
     def generate_itinerary_json(
-        self, requirements: str, current_itinerary: Itinerary | None = None
+        self, requirements: str, current_itinerary: Itinerary | None = None, language: str = "English"
     ) -> Itinerary:
         """
         Generate or update an itinerary based on requirements.
@@ -158,6 +174,7 @@ class TravelAgent(ABC):
         Args:
             requirements: Description of what the user wants
             current_itinerary: Existing itinerary to update (if any)
+            language: Language for generated content
 
         Returns:
             Updated Itinerary object
