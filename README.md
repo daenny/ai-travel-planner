@@ -8,15 +8,17 @@ A Streamlit-based travel planning assistant that helps you plan family trips to 
 ## Features
 
 - **AI-Powered Planning** - Chat with Claude, OpenAI, or Google Gemini to plan your trip
+- **Auto-Detection** - Automatically connects to the first available AI provider on startup
 - **Multiple Model Support** - Choose from various models (GPT-4o, Claude Sonnet, Gemini Pro, etc.)
-- **Blog Tip Extraction** - Paste travel blog URLs and let AI extract useful tips and highlights
+- **Blog Tip Extraction** - Paste travel blog URLs in the Blog Tips tab and let AI extract useful tips
 - **PDF Generation** - Export your itinerary in 3 beautiful styles:
   - **Magazine** - Colorful travel magazine aesthetic with large images
   - **Minimal** - Clean, elegant design focused on readability
   - **Guidebook** - Print-optimized with QR codes for bookings
 - **Unsplash Integration** - Automatically fetch stunning travel photos for your PDF
-- **Secure Key Storage** - API keys stored safely in your system keyring
+- **Secure Key Storage** - API keys stored safely in your system keyring (configured in Settings tab)
 - **Session Persistence** - Save and load your planning sessions
+- **Multi-Language Support** - Generate content in multiple languages
 
 ## Installation
 
@@ -56,12 +58,13 @@ pixi run app
 
 ### Quick Start
 
-1. **Configure AI Provider** - Select Claude/OpenAI/Gemini in the sidebar and enter your API key
-2. **Chat** - Tell the AI where you want to travel (e.g., "I want to plan a trip to Japan")
-3. **Add Blogs** - Paste travel blog URLs to extract tips (AI will analyze them)
-4. **Share Tips** - Click "Share tips with AI" to give the agent your blog research
-5. **Generate Itinerary** - Click "Create Itinerary from Conversation" in the Itinerary tab
-6. **Export PDF** - Choose a style and download your travel guide
+1. **Auto-Connect** - The app automatically detects and connects to an available AI provider on startup
+2. **Configure (Optional)** - Go to the **Settings tab** to change provider, model, or add API keys
+3. **Chat** - Tell the AI where you want to travel (e.g., "I want to plan a trip to Japan")
+4. **Add Blogs** - Go to the **Blog Tips tab**, paste travel blog URLs and click "Extract Tips"
+5. **Share Tips** - In the Chat tab, click "Share tips with AI" to give the agent your blog research
+6. **Generate Itinerary** - Click "Create Itinerary from Conversation" in the Itinerary tab
+7. **Export PDF** - In the sidebar, choose a style and download your travel guide
 
 The app will automatically detect your destination and update the title and AI expertise accordingly.
 
@@ -80,17 +83,18 @@ You'll need at least one of these API keys:
 
 ```
 pdf_planner/
-├── src/
-│   ├── app.py              # Streamlit main application
-│   ├── agents/             # AI provider implementations
+├── ai_travel_planner/
+│   ├── app.py              # Streamlit main application (4 tabs + sidebar)
+│   ├── agents/             # AI provider implementations (Claude, OpenAI, Gemini)
 │   ├── services/           # Unsplash, blog scraper, PDF generator
 │   ├── models/             # Pydantic data models
 │   ├── storage/            # JSON persistence
-│   └── templates/          # PDF HTML templates
+│   └── templates/          # PDF HTML templates (magazine, minimal, guidebook)
 ├── plans/                  # Saved sessions (JSON)
 ├── exports/                # Generated PDFs
 ├── images/                 # Cached Unsplash images
-└── CLAUDE.md              # Development guide
+├── CLAUDE.md              # Development guide
+└── README.md              # This file
 ```
 
 ## PDF Styles

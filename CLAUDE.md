@@ -1,5 +1,14 @@
 # Travel Planner - Development Guide
 
+## Documentation Maintenance
+
+**Important:** Always keep this file and README.md updated when making changes to:
+- UI structure or navigation (tabs, sidebar sections)
+- Configuration options or settings
+- API key handling or storage
+- New features or removed functionality
+- Constants or configuration values
+
 ## Project Overview
 
 A Streamlit-based travel planning assistant for family trips to any destination. Features conversational AI planning with automatic destination detection, blog content extraction, and PDF generation with multiple styles.
@@ -40,6 +49,28 @@ ai_travel_planner/
     └── guidebook.html     # Print-optimized with QR codes
 ```
 
+## UI Structure
+
+The app uses a 4-tab layout with a sidebar:
+
+### Tabs
+1. **Chat** - Conversational AI planning interface
+2. **Itinerary** - View/edit generated itinerary, create from conversation
+3. **Blog Tips** - Add blog URLs, extract tips, view extracted content
+4. **Settings** - AI provider selection, API keys, language, Unsplash configuration
+
+### Sidebar
+- App title (dynamic based on destination)
+- Mode indicator (Local/Remote, Debug)
+- AI Provider status (read-only, shows current connection)
+- Save/Load session files
+- PDF generation controls
+
+### Key Constants
+- `PROVIDERS` - List of supported AI providers: `["Claude", "OpenAI", "Gemini"]`
+- `PROVIDER_MODELS` - Dict mapping providers to available models
+- `SUPPORTED_LANGUAGES` - List of supported content languages
+
 ## Key Patterns
 
 ### Adding a New AI Provider
@@ -51,7 +82,10 @@ ai_travel_planner/
    - `generate_itinerary_json(requirements, current_itinerary)` - returns `Itinerary`
    - `name` and `model_id` properties
 4. Add to `ai_travel_planner/agents/__init__.py`
-5. Add provider option in `ai_travel_planner/app.py` `get_agent()` function
+5. In `ai_travel_planner/app.py`:
+   - Add provider name to `PROVIDERS` constant
+   - Add models to `PROVIDER_MODELS` dict
+   - Add case in `get_agent()` function
 
 ### Adding a New PDF Style
 
@@ -75,16 +109,18 @@ User Chat → Agent.chat() → ChatMessage stored in PlannerSession
          ↓
 "Generate PDF" → PDFGenerator.generate_pdf() → WeasyPrint → PDF file
 
-Blog URL → BlogScraper.scrape_with_ai() → BlogContent → "Share tips" → Agent context
+Blog URL (Blog Tips tab) → BlogScraper.scrape_with_ai() → BlogContent → "Share tips" → Agent context
 ```
 
 ## API Key Storage
 
 API keys can be stored in two ways:
 
-### 1. System Keyring (Recommended)
+### 1. System Keyring (Recommended for Local Mode)
 Keys are securely stored in the OS keyring (GNOME Keyring, KWallet, macOS Keychain, Windows Credential Manager).
-- Use the "💾 Save Key" button in the sidebar to store keys
+- Configure in the **Settings tab** (not sidebar)
+- Use the "Save Key" button to store keys in keyring
+- Click "Connect" to apply provider/model changes
 - Keys persist across sessions securely
 - Service name: `travel-planner`
 
@@ -96,6 +132,9 @@ Create `.env` file with:
 - `UNSPLASH_ACCESS_KEY` - For images (optional but recommended)
 
 The app checks keyring first, then falls back to environment variables.
+
+### Auto-Detection
+On startup, the app automatically detects and connects to the first available provider that has an API key configured (checks Claude, then OpenAI, then Gemini).
 
 ## Dependencies
 

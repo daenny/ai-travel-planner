@@ -163,6 +163,14 @@ def delete_api_key(provider: str) -> bool:
         return False
 
 
+def auto_detect_provider() -> str | None:
+    """Auto-detect first available provider with an API key."""
+    for provider in PROVIDERS:
+        if get_api_key(provider):
+            return provider
+    return None
+
+
 def blog_content_to_saved(content: BlogContent) -> SavedBlogContent:
     """Convert BlogContent dataclass to SavedBlogContent Pydantic model."""
     return SavedBlogContent(
@@ -233,6 +241,20 @@ def init_session_state():
     if "blog_content" not in st.session_state:
         st.session_state.blog_content = {}
 
+    # Auto-detect and initialize provider on first load
+    if "auto_detected" not in st.session_state:
+        st.session_state.auto_detected = True
+        detected_provider = auto_detect_provider()
+        if detected_provider:
+            api_key = get_api_key(detected_provider)
+            default_model = PROVIDER_MODELS[detected_provider][0]
+            st.session_state.agent = get_agent(detected_provider, api_key, default_model)
+            st.session_state.session.ai_provider = detected_provider
+            if st.session_state.agent:
+                st.session_state.agent.set_language(st.session_state.session.language)
+
+
+PROVIDERS = ["Claude", "OpenAI", "Gemini"]
 
 PROVIDER_MODELS = {
     "Claude": [
@@ -328,6 +350,141 @@ def maybe_update_destination(session: PlannerSession, agent: TravelAgent) -> boo
     return False
 
 
+def render_settings():
+    """Render the settings tab with AI provider, language, and API key configuration."""
+    st.header("⚙️ Settings")
+
+    # AI Provider section
+    st.subheader("AI Provider")
+
+    # Use session.ai_provider as source of truth for initial index
+    current_provider = st.session_state.session.ai_provider
+    if current_provider not in PROVIDERS:
+        current_provider = PROVIDERS[0]
+    provider_index = PROVIDERS.index(current_provider)
+
+    provider = st.selectbox(
+        "Select AI Provider",
+        PROVIDERS,
+        index=provider_index,
+        key="settings_provider_select",
+    )
+
+    # Get current model for this provider (if agent exists and matches)
+    current_model = None
+    if st.session_state.agent and st.session_state.session.ai_provider == provider:
+        current_model = st.session_state.agent.model_id
+
+    # Find model index
+    models = PROVIDER_MODELS[provider]
+    model_index = 0
+    if current_model and current_model in models:
+        model_index = models.index(current_model)
+
+    model = st.selectbox(
+        "Select Model",
+        models,
+        index=model_index,
+        key=f"settings_model_select_{provider}",
+    )
+
+    # Load API key from keyring or environment
+    stored_key = get_api_key(provider)
+    api_key = st.text_input(
+        f"{provider} API Key",
+        value=stored_key,
+        type="password",
+        key=f"settings_api_key_{provider}",
+    )
+
+    # Save/delete key buttons (different behavior in local vs remote mode)
+    if LOCAL_MODE:
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("💾 Save Key", key=f"settings_save_key_{provider}", use_container_width=True):
+                if api_key:
+                    if save_api_key(provider, api_key):
+                        st.success("Key saved!")
+                    else:
+                        st.error("Failed to save")
+        with col2:
+            if st.button("🗑️ Delete", key=f"settings_del_key_{provider}", use_container_width=True):
+                if delete_api_key(provider):
+                    st.success("Key deleted!")
+                    st.rerun()
+    else:
+        # Remote mode: save to session automatically when key is entered
+        if api_key and api_key != get_api_key_from_session(provider):
+            save_api_key_to_session(provider, api_key)
+        st.caption("Keys are stored in session (save session to persist)")
+
+    # Check if settings differ from current agent
+    agent_provider = st.session_state.session.ai_provider
+    agent_model = st.session_state.agent.model_id if st.session_state.agent else None
+    settings_changed = (provider != agent_provider or model != agent_model)
+
+    # Show current status and connect button
+    if st.session_state.agent and not settings_changed:
+        st.success(f"Connected to {agent_provider} ({agent_model})")
+    elif api_key:
+        if st.button("Connect", key="connect_provider", type="primary", use_container_width=True):
+            st.session_state.agent = get_agent(provider, api_key, model)
+            st.session_state.session.ai_provider = provider
+            if st.session_state.agent:
+                st.session_state.agent.set_language(st.session_state.session.language)
+                st.rerun()
+            else:
+                st.error(f"Failed to connect to {provider}")
+        if settings_changed:
+            st.info(f"Click Connect to switch to {provider} ({model})")
+    else:
+        st.warning(f"Enter an API key for {provider}")
+
+    st.markdown("---")
+
+    # Language section
+    st.subheader("Language")
+    current_language = st.session_state.session.language
+    language_index = SUPPORTED_LANGUAGES.index(current_language) if current_language in SUPPORTED_LANGUAGES else 0
+    language = st.selectbox(
+        "Content Language",
+        SUPPORTED_LANGUAGES,
+        index=language_index,
+        key="settings_language_select",
+        help="Language for AI-generated content (descriptions, tips, activities)"
+    )
+    if language != st.session_state.session.language:
+        st.session_state.session.language = language
+        if st.session_state.agent:
+            st.session_state.agent.set_language(language)
+
+    st.markdown("---")
+
+    # Unsplash section
+    st.subheader("Unsplash Images")
+    stored_unsplash = get_api_key("Unsplash")
+    unsplash_key_input = st.text_input(
+        "Unsplash Access Key",
+        value=stored_unsplash,
+        type="password",
+        key="settings_unsplash_key",
+    )
+    if LOCAL_MODE:
+        if st.button("💾 Save Unsplash Key", key="settings_save_unsplash"):
+            unsplash_val = st.session_state.get("settings_unsplash_key", "")
+            if unsplash_val:
+                if save_api_key("Unsplash", unsplash_val):
+                    st.success("Unsplash key saved!")
+                else:
+                    st.error("Failed to save")
+    else:
+        # Remote mode: save to session automatically
+        if unsplash_key_input and unsplash_key_input != get_api_key_from_session("Unsplash"):
+            save_api_key_to_session("Unsplash", unsplash_key_input)
+
+    st.caption("Unsplash API key is used to fetch travel images for your PDF itinerary.")
+
+
 def render_sidebar():
     """Render the sidebar with configuration options."""
     with st.sidebar:
@@ -346,145 +503,15 @@ def render_sidebar():
 
         st.markdown("---")
 
+        # Provider status display
         st.subheader("AI Provider")
-        provider = st.selectbox(
-            "Select AI Provider",
-            ["Claude", "OpenAI", "Gemini"],
-            key="provider_select",
-        )
-
-        model = st.selectbox(
-            "Select Model",
-            PROVIDER_MODELS[provider],
-            key=f"model_select_{provider}",
-        )
-
-        # Load API key from keyring or environment
-        stored_key = get_api_key(provider)
-        api_key = st.text_input(
-            f"{provider} API Key",
-            value=stored_key,
-            type="password",
-            key=f"api_key_{provider}",
-        )
-
-        # Save/delete key buttons (different behavior in local vs remote mode)
-        if LOCAL_MODE:
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("💾 Save Key", key=f"save_key_{provider}", use_container_width=True):
-                    if api_key:
-                        if save_api_key(provider, api_key):
-                            st.success("Key saved!")
-                        else:
-                            st.error("Failed to save")
-            with col2:
-                if st.button("🗑️ Delete", key=f"del_key_{provider}", use_container_width=True):
-                    if delete_api_key(provider):
-                        st.success("Key deleted!")
-                        st.rerun()
+        if st.session_state.agent:
+            provider = st.session_state.session.ai_provider
+            model = st.session_state.agent.model_id
+            st.success(f"{provider} ({model})")
         else:
-            # Remote mode: save to session automatically when key is entered
-            if api_key and api_key != get_api_key_from_session(provider):
-                save_api_key_to_session(provider, api_key)
-            st.caption("Keys are stored in session (save session to persist)")
-
-        current_model = st.session_state.agent.model_id if st.session_state.agent else None
-        needs_new_agent = (
-            st.session_state.agent is None
-            or st.session_state.session.ai_provider != provider
-            or current_model != model
-        )
-
-        if api_key and needs_new_agent:
-            st.session_state.agent = get_agent(provider, api_key, model)
-            st.session_state.session.ai_provider = provider
-            if st.session_state.agent:
-                st.session_state.agent.set_language(st.session_state.session.language)
-                st.success(f"Connected to {provider} ({model})")
-
-        st.markdown("---")
-        st.subheader("Language")
-        current_language = st.session_state.session.language
-        language_index = SUPPORTED_LANGUAGES.index(current_language) if current_language in SUPPORTED_LANGUAGES else 0
-        language = st.selectbox(
-            "Content Language",
-            SUPPORTED_LANGUAGES,
-            index=language_index,
-            key="language_select",
-            help="Language for AI-generated content (descriptions, tips, activities)"
-        )
-        if language != st.session_state.session.language:
-            st.session_state.session.language = language
-            if st.session_state.agent:
-                st.session_state.agent.set_language(language)
-
-        st.markdown("---")
-        st.subheader("Unsplash Images")
-        stored_unsplash = get_api_key("Unsplash")
-        unsplash_key_input = st.text_input(
-            "Unsplash Access Key",
-            value=stored_unsplash,
-            type="password",
-            key="unsplash_key",
-        )
-        if LOCAL_MODE:
-            if st.button("💾 Save Unsplash Key", key="save_unsplash"):
-                unsplash_val = st.session_state.get("unsplash_key", "")
-                if unsplash_val:
-                    if save_api_key("Unsplash", unsplash_val):
-                        st.success("Unsplash key saved!")
-                    else:
-                        st.error("Failed to save")
-        else:
-            # Remote mode: save to session automatically
-            if unsplash_key_input and unsplash_key_input != get_api_key_from_session("Unsplash"):
-                save_api_key_to_session("Unsplash", unsplash_key_input)
-
-        st.markdown("---")
-        st.subheader("Travel Blogs")
-        blog_url = st.text_input("Add blog URL", placeholder="https://...", key="blog_url_input")
-        use_ai_extraction = st.checkbox("Use AI to extract tips", value=True, key="use_ai_blog")
-
-        if st.button("Extract Tips", key="extract_blog"):
-            if blog_url:
-                scraper = BlogScraper()
-                agent = st.session_state.agent
-
-                if use_ai_extraction and agent:
-                    with st.spinner("Extracting with AI (this may take a moment)..."):
-                        content = scraper.scrape_with_ai(blog_url, agent)
-                else:
-                    with st.spinner("Extracting content..."):
-                        content = scraper.scrape_blog(blog_url)
-
-                if content:
-                    st.session_state.blog_content[blog_url] = content
-                    if blog_url not in st.session_state.session.itinerary.blog_urls:
-                        st.session_state.session.itinerary.blog_urls.append(blog_url)
-                    tip_count = len(content.tips)
-                    st.success(f"Extracted: {content.title} ({tip_count} tips)")
-                else:
-                    st.error("Failed to extract content")
-
-        if st.session_state.blog_content:
-            st.markdown("**Added blogs:**")
-            urls_to_delete = []
-            for url in list(st.session_state.blog_content.keys()):
-                content = st.session_state.blog_content[url]
-                col1, col2 = st.columns([4, 1])
-                with col1:
-                    st.markdown(f"- {content.title[:25]}... ({len(content.tips)} tips)")
-                with col2:
-                    if st.button("🗑️", key=f"del_blog_sidebar_{hash(url)}", help="Delete blog"):
-                        urls_to_delete.append(url)
-
-            # Process deletions after iteration
-            for url in urls_to_delete:
-                del st.session_state.blog_content[url]
-                if url in st.session_state.session.itinerary.blog_urls:
-                    st.session_state.session.itinerary.blog_urls.remove(url)
-                st.rerun()
+            st.warning("No AI provider configured")
+            st.caption("Go to Settings tab to configure")
 
         st.markdown("---")
         st.subheader("Save/Load Plans")
@@ -507,6 +534,8 @@ def render_sidebar():
                     st.session_state.last_loaded_file = file_id
                     # Restore blog content from loaded session
                     sync_blog_content_from_session()
+                    # Clear agent so user can reconnect with loaded provider
+                    st.session_state.agent = None
                     st.success(f"Loaded: {uploaded_file.name} ({len(st.session_state.blog_content)} blogs)")
                     st.rerun()
                 except Exception as e:
@@ -541,7 +570,7 @@ def render_sidebar():
         if st.button("Generate PDF", key="gen_pdf"):
             if st.session_state.session.itinerary.days:
                 with st.spinner("Generating PDF..."):
-                    unsplash_api_key = st.session_state.get("unsplash_key", "")
+                    unsplash_api_key = get_api_key("Unsplash")
                     if unsplash_api_key:
                         unsplash = UnsplashService(unsplash_api_key, IMAGES_DIR)
                         for day in st.session_state.session.itinerary.days:
@@ -784,9 +813,46 @@ def render_itinerary_builder():
 
 
 def render_blog_tips():
-    """Render extracted blog tips."""
+    """Render extracted blog tips with blog input UI."""
+    st.header("📝 Blog Tips")
+
+    # Blog input section at top
+    st.subheader("Add Travel Blog")
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        blog_url = st.text_input("Blog URL", placeholder="https://...", key="blog_url_input")
+    with col2:
+        use_ai_extraction = st.checkbox("Use AI", value=True, key="use_ai_blog", help="Use AI to extract tips intelligently")
+
+    if st.button("Extract Tips", key="extract_blog"):
+        if blog_url:
+            scraper = BlogScraper()
+            agent = st.session_state.agent
+
+            if use_ai_extraction and agent:
+                with st.spinner("Extracting with AI (this may take a moment)..."):
+                    content = scraper.scrape_with_ai(blog_url, agent)
+            else:
+                with st.spinner("Extracting content..."):
+                    content = scraper.scrape_blog(blog_url)
+
+            if content:
+                st.session_state.blog_content[blog_url] = content
+                if blog_url not in st.session_state.session.itinerary.blog_urls:
+                    st.session_state.session.itinerary.blog_urls.append(blog_url)
+                tip_count = len(content.tips)
+                st.success(f"Extracted: {content.title} ({tip_count} tips)")
+                st.rerun()
+            else:
+                st.error("Failed to extract content")
+        else:
+            st.warning("Please enter a blog URL")
+
+    st.markdown("---")
+
+    # Display extracted blogs
     if st.session_state.blog_content:
-        st.header("📝 Tips from Blogs")
+        st.subheader(f"Extracted Blogs ({len(st.session_state.blog_content)})")
 
         urls_to_delete = []
         for url in list(st.session_state.blog_content.keys()):
@@ -819,7 +885,7 @@ def render_blog_tips():
             st.success(f"Deleted blog: {url[:50]}...")
             st.rerun()
     else:
-        st.info("No blogs added yet. Add blog URLs in the sidebar to extract travel tips.")
+        st.info("No blogs added yet. Enter a travel blog URL above to extract tips and highlights.")
 
 
 def main():
@@ -827,7 +893,7 @@ def main():
     init_session_state()
     render_sidebar()
 
-    tab1, tab2, tab3 = st.tabs(["💬 Chat", "📋 Itinerary", "📝 Blog Tips"])
+    tab1, tab2, tab3, tab4 = st.tabs(["💬 Chat", "📋 Itinerary", "📝 Blog Tips", "⚙️ Settings"])
 
     with tab1:
         render_chat()
@@ -837,6 +903,9 @@ def main():
 
     with tab3:
         render_blog_tips()
+
+    with tab4:
+        render_settings()
 
 
 if __name__ == "__main__":
