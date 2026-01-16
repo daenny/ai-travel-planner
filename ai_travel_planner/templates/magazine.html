@@ -125,6 +125,24 @@
             margin-bottom: 20px;
         }
 
+        .day-gallery {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .day-gallery .gallery-image {
+            flex: 1;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .day-gallery .gallery-image:first-child {
+            flex: 2;
+            height: 120px;
+        }
+
         .day-summary {
             font-size: 12pt;
             color: #555;
@@ -311,7 +329,13 @@
             </div>
         </div>
 
-        {% if day.image_path %}
+        {% if day.image_paths %}
+        <div class="day-gallery">
+            {% for img_path in day.image_paths[:3] %}
+            <img class="gallery-image" src="{{ img_path|b64image }}" alt="{{ day.location }}">
+            {% endfor %}
+        </div>
+        {% elif day.image_path %}
         <img class="day-hero" src="{{ day.image_path|b64image }}" alt="{{ day.location }}">
         {% endif %}
 

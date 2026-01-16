@@ -153,6 +153,8 @@ class DayPlan(BaseModel):
     weather_note: Optional[str] = None
     image_url: Optional[str] = None
     image_path: Optional[str] = None
+    image_paths: list[str] = Field(default_factory=list)
+    image_queries: list[str] = Field(default_factory=list)
 
     @field_validator("date", mode="before")
     @classmethod

@@ -82,6 +82,23 @@
             opacity: 0.9;
         }
 
+        .day-gallery {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .day-gallery .gallery-image {
+            flex: 1;
+            height: 90px;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        .day-gallery .gallery-image:first-child {
+            flex: 2;
+        }
+
         .day-summary {
             font-style: italic;
             color: #7f8c8d;
@@ -211,7 +228,13 @@
             <span class="day-location">{{ day.location }}</span>
         </div>
 
-        {% if day.image_path %}
+        {% if day.image_paths %}
+        <div class="day-gallery">
+            {% for img_path in day.image_paths[:3] %}
+            <img class="gallery-image" src="{{ img_path|b64image }}" alt="{{ day.location }}">
+            {% endfor %}
+        </div>
+        {% elif day.image_path %}
         <img class="day-image" src="{{ day.image_path|b64image }}" alt="{{ day.location }}">
         {% endif %}
 

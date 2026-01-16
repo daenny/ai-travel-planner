@@ -117,6 +117,22 @@
             margin-bottom: 10px;
         }
 
+        .day-gallery {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .day-gallery .gallery-image {
+            flex: 1;
+            height: 60px;
+            object-fit: cover;
+        }
+
+        .day-gallery .gallery-image:first-child {
+            flex: 2;
+        }
+
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
@@ -355,7 +371,13 @@
 
         <div class="day-content">
             <div class="day-main">
-                {% if day.image_path %}
+                {% if day.image_paths %}
+                <div class="day-gallery">
+                    {% for img_path in day.image_paths[:3] %}
+                    <img class="gallery-image" src="{{ img_path|b64image }}" alt="{{ day.location }}">
+                    {% endfor %}
+                </div>
+                {% elif day.image_path %}
                 <img class="day-image" src="{{ day.image_path|b64image }}" alt="{{ day.location }}">
                 {% endif %}
 

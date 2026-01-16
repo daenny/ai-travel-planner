@@ -583,10 +583,21 @@ def render_sidebar():
                     if unsplash_api_key:
                         unsplash = UnsplashService(unsplash_api_key, IMAGES_DIR)
                         for day in st.session_state.session.itinerary.days:
-                            if not day.image_path:
+                            # Use AI-generated image queries if available
+                            if day.image_queries and not day.image_paths:
+                                paths = unsplash.download_photos_for_queries(
+                                    day.image_queries, max_images=3
+                                )
+                                day.image_paths = [str(p) for p in paths]
+                                # Also set single image_path for backward compatibility
+                                if paths and not day.image_path:
+                                    day.image_path = str(paths[0])
+                            # Fallback to location-based single image
+                            elif not day.image_path and not day.image_paths:
                                 img_path = unsplash.get_photo_for_location(day.location)
                                 if img_path:
                                     day.image_path = str(img_path)
+                                    day.image_paths = [str(img_path)]
 
                     generator = PDFGenerator(exports_dir=EXPORTS_DIR)
                     pdf_path = generator.generate_pdf(

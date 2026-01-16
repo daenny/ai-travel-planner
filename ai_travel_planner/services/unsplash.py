@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import hashlib
-import warnings
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -150,42 +150,52 @@ class UnsplashService:
                 unique_queries.append(q)
         queries = unique_queries[:10]
 
-        results = {}
-        for query in queries:
-            results[query] = self.download_photo(query)
+        # Use ThreadPoolExecutor for parallel downloads
+        results: dict[str, Path | None] = {}
+        with ThreadPoolExecutor(max_workers=min(len(queries), 5)) as executor:
+            future_to_query = {
+                executor.submit(self.download_photo, query): query
+                for query in queries
+            }
+            for future in as_completed(future_to_query):
+                query = future_to_query[future]
+                try:
+                    results[query] = future.result()
+                except Exception:
+                    results[query] = None
 
         return results
 
-    def get_borneo_images(self) -> dict[str, Path | None]:
+    def download_photos_for_queries(
+        self, queries: list[str], max_images: int = 3
+    ) -> list[Path]:
         """
-        Pre-fetch common Borneo-related images.
+        Download photos for multiple queries in parallel, returning list of cached paths.
 
-        .. deprecated::
-            Use :meth:`get_destination_images` instead.
+        Args:
+            queries: List of specific search queries (e.g., AI-generated image queries)
+            max_images: Maximum number of images to download (default 3)
 
         Returns:
-            Dict mapping location/activity to image paths
+            List of paths to downloaded images (may be shorter than max_images if some fail)
         """
-        warnings.warn(
-            "get_borneo_images is deprecated, use get_destination_images instead",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        queries = [
-            "Borneo rainforest",
-            "Orangutan Sepilok",
-            "Kinabalu mountain",
-            "Kota Kinabalu sunset",
-            "Kuala Lumpur skyline",
-            "Petronas towers night",
-            "Borneo beach",
-            "Proboscis monkey",
-            "Borneo river cruise",
-            "Malaysian food",
-        ]
+        queries_to_fetch = queries[:max_images]
+        if not queries_to_fetch:
+            return []
 
-        results = {}
-        for query in queries:
-            results[query] = self.download_photo(query)
+        # Use ThreadPoolExecutor for parallel downloads
+        results: dict[int, Path | None] = {}
+        with ThreadPoolExecutor(max_workers=min(len(queries_to_fetch), 5)) as executor:
+            future_to_idx = {
+                executor.submit(self.download_photo, query): idx
+                for idx, query in enumerate(queries_to_fetch)
+            }
+            for future in as_completed(future_to_idx):
+                idx = future_to_idx[future]
+                try:
+                    results[idx] = future.result()
+                except Exception:
+                    results[idx] = None
 
-        return results
+        # Return in original order, filtering out failures
+        return [results[i] for i in sorted(results.keys()) if results[i] is not None]
