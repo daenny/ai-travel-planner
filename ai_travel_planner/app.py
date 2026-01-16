@@ -1,5 +1,7 @@
+import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 import keyring
@@ -16,6 +18,30 @@ from ai_travel_planner.services.destination_detector import DestinationDetector
 
 load_dotenv()
 
+
+def parse_args():
+    """Parse command-line arguments passed after -- in streamlit run."""
+    parser = argparse.ArgumentParser(description="Travel Planner App")
+    parser.add_argument(
+        "--local",
+        action="store_true",
+        help="Run in local mode: load API keys from keyring/environment",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug mode: save itinerary debug output",
+    )
+    # Filter out streamlit arguments and parse only our app arguments
+    args, _ = parser.parse_known_args()
+    return args
+
+
+# Parse arguments at module load time
+APP_ARGS = parse_args()
+LOCAL_MODE = APP_ARGS.local
+DEBUG_MODE = APP_ARGS.debug
+
 # Keyring service name for storing API keys
 KEYRING_SERVICE = "travel-planner"
 
@@ -28,8 +54,46 @@ KEYRING_KEYS = {
 }
 
 
+def get_api_key_from_session(provider: str) -> str:
+    """Get API key from the current session (for remote mode)."""
+    if "session" not in st.session_state:
+        return ""
+    api_keys = st.session_state.session.api_keys
+    provider_map = {
+        "Claude": api_keys.anthropic,
+        "OpenAI": api_keys.openai,
+        "Gemini": api_keys.google,
+        "Unsplash": api_keys.unsplash,
+    }
+    return provider_map.get(provider, "")
+
+
+def save_api_key_to_session(provider: str, api_key: str) -> None:
+    """Save API key to the current session (for remote mode)."""
+    if "session" not in st.session_state:
+        return
+    api_keys = st.session_state.session.api_keys
+    if provider == "Claude":
+        api_keys.anthropic = api_key
+    elif provider == "OpenAI":
+        api_keys.openai = api_key
+    elif provider == "Gemini":
+        api_keys.google = api_key
+    elif provider == "Unsplash":
+        api_keys.unsplash = api_key
+
+
 def get_api_key(provider: str) -> str:
-    """Get API key from keyring, falling back to environment variable."""
+    """Get API key based on deployment mode.
+
+    Local mode: Load from keyring, fall back to environment variables.
+    Remote mode: Load from session only (user must enter or load from saved session).
+    """
+    if not LOCAL_MODE:
+        # Remote mode: only use session-stored keys
+        return get_api_key_from_session(provider)
+
+    # Local mode: keyring first, then environment variables
     key_name = KEYRING_KEYS.get(provider, "")
 
     # Try keyring first
@@ -51,9 +115,22 @@ def get_api_key(provider: str) -> str:
 
 
 def save_api_key(provider: str, api_key: str) -> bool:
-    """Save API key to keyring."""
+    """Save API key based on deployment mode.
+
+    Local mode: Save to keyring.
+    Remote mode: Save to session (will be persisted when session is saved).
+    """
+    if not api_key:
+        return False
+
+    if not LOCAL_MODE:
+        # Remote mode: save to session
+        save_api_key_to_session(provider, api_key)
+        return True
+
+    # Local mode: save to keyring
     key_name = KEYRING_KEYS.get(provider, "")
-    if not key_name or not api_key:
+    if not key_name:
         return False
 
     try:
@@ -64,7 +141,17 @@ def save_api_key(provider: str, api_key: str) -> bool:
 
 
 def delete_api_key(provider: str) -> bool:
-    """Delete API key from keyring."""
+    """Delete API key based on deployment mode.
+
+    Local mode: Delete from keyring.
+    Remote mode: Clear from session.
+    """
+    if not LOCAL_MODE:
+        # Remote mode: clear from session
+        save_api_key_to_session(provider, "")
+        return True
+
+    # Local mode: delete from keyring
     key_name = KEYRING_KEYS.get(provider, "")
     if not key_name:
         return False
@@ -128,8 +215,12 @@ st.set_page_config(
 PLANS_DIR = Path("plans")
 EXPORTS_DIR = Path("exports")
 IMAGES_DIR = Path("images")
+DEBUG_DIR = Path("debug")
 
-for d in [PLANS_DIR, EXPORTS_DIR, IMAGES_DIR]:
+dirs_to_create = [PLANS_DIR, EXPORTS_DIR, IMAGES_DIR]
+if DEBUG_MODE:
+    dirs_to_create.append(DEBUG_DIR)
+for d in dirs_to_create:
     d.mkdir(exist_ok=True)
 
 
@@ -241,6 +332,18 @@ def render_sidebar():
     """Render the sidebar with configuration options."""
     with st.sidebar:
         st.title(get_app_title(st.session_state.session))
+
+        # Show mode indicators
+        mode_parts = []
+        if LOCAL_MODE:
+            mode_parts.append("Local")
+        else:
+            mode_parts.append("Remote")
+        if DEBUG_MODE:
+            mode_parts.append("Debug")
+        mode_str = " | ".join(mode_parts)
+        st.caption(f"Mode: {mode_str}")
+
         st.markdown("---")
 
         st.subheader("AI Provider")
@@ -265,20 +368,26 @@ def render_sidebar():
             key=f"api_key_{provider}",
         )
 
-        # Save/delete key buttons
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("💾 Save Key", key=f"save_key_{provider}", use_container_width=True):
-                if api_key:
-                    if save_api_key(provider, api_key):
-                        st.success("Key saved!")
-                    else:
-                        st.error("Failed to save")
-        with col2:
-            if st.button("🗑️ Delete", key=f"del_key_{provider}", use_container_width=True):
-                if delete_api_key(provider):
-                    st.success("Key deleted!")
-                    st.rerun()
+        # Save/delete key buttons (different behavior in local vs remote mode)
+        if LOCAL_MODE:
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("💾 Save Key", key=f"save_key_{provider}", use_container_width=True):
+                    if api_key:
+                        if save_api_key(provider, api_key):
+                            st.success("Key saved!")
+                        else:
+                            st.error("Failed to save")
+            with col2:
+                if st.button("🗑️ Delete", key=f"del_key_{provider}", use_container_width=True):
+                    if delete_api_key(provider):
+                        st.success("Key deleted!")
+                        st.rerun()
+        else:
+            # Remote mode: save to session automatically when key is entered
+            if api_key and api_key != get_api_key_from_session(provider):
+                save_api_key_to_session(provider, api_key)
+            st.caption("Keys are stored in session (save session to persist)")
 
         current_model = st.session_state.agent.model_id if st.session_state.agent else None
         needs_new_agent = (
@@ -313,19 +422,24 @@ def render_sidebar():
         st.markdown("---")
         st.subheader("Unsplash Images")
         stored_unsplash = get_api_key("Unsplash")
-        st.text_input(
+        unsplash_key_input = st.text_input(
             "Unsplash Access Key",
             value=stored_unsplash,
             type="password",
             key="unsplash_key",
         )
-        if st.button("💾 Save Unsplash Key", key="save_unsplash"):
-            unsplash_val = st.session_state.get("unsplash_key", "")
-            if unsplash_val:
-                if save_api_key("Unsplash", unsplash_val):
-                    st.success("Unsplash key saved!")
-                else:
-                    st.error("Failed to save")
+        if LOCAL_MODE:
+            if st.button("💾 Save Unsplash Key", key="save_unsplash"):
+                unsplash_val = st.session_state.get("unsplash_key", "")
+                if unsplash_val:
+                    if save_api_key("Unsplash", unsplash_val):
+                        st.success("Unsplash key saved!")
+                    else:
+                        st.error("Failed to save")
+        else:
+            # Remote mode: save to session automatically
+            if unsplash_key_input and unsplash_key_input != get_api_key_from_session("Unsplash"):
+                save_api_key_to_session("Unsplash", unsplash_key_input)
 
         st.markdown("---")
         st.subheader("Travel Blogs")
@@ -599,6 +713,22 @@ def render_itinerary_builder():
                         chat_context, st.session_state.session.itinerary, st.session_state.session.language
                     )
                     st.session_state.session.itinerary = new_itinerary
+
+                    # Save debug output if debug mode is enabled
+                    if DEBUG_MODE:
+                        from datetime import datetime
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
+                        debug_data = {
+                            "timestamp": timestamp,
+                            "chat_context": chat_context,
+                            "language": st.session_state.session.language,
+                            "itinerary": new_itinerary.model_dump(mode="json"),
+                        }
+                        with open(debug_file, "w") as f:
+                            json.dump(debug_data, f, indent=2, default=str)
+                        st.info(f"Debug output saved to {debug_file}")
+
                     st.success("Itinerary generated!")
                     st.rerun()
                 except Exception as e:

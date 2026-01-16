@@ -210,6 +210,14 @@ class SavedBlogContent(BaseModel):
     raw_text: str = ""
 
 
+class StoredApiKeys(BaseModel):
+    """API keys stored in session for remote deployment."""
+    anthropic: str = ""
+    openai: str = ""
+    google: str = ""
+    unsplash: str = ""
+
+
 class PlannerSession(BaseModel):
     itinerary: Itinerary = Field(default_factory=Itinerary)
     chat_history: list[ChatMessage] = Field(default_factory=list)
@@ -217,6 +225,7 @@ class PlannerSession(BaseModel):
     language: str = "English"
     blog_content: dict[str, SavedBlogContent] = Field(default_factory=dict)
     destinations: "TripDestinations" = Field(default_factory=lambda: _get_trip_destinations_default())
+    api_keys: StoredApiKeys = Field(default_factory=StoredApiKeys)
 
 
 def _get_trip_destinations_default():
