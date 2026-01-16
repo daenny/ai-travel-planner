@@ -544,18 +544,27 @@ def render_sidebar():
         # Save session via download button
         st.markdown("**Save current session:**")
         save_name = st.text_input("Filename", placeholder="my_trip", key="save_name")
+        # Sync blog content before saving
+        sync_blog_content_to_session()
+        session_json = st.session_state.session.model_dump_json(indent=2)
+        # Use entered name, or generate default from destination/date
         if save_name:
-            # Sync blog content before saving
-            sync_blog_content_to_session()
-            session_json = st.session_state.session.model_dump_json(indent=2)
             filename = f"session_{save_name}.json" if not save_name.endswith(".json") else save_name
-            st.download_button(
-                "💾 Download Session",
-                data=session_json,
-                file_name=filename,
-                mime="application/json",
-                key="save_session_download",
-            )
+        else:
+            # Default filename based on destination or generic
+            dest = st.session_state.session.destinations
+            if dest and dest.primary:
+                default_name = dest.primary.lower().replace(" ", "_")
+            else:
+                default_name = "trip"
+            filename = f"session_{default_name}.json"
+        st.download_button(
+            "💾 Download Session",
+            data=session_json,
+            file_name=filename,
+            mime="application/json",
+            key="save_session_download",
+        )
 
         st.markdown("---")
         st.subheader("Generate PDF")
