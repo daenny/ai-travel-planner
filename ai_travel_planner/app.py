@@ -132,6 +132,24 @@ def get_api_key(provider: str) -> str:
     return os.getenv(env_var, "")
 
 
+def get_system_api_key(provider: str) -> str:
+    """Get API key from system sources only (secrets/env), NOT from session.
+
+    Used to detect if a key is system-provided vs user-entered.
+    """
+    env_var = ENV_VAR_KEYS.get(provider, "")
+
+    # Check Streamlit secrets first
+    try:
+        if hasattr(st, "secrets") and env_var in st.secrets:
+            return st.secrets[env_var]
+    except Exception:
+        pass
+
+    # Then check environment variables
+    return os.getenv(env_var, "")
+
+
 def save_api_key(provider: str, api_key: str) -> bool:
     """Save API key based on deployment mode.
 
@@ -433,8 +451,9 @@ def render_settings():
                     st.success("Key deleted!")
                     st.rerun()
     else:
-        # Remote mode: save to session automatically when key is entered
-        if api_key and api_key != get_api_key_from_session(provider):
+        # Remote mode: only save user-entered keys, not system keys from secrets/env
+        system_key = get_system_api_key(provider)
+        if api_key and api_key != get_api_key_from_session(provider) and api_key != system_key:
             save_api_key_to_session(provider, api_key)
         st.caption("Keys are stored in session (save session to persist)")
 
@@ -498,8 +517,9 @@ def render_settings():
                 else:
                     st.error("Failed to save")
     else:
-        # Remote mode: save to session automatically
-        if unsplash_key_input and unsplash_key_input != get_api_key_from_session("Unsplash"):
+        # Remote mode: only save user-entered keys, not system keys from secrets/env
+        system_unsplash = get_system_api_key("Unsplash")
+        if unsplash_key_input and unsplash_key_input != get_api_key_from_session("Unsplash") and unsplash_key_input != system_unsplash:
             save_api_key_to_session("Unsplash", unsplash_key_input)
 
     st.caption("Unsplash API key is used to fetch travel images for your PDF itinerary.")
