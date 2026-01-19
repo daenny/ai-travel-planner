@@ -9,6 +9,7 @@ from .itinerary import (
     GenerationState,
     ChatMessage,
     SavedBlogContent,
+    SavedDiscoveredLink,
     StoredApiKeys,
     PlannerSession,
 )
@@ -28,6 +29,7 @@ __all__ = [
     "GenerationState",
     "ChatMessage",
     "SavedBlogContent",
+    "SavedDiscoveredLink",
     "StoredApiKeys",
     "PlannerSession",
     "Destination",

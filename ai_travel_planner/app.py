@@ -8,12 +8,12 @@ import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, PlannerSession, SavedBlogContent, TripDestinations, GenerationProgress, GenerationState
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, PlannerSession, SavedBlogContent, SavedDiscoveredLink, TripDestinations, GenerationProgress, GenerationState
 from ai_travel_planner.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
 from ai_travel_planner.agents.base import TravelAgent
 from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerator, generate_itinerary_iteratively, resume_itinerary_generation
 from ai_travel_planner.services.pdf_generator import PDFStyle
-from ai_travel_planner.services.blog_scraper import BlogContent
+from ai_travel_planner.services.blog_scraper import BlogContent, DiscoveredLink
 from ai_travel_planner.services.destination_detector import DestinationDetector
 
 load_dotenv()
@@ -249,6 +249,40 @@ def sync_blog_content_from_session():
     }
 
 
+def discovered_link_to_saved(link: DiscoveredLink) -> SavedDiscoveredLink:
+    """Convert DiscoveredLink dataclass to SavedDiscoveredLink Pydantic model."""
+    return SavedDiscoveredLink(
+        url=link.url,
+        title=link.title,
+        source_url=link.source_url,
+    )
+
+
+def saved_to_discovered_link(saved: SavedDiscoveredLink) -> DiscoveredLink:
+    """Convert SavedDiscoveredLink Pydantic model to DiscoveredLink dataclass."""
+    return DiscoveredLink(
+        url=saved.url,
+        title=saved.title,
+        source_url=saved.source_url,
+    )
+
+
+def sync_discovered_links_to_session():
+    """Sync st.session_state.discovered_links to session.discovered_links for saving."""
+    st.session_state.session.discovered_links = {
+        source_url: [discovered_link_to_saved(link) for link in links]
+        for source_url, links in st.session_state.discovered_links.items()
+    }
+
+
+def sync_discovered_links_from_session():
+    """Sync session.discovered_links to st.session_state.discovered_links after loading."""
+    st.session_state.discovered_links = {
+        source_url: [saved_to_discovered_link(saved) for saved in saved_links]
+        for source_url, saved_links in st.session_state.session.discovered_links.items()
+    }
+
+
 st.set_page_config(
     page_title="Travel Planner",
     page_icon="✈️",
@@ -276,6 +310,8 @@ def init_session_state():
         st.session_state.agent = None
     if "blog_content" not in st.session_state:
         st.session_state.blog_content = {}
+    if "discovered_links" not in st.session_state:
+        st.session_state.discovered_links = {}
     if "generation_state" not in st.session_state:
         st.session_state.generation_state = GenerationState()
 
@@ -572,8 +608,9 @@ def render_sidebar():
                     loaded = PlannerSession.model_validate(data)
                     st.session_state.session = loaded
                     st.session_state.last_loaded_file = file_id
-                    # Restore blog content from loaded session
+                    # Restore blog content and discovered links from loaded session
                     sync_blog_content_from_session()
+                    sync_discovered_links_from_session()
                     # Clear agent so user can reconnect with loaded provider
                     st.session_state.agent = None
                     st.success(f"Loaded: {uploaded_file.name} ({len(st.session_state.blog_content)} blogs)")
@@ -584,8 +621,9 @@ def render_sidebar():
         # Save session via download button
         st.markdown("**Save current session:**")
         save_name = st.text_input("Filename", placeholder="my_trip", key="save_name")
-        # Sync blog content before saving
+        # Sync blog content and discovered links before saving
         sync_blog_content_to_session()
+        sync_discovered_links_to_session()
         session_json = st.session_state.session.model_dump_json(indent=2)
         # Use entered name, or generate default from destination/date
         if save_name:
@@ -1111,7 +1149,14 @@ def render_blog_tips():
     with col2:
         use_ai_extraction = st.checkbox("Use AI", value=True, key="use_ai_blog", help="Use AI to extract tips intelligently")
 
-    if st.button("Extract Tips", key="extract_blog"):
+    # Button row: Extract Tips and Discover Links
+    btn_col1, btn_col2, _ = st.columns([1, 1, 2])
+    with btn_col1:
+        extract_clicked = st.button("Extract Tips", key="extract_blog")
+    with btn_col2:
+        discover_clicked = st.button("Discover Links", key="discover_links")
+
+    if extract_clicked:
         if blog_url:
             scraper = BlogScraper()
             agent = st.session_state.agent
@@ -1132,6 +1177,21 @@ def render_blog_tips():
                 st.rerun()
             else:
                 st.error("Failed to extract content")
+        else:
+            st.warning("Please enter a blog URL")
+
+    if discover_clicked:
+        if blog_url:
+            scraper = BlogScraper()
+            already_scraped = set(st.session_state.blog_content.keys())
+            with st.spinner("Discovering links..."):
+                links = scraper.discover_links(blog_url, already_scraped)
+            if links:
+                st.session_state.discovered_links[blog_url] = links
+                st.success(f"Found {len(links)} links")
+                st.rerun()
+            else:
+                st.info("No new links found on this page")
         else:
             st.warning("Please enter a blog URL")
 
@@ -1173,6 +1233,89 @@ def render_blog_tips():
             st.rerun()
     else:
         st.info("No blogs added yet. Enter a travel blog URL above to extract tips and highlights.")
+
+    # Display discovered links
+    if st.session_state.discovered_links:
+        st.markdown("---")
+        total_links = sum(len(links) for links in st.session_state.discovered_links.values())
+        st.subheader(f"Discovered Links ({total_links})")
+
+        # Initialize selection state if needed
+        if "selected_discovered_links" not in st.session_state:
+            st.session_state.selected_discovered_links = set()
+
+        # Display links grouped by source URL
+        sources_to_clear = []
+        for source_url, links in st.session_state.discovered_links.items():
+            with st.expander(f"From: {source_url[:60]}... ({len(links)} links)", expanded=True):
+                col1, col2 = st.columns([5, 1])
+                with col2:
+                    if st.button("🗑️ Clear", key=f"clear_discovered_{hash(source_url)}"):
+                        sources_to_clear.append(source_url)
+
+                for link in links:
+                    # Create unique key for checkbox
+                    link_key = f"sel_{hash(link.url)}"
+                    is_selected = st.checkbox(
+                        link.title[:80] + ("..." if len(link.title) > 80 else ""),
+                        key=link_key,
+                        help=link.url,
+                    )
+                    if is_selected:
+                        st.session_state.selected_discovered_links.add(link.url)
+                    elif link.url in st.session_state.selected_discovered_links:
+                        st.session_state.selected_discovered_links.discard(link.url)
+
+        # Clear sources after iteration
+        for source in sources_to_clear:
+            # Remove selected links that belonged to this source
+            links_to_remove = {link.url for link in st.session_state.discovered_links[source]}
+            st.session_state.selected_discovered_links -= links_to_remove
+            del st.session_state.discovered_links[source]
+            st.rerun()
+
+        # Scrape selected button
+        selected_count = len(st.session_state.selected_discovered_links)
+        if selected_count > 0:
+            if st.button(f"Scrape Selected ({selected_count})", key="scrape_selected"):
+                scraper = BlogScraper()
+                agent = st.session_state.agent if use_ai_extraction else None
+                urls_to_scrape = list(st.session_state.selected_discovered_links)
+
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+
+                scraped_urls = []
+                for i, (url, content, error) in enumerate(scraper.batch_scrape(urls_to_scrape, agent, use_ai_extraction)):
+                    progress = (i + 1) / len(urls_to_scrape)
+                    progress_bar.progress(progress)
+                    status_text.text(f"Scraping {i + 1}/{len(urls_to_scrape)}: {url[:50]}...")
+
+                    if content:
+                        st.session_state.blog_content[url] = content
+                        if url not in st.session_state.session.itinerary.blog_urls:
+                            st.session_state.session.itinerary.blog_urls.append(url)
+                        scraped_urls.append(url)
+                    elif error:
+                        st.warning(f"Failed: {url[:40]}... - {error}")
+
+                # Remove scraped URLs from discovered links
+                for source_url in list(st.session_state.discovered_links.keys()):
+                    st.session_state.discovered_links[source_url] = [
+                        link for link in st.session_state.discovered_links[source_url]
+                        if link.url not in scraped_urls
+                    ]
+                    # Remove source if no links left
+                    if not st.session_state.discovered_links[source_url]:
+                        del st.session_state.discovered_links[source_url]
+
+                # Clear selection
+                st.session_state.selected_discovered_links.clear()
+
+                progress_bar.empty()
+                status_text.empty()
+                st.success(f"Scraped {len(scraped_urls)} blogs")
+                st.rerun()
 
 
 def main():

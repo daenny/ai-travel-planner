@@ -1,7 +1,8 @@
 import json
 import re
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterator
+from urllib.parse import urlparse, urljoin
 
 import httpx
 from bs4 import BeautifulSoup
@@ -42,6 +43,24 @@ class BlogContent:
                 parts.append(f"- {highlight}")
 
         return "\n".join(parts)
+
+
+@dataclass
+class DiscoveredLink:
+    """A link discovered from a blog page."""
+    url: str
+    title: str  # Link text
+    source_url: str  # URL where this link was found
+
+
+# URL filtering patterns for discover_links
+EXCLUDED_URL_PATTERNS = [
+    r"/category/", r"/tag/", r"/author/", r"/page/\d+",
+    r"/feed", r"/rss", r"/wp-admin", r"/wp-content",
+    r"/login", r"/register", r"/cart", r"/checkout",
+    r"#", r"\?",  # Anchors and query params often not useful
+]
+EXCLUDED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png", ".gif", ".mp4", ".zip", ".mp3", ".wav"}
 
 
 def build_blog_extraction_prompt(destination: str | None = None) -> str:
@@ -381,3 +400,134 @@ class BlogScraper:
             return content.tips[:5]
 
         return relevant_tips
+
+    def discover_links(
+        self, url: str, already_scraped: set[str] | None = None
+    ) -> list[DiscoveredLink]:
+        """
+        Discover links from a blog page for potential further scraping.
+
+        Args:
+            url: Blog URL to discover links from
+            already_scraped: Set of URLs already scraped (to exclude)
+
+        Returns:
+            List of DiscoveredLink objects
+        """
+        if already_scraped is None:
+            already_scraped = set()
+
+        try:
+            with httpx.Client() as client:
+                response = client.get(
+                    url,
+                    headers=self.headers,
+                    timeout=15.0,
+                    follow_redirects=True,
+                )
+                response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, "html.parser")
+            parsed_source = urlparse(url)
+            source_domain = parsed_source.netloc
+
+            discovered: list[DiscoveredLink] = []
+            seen_urls: set[str] = set()
+
+            for a_tag in soup.find_all("a", href=True):
+                # Skip links inside nav, footer, header, aside
+                if a_tag.find_parent(["nav", "footer", "header", "aside"]):
+                    continue
+
+                href = a_tag["href"]
+                link_text = a_tag.get_text(strip=True)
+
+                # Skip empty link text
+                if not link_text or len(link_text) < 3:
+                    continue
+
+                # Normalize URL
+                full_url = urljoin(url, href)
+                parsed_url = urlparse(full_url)
+
+                # Filter: same domain only
+                if parsed_url.netloc != source_domain:
+                    continue
+
+                # Filter: not the source URL itself
+                if full_url.rstrip("/") == url.rstrip("/"):
+                    continue
+
+                # Filter: not already scraped
+                if full_url in already_scraped or full_url.rstrip("/") in already_scraped:
+                    continue
+
+                # Filter: not a homepage (just domain with no path or just /)
+                if not parsed_url.path or parsed_url.path == "/":
+                    continue
+
+                # Filter: excluded patterns
+                skip = False
+                for pattern in EXCLUDED_URL_PATTERNS:
+                    if re.search(pattern, full_url, re.IGNORECASE):
+                        skip = True
+                        break
+                if skip:
+                    continue
+
+                # Filter: excluded extensions
+                path_lower = parsed_url.path.lower()
+                if any(path_lower.endswith(ext) for ext in EXCLUDED_EXTENSIONS):
+                    continue
+
+                # Deduplicate
+                normalized_url = full_url.rstrip("/")
+                if normalized_url in seen_urls:
+                    continue
+                seen_urls.add(normalized_url)
+
+                discovered.append(
+                    DiscoveredLink(
+                        url=full_url,
+                        title=link_text[:100],  # Limit title length
+                        source_url=url,
+                    )
+                )
+
+            return discovered
+
+        except Exception:
+            return []
+
+    def batch_scrape(
+        self,
+        urls: list[str],
+        agent: "TravelAgent | None" = None,
+        use_ai: bool = True,
+        destination: str | None = None,
+    ) -> Iterator[tuple[str, BlogContent | None, str | None]]:
+        """
+        Batch scrape multiple URLs, yielding progress.
+
+        Args:
+            urls: List of URLs to scrape
+            agent: Optional AI agent for extraction
+            use_ai: Whether to use AI extraction
+            destination: Optional destination for context
+
+        Yields:
+            Tuples of (url, content_or_none, error_or_none)
+        """
+        for url in urls:
+            try:
+                if use_ai and agent:
+                    content = self.scrape_with_ai(url, agent, destination)
+                else:
+                    content = self.scrape_blog(url)
+
+                if content:
+                    yield (url, content, None)
+                else:
+                    yield (url, None, "Failed to extract content")
+            except Exception as e:
+                yield (url, None, str(e))
