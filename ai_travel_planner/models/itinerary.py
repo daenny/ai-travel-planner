@@ -302,6 +302,13 @@ class SavedBlogContent(BaseModel):
     raw_text: str = ""
 
 
+class SavedDiscoveredLink(BaseModel):
+    """A discovered link for persistence."""
+    url: str
+    title: str
+    source_url: str
+
+
 class StoredApiKeys(BaseModel):
     """API keys stored in session for remote deployment."""
     anthropic: str = ""
@@ -316,6 +323,7 @@ class PlannerSession(BaseModel):
     ai_provider: str = "claude"
     language: str = "English"
     blog_content: dict[str, SavedBlogContent] = Field(default_factory=dict)
+    discovered_links: dict[str, list[SavedDiscoveredLink]] = Field(default_factory=dict)
     destinations: "TripDestinations" = Field(default_factory=lambda: _get_trip_destinations_default())
     api_keys: StoredApiKeys = Field(default_factory=StoredApiKeys)
 
