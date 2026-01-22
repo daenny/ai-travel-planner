@@ -18,11 +18,6 @@ def render_settings(local_mode: bool):
     """Render the settings tab with AI provider, language, and API key configuration."""
     st.header("⚙️ Settings")
 
-    # Show highlight if user navigated here via "Go to Settings" button
-    if st.session_state.navigate_to_settings:
-        st.success("Configure your AI provider below to get started!")
-        st.session_state.navigate_to_settings = False
-
     # AI Provider section
     st.subheader("AI Provider")
 

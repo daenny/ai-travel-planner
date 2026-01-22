@@ -43,7 +43,7 @@ def render_itinerary_builder(local_mode: bool, debug_mode: bool):
     st.subheader("Generate Itinerary from Chat")
 
     if not st.session_state.agent:
-        render_settings_prompt("Connect to an AI provider to generate itineraries from your chat conversation.", "gen_go_settings")
+        render_settings_prompt("Connect to an AI provider to generate itineraries.")
     else:
 
         # Check if there's a resumable generation
@@ -225,7 +225,7 @@ def render_itinerary_builder(local_mode: bool, debug_mode: bool):
         st.subheader("Update Itinerary")
 
         if not st.session_state.agent:
-            render_settings_prompt("Connect to an AI provider to update your itinerary.", "update_go_settings")
+            render_settings_prompt("Connect to an AI provider to update your itinerary.")
         elif st.session_state.pending_diff is not None:
             # Show the diff preview
             render_diff_preview(itinerary, st.session_state.pending_diff)

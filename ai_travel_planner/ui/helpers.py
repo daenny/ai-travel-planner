@@ -30,27 +30,13 @@ def get_chat_placeholder(session: PlannerSession) -> str:
     return "Where would you like to travel?"
 
 
-def render_settings_prompt(message: str, key: str, use_columns: bool = True):
-    """Render a message with a 'Go to Settings' button.
+def render_settings_prompt(message: str):
+    """Render a message prompting user to go to Settings tab.
 
     Args:
-        message: Info/warning message to display
-        key: Unique key for the button
-        use_columns: If True, use columns layout; if False, stack vertically (for sidebar)
+        message: Info message to display
     """
-    if use_columns:
-        col_msg, col_btn = st.columns([3, 1])
-        with col_msg:
-            st.info(message)
-        with col_btn:
-            if st.button("⚙️ Go to Settings", key=key, use_container_width=True):
-                st.session_state.navigate_to_settings = True
-                st.rerun()
-    else:
-        st.caption(message)
-        if st.button("⚙️ Go to Settings", key=key, use_container_width=True):
-            st.session_state.navigate_to_settings = True
-            st.rerun()
+    st.info(f"ℹ️ {message} Go to the **⚙️ Settings** tab to configure.")
 
 
 def save_debug_output(itinerary: Itinerary, chat_context: str, mode: str, debug_mode: bool, **extra_fields):

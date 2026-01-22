@@ -41,7 +41,7 @@ def render_sidebar(local_mode: bool, debug_mode: bool):
             model = st.session_state.agent.model_id
             st.success(f"{provider} ({model})")
         else:
-            render_settings_prompt("Not connected", "sidebar_go_settings", use_columns=False)
+            render_settings_prompt("Not connected.")
 
         st.markdown("---")
         st.subheader("Save/Load Plans")

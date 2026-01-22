@@ -104,8 +104,6 @@ def init_session_state(local_mode: bool):
         st.session_state.generation_state = GenerationState()
     if "pending_diff" not in st.session_state:
         st.session_state.pending_diff = None
-    if "navigate_to_settings" not in st.session_state:
-        st.session_state.navigate_to_settings = False
 
     # Auto-detect and initialize provider on first load
     if "auto_detected" not in st.session_state:

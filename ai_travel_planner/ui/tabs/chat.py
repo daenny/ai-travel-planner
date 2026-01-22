@@ -19,7 +19,7 @@ def render_chat():
     has_agent = st.session_state.agent is not None
 
     if not has_agent:
-        render_settings_prompt("No AI provider configured. Set up an API key to start planning.", "chat_go_settings")
+        render_settings_prompt("No AI provider configured.")
 
     # Chat input at the top (disabled if no agent)
     chat_placeholder = get_chat_placeholder(st.session_state.session)
