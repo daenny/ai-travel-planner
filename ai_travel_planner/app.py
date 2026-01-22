@@ -408,6 +408,49 @@ def get_chat_placeholder(session: PlannerSession) -> str:
     return "Where would you like to travel?"
 
 
+def render_settings_prompt(message: str, key: str, use_columns: bool = True):
+    """Render a message with a 'Go to Settings' button.
+
+    Args:
+        message: Info/warning message to display
+        key: Unique key for the button
+        use_columns: If True, use columns layout; if False, stack vertically (for sidebar)
+    """
+    if use_columns:
+        col_msg, col_btn = st.columns([3, 1])
+        with col_msg:
+            st.info(message)
+        with col_btn:
+            if st.button("⚙️ Go to Settings", key=key, use_container_width=True):
+                st.session_state.navigate_to_settings = True
+                st.rerun()
+    else:
+        st.caption(message)
+        if st.button("⚙️ Go to Settings", key=key, use_container_width=True):
+            st.session_state.navigate_to_settings = True
+            st.rerun()
+
+
+def save_debug_output(itinerary: Itinerary, chat_context: str, mode: str, **extra_fields):
+    """Save debug output for itinerary generation if DEBUG_MODE is enabled."""
+    if not DEBUG_MODE:
+        return
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
+    debug_data = {
+        "timestamp": timestamp,
+        "chat_context": chat_context,
+        "language": st.session_state.session.language,
+        "generation_mode": mode,
+        "itinerary": itinerary.model_dump(mode="json"),
+        **extra_fields,
+    }
+    with open(debug_file, "w") as f:
+        json.dump(debug_data, f, indent=2, default=str)
+    st.info(f"Debug output saved to {debug_file}")
+
+
 def maybe_update_destination(session: PlannerSession, agent: TravelAgent) -> bool:
     """Check if we should update detected destination."""
     # Only detect if no destination set yet
@@ -597,10 +640,7 @@ def render_sidebar():
             model = st.session_state.agent.model_id
             st.success(f"{provider} ({model})")
         else:
-            st.caption("Not connected")
-            if st.button("⚙️ Go to Settings", key="sidebar_go_settings", use_container_width=True):
-                st.session_state.navigate_to_settings = True
-                st.rerun()
+            render_settings_prompt("Not connected", "sidebar_go_settings", use_columns=False)
 
         st.markdown("---")
         st.subheader("Save/Load Plans")
@@ -700,13 +740,7 @@ def render_chat():
     has_agent = st.session_state.agent is not None
 
     if not has_agent:
-        col_msg, col_btn = st.columns([3, 1])
-        with col_msg:
-            st.warning("⚠️ No AI provider configured. Set up an API key to start planning.")
-        with col_btn:
-            if st.button("⚙️ Go to Settings", key="chat_go_settings", use_container_width=True):
-                st.session_state.navigate_to_settings = True
-                st.rerun()
+        render_settings_prompt("No AI provider configured. Set up an API key to start planning.", "chat_go_settings")
 
     # Chat input at the top (disabled if no agent)
     chat_placeholder = get_chat_placeholder(st.session_state.session)
@@ -836,13 +870,7 @@ def render_itinerary_builder():
     st.subheader("Generate Itinerary from Chat")
 
     if not st.session_state.agent:
-        col_msg, col_btn = st.columns([3, 1])
-        with col_msg:
-            st.info("Connect to an AI provider to generate itineraries from your chat conversation.")
-        with col_btn:
-            if st.button("⚙️ Go to Settings", key="gen_go_settings", use_container_width=True):
-                st.session_state.navigate_to_settings = True
-                st.rerun()
+        render_settings_prompt("Connect to an AI provider to generate itineraries from your chat conversation.", "gen_go_settings")
     else:
 
         # Check if there's a resumable generation
@@ -990,25 +1018,12 @@ def render_itinerary_builder():
 
                     if final_itinerary:
                         st.session_state.session.itinerary = final_itinerary
-
-                        # Save debug output if debug mode is enabled
-                        if DEBUG_MODE:
-                            from datetime import datetime
-                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
-                            debug_data = {
-                                "timestamp": timestamp,
-                                "chat_context": chat_context,
-                                "language": st.session_state.session.language,
-                                "generation_mode": "iterative" + ("_resume" if is_resume else ""),
-                                "block_size": block_size,
-                                "final_status": final_progress.status if final_progress else "unknown",
-                                "itinerary": final_itinerary.model_dump(mode="json"),
-                            }
-                            with open(debug_file, "w") as f:
-                                json.dump(debug_data, f, indent=2, default=str)
-                            st.info(f"Debug output saved to {debug_file}")
-
+                        save_debug_output(
+                            final_itinerary, chat_context,
+                            mode="iterative" + ("_resume" if is_resume else ""),
+                            block_size=block_size,
+                            final_status=final_progress.status if final_progress else "unknown",
+                        )
                         st.rerun()
 
                 except Exception as e:
@@ -1022,25 +1037,8 @@ def render_itinerary_builder():
                             chat_context, st.session_state.session.itinerary, st.session_state.session.language
                         )
                         st.session_state.session.itinerary = new_itinerary
-                        # Clear generation state
                         st.session_state.generation_state = GenerationState()
-
-                        # Save debug output if debug mode is enabled
-                        if DEBUG_MODE:
-                            from datetime import datetime
-                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            debug_file = DEBUG_DIR / f"itinerary_debug_{timestamp}.json"
-                            debug_data = {
-                                "timestamp": timestamp,
-                                "chat_context": chat_context,
-                                "language": st.session_state.session.language,
-                                "generation_mode": "single",
-                                "itinerary": new_itinerary.model_dump(mode="json"),
-                            }
-                            with open(debug_file, "w") as f:
-                                json.dump(debug_data, f, indent=2, default=str)
-                            st.info(f"Debug output saved to {debug_file}")
-
+                        save_debug_output(new_itinerary, chat_context, mode="single")
                         st.success("Itinerary generated!")
                         st.rerun()
                     except Exception as e:
@@ -1053,13 +1051,7 @@ def render_itinerary_builder():
         st.subheader("Update Itinerary")
 
         if not st.session_state.agent:
-            col_msg, col_btn = st.columns([3, 1])
-            with col_msg:
-                st.info("Connect to an AI provider to update your itinerary.")
-            with col_btn:
-                if st.button("⚙️ Go to Settings", key="update_go_settings", use_container_width=True):
-                    st.session_state.navigate_to_settings = True
-                    st.rerun()
+            render_settings_prompt("Connect to an AI provider to update your itinerary.", "update_go_settings")
         elif st.session_state.pending_diff is not None:
             # Show the diff preview
             render_diff_preview(itinerary, st.session_state.pending_diff)
