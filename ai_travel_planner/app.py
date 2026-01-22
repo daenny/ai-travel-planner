@@ -8,10 +8,12 @@ import keyring
 import streamlit as st
 from dotenv import load_dotenv
 
-from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, PlannerSession, SavedBlogContent, SavedDiscoveredLink, TripDestinations, GenerationProgress, GenerationState
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, ItineraryDiff, PlannerSession, SavedBlogContent, SavedDiscoveredLink, TripDestinations, GenerationProgress, GenerationState
 from ai_travel_planner.agents import ClaudeAgent, OpenAIAgent, GeminiAgent
 from ai_travel_planner.agents.base import TravelAgent
 from ai_travel_planner.services import UnsplashService, BlogScraper, PDFGenerator, generate_itinerary_iteratively, resume_itinerary_generation
+from ai_travel_planner.services.itinerary_updater import apply_diff, validate_diff, DiffParseError
+from ai_travel_planner.ui.diff_preview import render_diff_preview, render_diff_actions, render_update_request_form
 from ai_travel_planner.services.pdf_generator import PDFStyle
 from ai_travel_planner.services.blog_scraper import BlogContent, DiscoveredLink
 from ai_travel_planner.services.destination_detector import DestinationDetector
@@ -314,6 +316,8 @@ def init_session_state():
         st.session_state.discovered_links = {}
     if "generation_state" not in st.session_state:
         st.session_state.generation_state = GenerationState()
+    if "pending_diff" not in st.session_state:
+        st.session_state.pending_diff = None
 
     # Auto-detect and initialize provider on first load
     if "auto_detected" not in st.session_state:
@@ -1065,6 +1069,65 @@ def render_itinerary_builder():
                         st.rerun()
                     except Exception as e:
                         st.error(f"Failed to generate itinerary: {e}")
+
+    st.markdown("---")
+
+    # Update Itinerary section - only show when itinerary has days
+    if itinerary.days and st.session_state.agent:
+        st.subheader("Update Itinerary")
+
+        # Check if there's a pending diff
+        if st.session_state.pending_diff is not None:
+            # Show the diff preview
+            render_diff_preview(itinerary, st.session_state.pending_diff)
+
+            # Show accept/reject buttons
+            col_accept, col_reject = st.columns(2)
+            with col_accept:
+                if st.button("Accept Changes", type="primary", use_container_width=True, key="accept_diff"):
+                    # Validate and apply the diff
+                    errors = validate_diff(itinerary, st.session_state.pending_diff)
+                    if errors:
+                        for error in errors:
+                            st.error(error)
+                    else:
+                        updated_itinerary = apply_diff(itinerary, st.session_state.pending_diff)
+                        st.session_state.session.itinerary = updated_itinerary
+                        st.session_state.pending_diff = None
+                        st.success("Changes applied!")
+                        st.rerun()
+            with col_reject:
+                if st.button("Reject Changes", type="secondary", use_container_width=True, key="reject_diff"):
+                    st.session_state.pending_diff = None
+                    st.rerun()
+        else:
+            # Show update request form
+            with st.form("update_request_form", clear_on_submit=True):
+                update_request = st.text_area(
+                    "What would you like to change?",
+                    placeholder="e.g., Add a beach day after day 2, swap days 3 and 4, remove the museum visit from day 1",
+                    height=80,
+                )
+                submitted = st.form_submit_button("Generate Changes", type="primary")
+
+                if submitted and update_request.strip():
+                    with st.spinner("Generating changes..."):
+                        try:
+                            diff = st.session_state.agent.generate_itinerary_update(
+                                current_itinerary=itinerary,
+                                update_request=update_request.strip(),
+                                language=st.session_state.session.language,
+                            )
+                            st.session_state.pending_diff = diff
+                            st.rerun()
+                        except DiffParseError as e:
+                            # User-friendly error from diff parsing
+                            st.error(f"⚠️ {e.message}")
+                            st.caption("Try rephrasing your request or simplifying the changes.")
+                        except Exception as e:
+                            # Generic API or network error
+                            st.error(f"❌ Failed to generate changes: {e}")
+                            st.caption("Check your API key and network connection.")
 
     st.markdown("---")
 

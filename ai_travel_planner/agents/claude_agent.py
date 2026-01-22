@@ -2,13 +2,16 @@ import json
 from typing import Generator
 
 import anthropic
+from pydantic import ValidationError
 
-from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, DayPlan
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, ItineraryDiff, DayPlan
+from ai_travel_planner.services.itinerary_updater import DiffParseError
 from .base import (
     TravelAgent,
     ITINERARY_JSON_PROMPT,
     METADATA_JSON_PROMPT,
     DAY_BLOCK_PROMPT,
+    ITINERARY_UPDATE_PROMPT,
     extract_json_from_response,
     repair_json,
 )
@@ -178,3 +181,72 @@ class ClaudeAgent(TravelAgent):
             days_data = data.get("days", [])
 
         return [DayPlan.model_validate(d) for d in days_data]
+
+    def generate_itinerary_update(
+        self,
+        current_itinerary: Itinerary,
+        update_request: str,
+        language: str = "English",
+    ) -> ItineraryDiff:
+        itinerary_json = current_itinerary.model_dump_json(indent=2)
+
+        language_note = ""
+        if language.lower() != "english":
+            language_note = f"\n\nIMPORTANT: Generate all text content in {language}.\n"
+
+        prompt = ITINERARY_UPDATE_PROMPT.format(
+            current_itinerary=itinerary_json,
+            update_request=update_request,
+        )
+
+        full_prompt = f"{prompt}{language_note}"
+
+        response = self.client.messages.create(
+            model=self.model,
+            max_tokens=4096,
+            system=self.system_prompt,
+            messages=[{"role": "user", "content": full_prompt}],
+        )
+
+        raw_response = response.content[0].text.strip()
+
+        # Save debug output
+        debug_path = self.save_debug_response(raw_response, prefix="update_diff")
+        print(f"Debug update diff response saved to: {debug_path}")
+
+        try:
+            json_str = extract_json_from_response(raw_response)
+        except ValueError as e:
+            raise DiffParseError(
+                "The AI response did not contain valid JSON. Please try again.",
+                raw_response=raw_response,
+                cause=e,
+            )
+
+        try:
+            data = json.loads(json_str)
+        except json.JSONDecodeError as e:
+            # Try to repair common JSON errors
+            try:
+                json_str = repair_json(json_str)
+                data = json.loads(json_str)
+            except json.JSONDecodeError:
+                raise DiffParseError(
+                    "The AI response contained malformed JSON. Please try rephrasing your request.",
+                    raw_response=raw_response,
+                    cause=e,
+                )
+
+        try:
+            return ItineraryDiff.model_validate(data)
+        except ValidationError as e:
+            # Extract user-friendly error message from Pydantic
+            error_details = []
+            for error in e.errors():
+                loc = " -> ".join(str(x) for x in error["loc"])
+                error_details.append(f"{loc}: {error['msg']}")
+            raise DiffParseError(
+                f"The AI generated an invalid update structure: {'; '.join(error_details[:3])}",
+                raw_response=raw_response,
+                cause=e,
+            )

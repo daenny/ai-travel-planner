@@ -38,10 +38,13 @@ ai_travel_planner/
 │   ├── blog_scraper.py    # HTML scraping for travel tips
 │   ├── pdf_generator.py   # WeasyPrint PDF generation
 │   ├── destination_detector.py  # Automatic destination detection
-│   └── itinerary_generator.py   # Iterative itinerary generation with resume
+│   ├── itinerary_generator.py   # Iterative itinerary generation with resume
+│   └── itinerary_updater.py     # Diff-based itinerary updates
 ├── models/                # Pydantic data models
-│   ├── itinerary.py       # Itinerary, DayPlan, Activity, ItineraryMetadata, GenerationProgress, GenerationState
+│   ├── itinerary.py       # Itinerary, DayPlan, Activity, ItineraryDiff, FieldChange, etc.
 │   └── destination.py     # Destination and TripDestinations
+├── ui/                    # UI components
+│   └── diff_preview.py    # Diff visualization for itinerary updates
 ├── storage/               # Persistence
 │   └── json_store.py      # JSON file save/load
 └── templates/             # Jinja2 HTML templates for PDFs
@@ -83,6 +86,7 @@ The app uses a 4-tab layout with a sidebar:
    - `generate_itinerary_json(requirements, current_itinerary)` - returns `Itinerary`
    - `generate_itinerary_metadata(requirements, language)` - returns `ItineraryMetadata`
    - `generate_day_block(requirements, metadata, start_day, end_day, total_days, previous_days, language)` - returns `list[DayPlan]`
+   - `generate_itinerary_update(current_itinerary, update_request, language)` - returns `ItineraryDiff`
    - `name` and `model_id` properties
 4. Add to `ai_travel_planner/agents/__init__.py`
 5. In `ai_travel_planner/app.py`:
@@ -142,6 +146,42 @@ resume_itinerary_generation(agent, requirements, metadata, existing_itinerary)
     │
     └─→ continues from existing days, yields same tuple format
 ```
+
+### Itinerary Update Flow
+
+For modifying existing itineraries without regenerating everything:
+
+1. **Diff-Based Updates**: Instead of regenerating the entire itinerary, AI generates only the changes
+2. **Visual Preview**: Users see proposed changes with color-coded additions/removals
+3. **Accept/Reject**: Users can approve or reject changes before applying
+
+```
+User enters update request in Itinerary tab
+         ↓
+Agent.generate_itinerary_update(itinerary, request) → ItineraryDiff
+         ↓
+validate_diff(itinerary, diff) → errors[]
+         ↓
+preview_diff(itinerary, diff) → change preview for UI
+         ↓
+User clicks "Accept" → apply_diff(itinerary, diff) → updated Itinerary
+```
+
+**Diff Models** (in `models/itinerary.py`):
+- `ItineraryDiff`: Container with summary, day_diffs, metadata_changes
+- `DayDiff`: Day-level changes (add, remove, modify, swap)
+- `ActivityDiff`: Activity-level changes (add, remove, modify)
+- `FieldChange`: Generic field change (field, old_value, new_value)
+
+**Service Functions** (in `services/itinerary_updater.py`):
+- `apply_diff(itinerary, diff)` - Applies changes without mutating original
+- `validate_diff(itinerary, diff)` - Returns list of validation errors
+- `preview_diff(itinerary, diff)` - Returns human-readable change descriptions
+
+**UI Components** (in `ui/diff_preview.py`):
+- `render_diff_preview()` - Color-coded change visualization
+- `render_diff_actions()` - Accept/Reject buttons
+- `render_update_request_form()` - Text input for update requests
 
 ## API Key Storage
 
@@ -241,6 +281,26 @@ Add to `ActivityType` enum in `ai_travel_planner/models/itinerary.py`
 Edit the `<style>` section in the relevant template file in `ai_travel_planner/templates/`
 
 ## Testing
+
+Run all tests:
+```bash
+pixi run pytest
+```
+
+Run specific test files:
+```bash
+# Diff model tests
+pixi run pytest tests/test_diff_models.py -v
+
+# Update service tests
+pixi run pytest tests/test_itinerary_updater.py -v
+
+# Agent update tests
+pixi run pytest tests/test_agent_update.py -v
+
+# End-to-end update flow tests
+pixi run pytest tests/test_update_flow_e2e.py -v
+```
 
 Run manual testing:
 ```bash
