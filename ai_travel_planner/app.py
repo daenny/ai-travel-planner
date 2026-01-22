@@ -13,6 +13,7 @@ from ai_travel_planner.ui.tabs import (
     render_chat,
     render_itinerary_builder,
     render_blog_tips,
+    render_pdf_export,
 )
 
 load_dotenv()
@@ -62,7 +63,7 @@ def main():
     init_session_state(LOCAL_MODE)
     render_sidebar(LOCAL_MODE, DEBUG_MODE)
 
-    tab1, tab2, tab3, tab4 = st.tabs(["💬 Chat", "📋 Itinerary", "📝 Blog Tips", "⚙️ Settings"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["💬 Chat", "📋 Itinerary", "📄 PDF Export", "📝 Blog Tips", "⚙️ Settings"])
 
     with tab1:
         render_chat()
@@ -71,9 +72,12 @@ def main():
         render_itinerary_builder(LOCAL_MODE, DEBUG_MODE)
 
     with tab3:
-        render_blog_tips()
+        render_pdf_export(LOCAL_MODE)
 
     with tab4:
+        render_blog_tips()
+
+    with tab5:
         render_settings(LOCAL_MODE)
 
 

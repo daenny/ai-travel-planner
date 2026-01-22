@@ -6,16 +6,11 @@ import streamlit as st
 
 from ai_travel_planner.models import GenerationState
 from ai_travel_planner.services import (
-    UnsplashService,
-    PDFGenerator,
     generate_itinerary_iteratively,
     resume_itinerary_generation,
 )
 from ai_travel_planner.services.itinerary_updater import apply_diff, validate_diff, DiffParseError
-from ai_travel_planner.services.pdf_generator import PDFStyle
 from ai_travel_planner.ui.diff_preview import render_diff_preview
-from ai_travel_planner.ui.config import IMAGES_DIR, EXPORTS_DIR
-from ai_travel_planner.ui.api_keys import get_api_key
 from ai_travel_planner.ui.helpers import render_settings_prompt, save_debug_output, load_photos_for_itinerary
 
 
@@ -347,74 +342,3 @@ def render_itinerary_builder(local_mode: bool, debug_mode: bool):
         for i, item in enumerate(itinerary.packing_list):
             with cols[i % 3]:
                 st.checkbox(item, key=f"pack_{i}")
-
-    # PDF Generation section
-    if itinerary.days:
-        st.markdown("---")
-        st.subheader("Generate PDF")
-
-        col_style, col_gen, col_all = st.columns([2, 1, 1])
-        with col_style:
-            pdf_style = st.selectbox(
-                "PDF Style",
-                [s.value for s in PDFStyle],
-                format_func=lambda x: x.title(),
-                key="pdf_style_itinerary",
-            )
-        with col_gen:
-            generate_pdf_clicked = st.button("Generate PDF", key="gen_pdf_itinerary", use_container_width=True)
-        with col_all:
-            generate_all_clicked = st.button("All Styles", key="gen_all_pdf_itinerary", use_container_width=True)
-
-        if generate_pdf_clicked:
-            with st.spinner("Generating PDF..."):
-                unsplash_api_key = get_api_key("Unsplash", local_mode)
-                if unsplash_api_key:
-                    unsplash = UnsplashService(unsplash_api_key, IMAGES_DIR)
-                    for day in st.session_state.session.itinerary.days:
-                        # Use AI-generated image queries if available
-                        if day.image_queries and not day.image_paths:
-                            paths = unsplash.download_photos_for_queries(
-                                day.image_queries, max_images=3
-                            )
-                            day.image_paths = [str(p) for p in paths]
-                            # Also set single image_path for backward compatibility
-                            if paths and not day.image_path:
-                                day.image_path = str(paths[0])
-                        # Fallback to location-based single image
-                        elif not day.image_path and not day.image_paths:
-                            img_path = unsplash.get_photo_for_location(day.location)
-                            if img_path:
-                                day.image_path = str(img_path)
-                                day.image_paths = [str(img_path)]
-
-                generator = PDFGenerator(exports_dir=EXPORTS_DIR)
-                pdf_path = generator.generate_pdf(
-                    st.session_state.session.itinerary,
-                    PDFStyle(pdf_style),
-                )
-                st.success("PDF generated!")
-
-                with open(pdf_path, "rb") as f:
-                    st.download_button(
-                        "Download PDF",
-                        f,
-                        file_name=pdf_path.name,
-                        mime="application/pdf",
-                        key="download_pdf_itinerary",
-                    )
-
-        if generate_all_clicked:
-            with st.spinner("Generating all PDFs..."):
-                generator = PDFGenerator(exports_dir=EXPORTS_DIR)
-                paths = generator.generate_all_styles(st.session_state.session.itinerary)
-                st.success("All PDFs generated!")
-                for style, path in paths.items():
-                    with open(path, "rb") as f:
-                        st.download_button(
-                            f"Download {style.value.title()}",
-                            f,
-                            file_name=path.name,
-                            mime="application/pdf",
-                            key=f"dl_itinerary_{style.value}",
-                        )
