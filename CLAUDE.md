@@ -59,16 +59,15 @@ The app uses a 4-tab layout with a sidebar:
 
 ### Tabs
 1. **Chat** - Conversational AI planning interface
-2. **Itinerary** - View/edit generated itinerary, iterative generation with progress, resume capability
+2. **Itinerary** - View/edit generated itinerary, iterative generation with progress, resume capability, PDF generation
 3. **Blog Tips** - Add blog URLs, extract tips, view extracted content
 4. **Settings** - AI provider selection, API keys, language, Unsplash configuration
 
 ### Sidebar
 - App title (dynamic based on destination)
 - Mode indicator (Local/Remote, Debug)
-- AI Provider status (read-only, shows current connection)
+- AI Provider status (read-only, shows current connection with link to Settings if not connected)
 - Save/Load session files
-- PDF generation controls
 
 ### Key Constants
 - `PROVIDERS` - List of supported AI providers: `["Claude", "OpenAI", "Gemini"]`
