@@ -1,6 +1,6 @@
 from datetime import date as DateType, time as TimeType, datetime
 from enum import Enum
-from typing import Optional, TYPE_CHECKING
+from typing import Any, Optional, TYPE_CHECKING
 from pydantic import BaseModel, Field, field_validator
 
 if TYPE_CHECKING:
@@ -102,6 +102,38 @@ class TravelTip(BaseModel):
     category: str = "general"
 
 
+class FieldChange(BaseModel):
+    """Represents a change to a single field.
+
+    Used for diff-based itinerary updates to track what changed.
+    """
+    field: str = Field(..., min_length=1)
+    old_value: Any = None
+    new_value: Any = None
+
+    @property
+    def is_addition(self) -> bool:
+        """Check if this change represents adding a new field value."""
+        return self.old_value is None and self.new_value is not None
+
+    @property
+    def is_removal(self) -> bool:
+        """Check if this change represents removing a field value."""
+        return self.old_value is not None and self.new_value is None
+
+    @property
+    def is_modification(self) -> bool:
+        """Check if this change represents modifying an existing field value."""
+        return self.old_value is not None and self.new_value is not None
+
+
+class ActivityDiffType(str, Enum):
+    """Types of changes that can be made to an activity."""
+    ADD = "add"
+    REMOVE = "remove"
+    MODIFY = "modify"
+
+
 class Activity(BaseModel):
     name: str
     description: str
@@ -142,6 +174,18 @@ class Activity(BaseModel):
         return parse_time(v)
 
 
+class ActivityDiff(BaseModel):
+    """Represents a change to an activity within a day.
+
+    Used for diff-based itinerary updates to track activity-level changes.
+    """
+    operation: ActivityDiffType
+    activity: Optional[Activity] = None
+    activity_index: Optional[int] = None
+    position: Optional[int] = None
+    field_changes: list[FieldChange] = Field(default_factory=list)
+
+
 class DayPlan(BaseModel):
     day_number: int
     date: DateType | None = None
@@ -161,6 +205,49 @@ class DayPlan(BaseModel):
     def parse_date_field(cls, v):
         """Parse date strings to date objects."""
         return parse_date(v)
+
+
+class DayDiffType(str, Enum):
+    """Types of changes that can be made to a day."""
+    ADD = "add"
+    REMOVE = "remove"
+    MODIFY = "modify"
+    SWAP = "swap"
+
+
+class DayDiff(BaseModel):
+    """Represents a change to a day within an itinerary.
+
+    Used for diff-based itinerary updates to track day-level changes.
+    """
+    operation: DayDiffType
+    day: Optional[DayPlan] = None
+    day_number: Optional[int] = None
+    position: Optional[int] = None
+    field_changes: list[FieldChange] = Field(default_factory=list)
+    activity_diffs: list[ActivityDiff] = Field(default_factory=list)
+    swap_with_day: Optional[int] = None
+
+
+class ItineraryDiff(BaseModel):
+    """Container for all changes to an itinerary.
+
+    Used for diff-based itinerary updates. Contains a summary of changes
+    and lists of day-level and metadata-level changes.
+    """
+    summary: str
+    day_diffs: list[DayDiff] = Field(default_factory=list)
+    metadata_changes: list[FieldChange] = Field(default_factory=list)
+
+    @property
+    def has_changes(self) -> bool:
+        """Check if there are any changes in this diff."""
+        return len(self.day_diffs) > 0 or len(self.metadata_changes) > 0
+
+    @property
+    def change_count(self) -> int:
+        """Return the total number of changes."""
+        return len(self.day_diffs) + len(self.metadata_changes)
 
 
 class ItineraryMetadata(BaseModel):

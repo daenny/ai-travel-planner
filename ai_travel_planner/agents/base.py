@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from typing import Generator, TYPE_CHECKING
 
-from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, DayPlan
+from ai_travel_planner.models import ChatMessage, Itinerary, ItineraryMetadata, ItineraryDiff, DayPlan
 
 if TYPE_CHECKING:
     from ai_travel_planner.models.destination import TripDestinations
@@ -299,6 +299,100 @@ IMPORTANT GUIDELINES:
 
 Return ONLY the JSON with the days array, no other text."""
 
+# Prompt for generating itinerary updates as diffs
+ITINERARY_UPDATE_PROMPT = """You are updating an existing travel itinerary based on a user's request.
+Instead of regenerating the entire itinerary, you will output ONLY the specific changes needed.
+
+CURRENT ITINERARY:
+{current_itinerary}
+
+USER UPDATE REQUEST:
+{update_request}
+
+Generate a diff JSON that describes ONLY the changes needed. Follow this exact structure:
+{{
+    "summary": "Brief description of changes made",
+    "day_diffs": [
+        // For ADDING a new day:
+        {{
+            "operation": "add",
+            "position": 3,  // Where to insert (1-indexed day number)
+            "day": {{
+                "day_number": 3,
+                "title": "New Day Title",
+                "location": "Location",
+                "summary": "Day summary",
+                "activities": [...]
+            }}
+        }},
+        // For REMOVING a day:
+        {{
+            "operation": "remove",
+            "day_number": 2  // Which day to remove
+        }},
+        // For MODIFYING a day (changing fields or activities):
+        {{
+            "operation": "modify",
+            "day_number": 2,
+            "field_changes": [
+                {{"field": "title", "old_value": "Old Title", "new_value": "New Title"}},
+                {{"field": "location", "old_value": "Old Location", "new_value": "New Location"}}
+            ],
+            "activity_diffs": [
+                // Add an activity:
+                {{
+                    "operation": "add",
+                    "position": 2,  // Position in the activities list (0-indexed)
+                    "activity": {{
+                        "name": "Activity Name",
+                        "description": "Detailed description",
+                        "location": "Specific location",
+                        "activity_type": "sightseeing|adventure|dining|transport|accommodation|relaxation|wildlife|cultural|shopping",
+                        "start_time": "HH:MM or null",
+                        "end_time": "HH:MM or null"
+                    }}
+                }},
+                // Remove an activity:
+                {{
+                    "operation": "remove",
+                    "activity_index": 1  // Index of activity to remove (0-indexed)
+                }},
+                // Modify an activity:
+                {{
+                    "operation": "modify",
+                    "activity_index": 0,
+                    "field_changes": [
+                        {{"field": "start_time", "old_value": "09:00", "new_value": "07:00"}},
+                        {{"field": "description", "old_value": "old desc", "new_value": "new desc"}}
+                    ]
+                }}
+            ]
+        }},
+        // For SWAPPING two days:
+        {{
+            "operation": "swap",
+            "day_number": 2,
+            "swap_with_day": 4
+        }}
+    ],
+    "metadata_changes": [
+        // For changing itinerary-level fields (title, description, packing_list, etc.):
+        {{"field": "title", "old_value": "Old Trip Title", "new_value": "New Trip Title"}},
+        {{"field": "packing_list", "old_value": ["item1"], "new_value": ["item1", "item2"]}}
+    ]
+}}
+
+IMPORTANT GUIDELINES:
+1. Output ONLY the changes - do not include unchanged days or activities
+2. Use "modify" operation when changing existing content, not "remove" + "add"
+3. For swap operations, only include one swap entry (not two)
+4. If no changes are needed, return empty arrays with an explanatory summary
+5. The summary should be user-friendly and describe what was changed
+6. When adding activities, include detailed descriptions (3-5 sentences)
+7. Ensure day_number references match the current itinerary's day numbering
+
+Return ONLY the JSON, no other text."""
+
 
 class TravelAgent(ABC):
     """Abstract base class for travel planning agents."""
@@ -437,6 +531,29 @@ class TravelAgent(ABC):
 
         Returns:
             List of DayPlan objects for the requested range
+        """
+        pass
+
+    @abstractmethod
+    def generate_itinerary_update(
+        self,
+        current_itinerary: Itinerary,
+        update_request: str,
+        language: str = "English",
+    ) -> ItineraryDiff:
+        """
+        Generate an itinerary update as a diff based on user request.
+
+        Instead of regenerating the entire itinerary, this method returns
+        only the specific changes needed to fulfill the user's update request.
+
+        Args:
+            current_itinerary: The existing itinerary to update
+            update_request: Natural language description of desired changes
+            language: Language for generated content
+
+        Returns:
+            ItineraryDiff object containing only the changes to apply
         """
         pass
 
