@@ -318,6 +318,8 @@ def init_session_state():
         st.session_state.generation_state = GenerationState()
     if "pending_diff" not in st.session_state:
         st.session_state.pending_diff = None
+    if "navigate_to_settings" not in st.session_state:
+        st.session_state.navigate_to_settings = False
 
     # Auto-detect and initialize provider on first load
     if "auto_detected" not in st.session_state:
@@ -431,6 +433,11 @@ def maybe_update_destination(session: PlannerSession, agent: TravelAgent) -> boo
 def render_settings():
     """Render the settings tab with AI provider, language, and API key configuration."""
     st.header("⚙️ Settings")
+
+    # Show highlight if user navigated here via "Go to Settings" button
+    if st.session_state.navigate_to_settings:
+        st.success("Configure your AI provider below to get started!")
+        st.session_state.navigate_to_settings = False
 
     # AI Provider section
     st.subheader("AI Provider")
@@ -590,7 +597,10 @@ def render_sidebar():
             model = st.session_state.agent.model_id
             st.success(f"{provider} ({model})")
         else:
-            st.info("Not connected - configure in **Settings** tab")
+            st.caption("Not connected")
+            if st.button("⚙️ Go to Settings", key="sidebar_go_settings", use_container_width=True):
+                st.session_state.navigate_to_settings = True
+                st.rerun()
 
         st.markdown("---")
         st.subheader("Save/Load Plans")
@@ -690,7 +700,13 @@ def render_chat():
     has_agent = st.session_state.agent is not None
 
     if not has_agent:
-        st.warning("⚠️ No AI provider configured. Go to the **Settings** tab to set up an API key.")
+        col_msg, col_btn = st.columns([3, 1])
+        with col_msg:
+            st.warning("⚠️ No AI provider configured. Set up an API key to start planning.")
+        with col_btn:
+            if st.button("⚙️ Go to Settings", key="chat_go_settings", use_container_width=True):
+                st.session_state.navigate_to_settings = True
+                st.rerun()
 
     # Chat input at the top (disabled if no agent)
     chat_placeholder = get_chat_placeholder(st.session_state.session)
@@ -820,7 +836,13 @@ def render_itinerary_builder():
     st.subheader("Generate Itinerary from Chat")
 
     if not st.session_state.agent:
-        st.info("Connect to an AI provider in the **Settings** tab to generate itineraries from your chat conversation.")
+        col_msg, col_btn = st.columns([3, 1])
+        with col_msg:
+            st.info("Connect to an AI provider to generate itineraries from your chat conversation.")
+        with col_btn:
+            if st.button("⚙️ Go to Settings", key="gen_go_settings", use_container_width=True):
+                st.session_state.navigate_to_settings = True
+                st.rerun()
     else:
 
         # Check if there's a resumable generation
@@ -1031,7 +1053,13 @@ def render_itinerary_builder():
         st.subheader("Update Itinerary")
 
         if not st.session_state.agent:
-            st.info("Connect to an AI provider in the **Settings** tab to update your itinerary.")
+            col_msg, col_btn = st.columns([3, 1])
+            with col_msg:
+                st.info("Connect to an AI provider to update your itinerary.")
+            with col_btn:
+                if st.button("⚙️ Go to Settings", key="update_go_settings", use_container_width=True):
+                    st.session_state.navigate_to_settings = True
+                    st.rerun()
         elif st.session_state.pending_diff is not None:
             # Show the diff preview
             render_diff_preview(itinerary, st.session_state.pending_diff)
