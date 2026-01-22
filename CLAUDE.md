@@ -44,7 +44,9 @@ ai_travel_planner/
 │   ├── itinerary.py       # Itinerary, DayPlan, Activity, ItineraryDiff, FieldChange, etc.
 │   └── destination.py     # Destination and TripDestinations
 ├── ui/                    # UI components
-│   └── diff_preview.py    # Diff visualization for itinerary updates
+│   ├── diff_preview.py    # Diff visualization for itinerary updates
+│   └── tabs/
+│       └── pdf_export.py  # PDF export tab
 ├── storage/               # Persistence
 │   └── json_store.py      # JSON file save/load
 └── templates/             # Jinja2 HTML templates for PDFs
@@ -55,13 +57,14 @@ ai_travel_planner/
 
 ## UI Structure
 
-The app uses a 4-tab layout with a sidebar:
+The app uses a 5-tab layout with a sidebar:
 
 ### Tabs
 1. **Chat** - Conversational AI planning interface
-2. **Itinerary** - View/edit generated itinerary, iterative generation with progress, resume capability, PDF generation
-3. **Blog Tips** - Add blog URLs, extract tips, view extracted content
-4. **Settings** - AI provider selection, API keys, language, Unsplash configuration
+2. **Itinerary** - View/edit generated itinerary, iterative generation with progress, resume capability
+3. **PDF Export** - Export itinerary to PDF with multiple styles (Magazine, Minimal, Guidebook)
+4. **Blog Tips** - Add blog URLs, extract tips, view extracted content
+5. **Settings** - AI provider selection, API keys, language, Unsplash configuration
 
 ### Sidebar
 - App title (dynamic based on destination)
@@ -119,8 +122,8 @@ User Chat → Agent.chat() → ChatMessage stored in PlannerSession
          └─ ... until complete or error
          ↓
 "Resume" (if partial) → resume_itinerary_generation() → Continue from last day
-         ↓
-"Generate PDF" → PDFGenerator.generate_pdf() → WeasyPrint → PDF file
+
+PDF Export tab → PDFGenerator.generate_pdf() → WeasyPrint → PDF file
 
 Blog URL (Blog Tips tab) → BlogScraper.scrape_with_ai() → BlogContent → "Share tips" → Agent context
 ```
