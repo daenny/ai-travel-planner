@@ -590,8 +590,7 @@ def render_sidebar():
             model = st.session_state.agent.model_id
             st.success(f"{provider} ({model})")
         else:
-            st.warning("No AI provider configured")
-            st.caption("Go to Settings tab to configure")
+            st.info("Not connected - configure in **Settings** tab")
 
         st.markdown("---")
         st.subheader("Save/Load Plans")
@@ -615,9 +614,26 @@ def render_sidebar():
                     # Restore blog content and discovered links from loaded session
                     sync_blog_content_from_session()
                     sync_discovered_links_from_session()
-                    # Clear agent so user can reconnect with loaded provider
-                    st.session_state.agent = None
-                    st.success(f"Loaded: {uploaded_file.name} ({len(st.session_state.blog_content)} blogs)")
+
+                    # Try to auto-connect to AI provider if key is available
+                    provider = loaded.ai_provider
+                    if provider not in PROVIDERS:
+                        provider = PROVIDERS[0]
+                    api_key = get_api_key(provider)
+                    if api_key:
+                        default_model = PROVIDER_MODELS[provider][0]
+                        st.session_state.agent = get_agent(provider, api_key, default_model)
+                        if st.session_state.agent:
+                            st.session_state.agent.set_language(loaded.language)
+                            # Restore destinations to agent if available
+                            if loaded.destinations and loaded.destinations.primary:
+                                st.session_state.agent.set_destinations(loaded.destinations)
+                            st.success(f"Loaded: {uploaded_file.name} - Connected to {provider}")
+                        else:
+                            st.success(f"Loaded: {uploaded_file.name}")
+                    else:
+                        st.session_state.agent = None
+                        st.success(f"Loaded: {uploaded_file.name}")
                     st.rerun()
                 except Exception as e:
                     st.error(f"Failed to load session: {e}")
@@ -647,72 +663,6 @@ def render_sidebar():
             mime="application/json",
             key="save_session_download",
         )
-
-        st.markdown("---")
-        st.subheader("Generate PDF")
-
-        pdf_style = st.selectbox(
-            "PDF Style",
-            [s.value for s in PDFStyle],
-            format_func=lambda x: x.title(),
-            key="pdf_style",
-        )
-
-        if st.button("Generate PDF", key="gen_pdf"):
-            if st.session_state.session.itinerary.days:
-                with st.spinner("Generating PDF..."):
-                    unsplash_api_key = get_api_key("Unsplash")
-                    if unsplash_api_key:
-                        unsplash = UnsplashService(unsplash_api_key, IMAGES_DIR)
-                        for day in st.session_state.session.itinerary.days:
-                            # Use AI-generated image queries if available
-                            if day.image_queries and not day.image_paths:
-                                paths = unsplash.download_photos_for_queries(
-                                    day.image_queries, max_images=3
-                                )
-                                day.image_paths = [str(p) for p in paths]
-                                # Also set single image_path for backward compatibility
-                                if paths and not day.image_path:
-                                    day.image_path = str(paths[0])
-                            # Fallback to location-based single image
-                            elif not day.image_path and not day.image_paths:
-                                img_path = unsplash.get_photo_for_location(day.location)
-                                if img_path:
-                                    day.image_path = str(img_path)
-                                    day.image_paths = [str(img_path)]
-
-                    generator = PDFGenerator(exports_dir=EXPORTS_DIR)
-                    pdf_path = generator.generate_pdf(
-                        st.session_state.session.itinerary,
-                        PDFStyle(pdf_style),
-                    )
-                    st.success(f"PDF generated!")
-
-                    with open(pdf_path, "rb") as f:
-                        st.download_button(
-                            "Download PDF",
-                            f,
-                            file_name=pdf_path.name,
-                            mime="application/pdf",
-                        )
-            else:
-                st.warning("Create an itinerary first!")
-
-        if st.button("Generate All Styles", key="gen_all_pdf"):
-            if st.session_state.session.itinerary.days:
-                with st.spinner("Generating all PDFs..."):
-                    generator = PDFGenerator(exports_dir=EXPORTS_DIR)
-                    paths = generator.generate_all_styles(st.session_state.session.itinerary)
-                    st.success("All PDFs generated!")
-                    for style, path in paths.items():
-                        with open(path, "rb") as f:
-                            st.download_button(
-                                f"Download {style.value.title()}",
-                                f,
-                                file_name=path.name,
-                                mime="application/pdf",
-                                key=f"dl_{style.value}",
-                            )
 
 
 def get_blog_context() -> str:
@@ -866,8 +816,12 @@ def render_itinerary_builder():
 
     st.markdown("---")
 
-    if st.session_state.agent:
-        st.subheader("Generate Itinerary from Chat")
+    # Generate Itinerary section
+    st.subheader("Generate Itinerary from Chat")
+
+    if not st.session_state.agent:
+        st.info("Connect to an AI provider in the **Settings** tab to generate itineraries from your chat conversation.")
+    else:
 
         # Check if there's a resumable generation
         gen_state = st.session_state.generation_state
@@ -1073,11 +1027,12 @@ def render_itinerary_builder():
     st.markdown("---")
 
     # Update Itinerary section - only show when itinerary has days
-    if itinerary.days and st.session_state.agent:
+    if itinerary.days:
         st.subheader("Update Itinerary")
 
-        # Check if there's a pending diff
-        if st.session_state.pending_diff is not None:
+        if not st.session_state.agent:
+            st.info("Connect to an AI provider in the **Settings** tab to update your itinerary.")
+        elif st.session_state.pending_diff is not None:
             # Show the diff preview
             render_diff_preview(itinerary, st.session_state.pending_diff)
 
@@ -1198,6 +1153,77 @@ def render_itinerary_builder():
         for i, item in enumerate(itinerary.packing_list):
             with cols[i % 3]:
                 st.checkbox(item, key=f"pack_{i}")
+
+    # PDF Generation section
+    if itinerary.days:
+        st.markdown("---")
+        st.subheader("Generate PDF")
+
+        col_style, col_gen, col_all = st.columns([2, 1, 1])
+        with col_style:
+            pdf_style = st.selectbox(
+                "PDF Style",
+                [s.value for s in PDFStyle],
+                format_func=lambda x: x.title(),
+                key="pdf_style_itinerary",
+            )
+        with col_gen:
+            generate_pdf_clicked = st.button("Generate PDF", key="gen_pdf_itinerary", use_container_width=True)
+        with col_all:
+            generate_all_clicked = st.button("All Styles", key="gen_all_pdf_itinerary", use_container_width=True)
+
+        if generate_pdf_clicked:
+            with st.spinner("Generating PDF..."):
+                unsplash_api_key = get_api_key("Unsplash")
+                if unsplash_api_key:
+                    unsplash = UnsplashService(unsplash_api_key, IMAGES_DIR)
+                    for day in st.session_state.session.itinerary.days:
+                        # Use AI-generated image queries if available
+                        if day.image_queries and not day.image_paths:
+                            paths = unsplash.download_photos_for_queries(
+                                day.image_queries, max_images=3
+                            )
+                            day.image_paths = [str(p) for p in paths]
+                            # Also set single image_path for backward compatibility
+                            if paths and not day.image_path:
+                                day.image_path = str(paths[0])
+                        # Fallback to location-based single image
+                        elif not day.image_path and not day.image_paths:
+                            img_path = unsplash.get_photo_for_location(day.location)
+                            if img_path:
+                                day.image_path = str(img_path)
+                                day.image_paths = [str(img_path)]
+
+                generator = PDFGenerator(exports_dir=EXPORTS_DIR)
+                pdf_path = generator.generate_pdf(
+                    st.session_state.session.itinerary,
+                    PDFStyle(pdf_style),
+                )
+                st.success("PDF generated!")
+
+                with open(pdf_path, "rb") as f:
+                    st.download_button(
+                        "Download PDF",
+                        f,
+                        file_name=pdf_path.name,
+                        mime="application/pdf",
+                        key="download_pdf_itinerary",
+                    )
+
+        if generate_all_clicked:
+            with st.spinner("Generating all PDFs..."):
+                generator = PDFGenerator(exports_dir=EXPORTS_DIR)
+                paths = generator.generate_all_styles(st.session_state.session.itinerary)
+                st.success("All PDFs generated!")
+                for style, path in paths.items():
+                    with open(path, "rb") as f:
+                        st.download_button(
+                            f"Download {style.value.title()}",
+                            f,
+                            file_name=path.name,
+                            mime="application/pdf",
+                            key=f"dl_itinerary_{style.value}",
+                        )
 
 
 def render_blog_tips():
